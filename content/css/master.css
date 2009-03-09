@@ -13,6 +13,14 @@ body {
 }
 
 img#equation {float: right;}
+div#current_version {
+  float:right;
+  border: 1px solid #aaa;
+  background-color: #f0efe9;
+  margin-top: 20px;
+  padding: 5px;
+  font-weight: bold;
+}
 
 ul#nav {
   background: #1a1a1a url(../images/nav_background.png) repeat-x  top left;
