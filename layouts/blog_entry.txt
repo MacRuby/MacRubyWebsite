@@ -22,9 +22,22 @@ filter:    erb
 
     </div><!-- // end rightcol -->
     <div id="leftcol">
-      <%= @content %>
+    <div id="blog_backlink">
+      <a href="/blog/index.html">&laquo; Back to MacRuby Blog</a>
+    </div>
+    <div class="article">
+      <div class="header">
+        <div class="date"><%= @page.created_at.strftime('%Y-%m-%d') %></div>
+        <div class="title"><%= link_to_page(@page) %></div>
+      </div>
+      <div class="author">
+        By <%= @page.author %>
+      </div>
+      <div class="body">
+        <%= @content %>
+      </div>
+    </div>
     </div><!-- // end leftcol -->
   </div><!-- // end nest -->
-  <p>This website was created with <a href="http://webby.rubyforge.org">Webby</a></p>
 </body>
 </html>

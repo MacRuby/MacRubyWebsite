@@ -164,10 +164,21 @@ h1.title {
   margin-bottom: 10px;
 }
 
+div#blog_backlink {
+  margin-top: 10px;
+}
+
 h2 {
   font-size: 24px;
   font-family: Georgia, Times, serif;
   line-height: 30px;
+  color: #333;
+}
+
+h3 {
+  font-size: 14px;
+  font-family: Georgia, Times, serif;
+  line-height: 20px;
   color: #333;
 }
 
@@ -198,6 +209,10 @@ div.article .title a {
   line-height: 30px;
   color: #333;
   text-decoration: none;
+}
+
+div.article .title a:hover {
+  text-decoration: underline;
 }
 
 div.article .date {

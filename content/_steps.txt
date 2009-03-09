@@ -1,0 +1,15 @@
+---
+filter: erb
+---
+<div id="step1">
+  <a href="http://www.macruby.org/files/MacRuby%200.4.zip" id="zip"><img src="/images/zip.png" width="100" height="100" /></a>
+  <p>or <a href="/source.html">checkout source from svn...</a>
+  
+</div><!-- // end step1 -->
+<div id="step2">
+  
+</div><!-- // end step2 -->
+<div id="step3">
+  <p>Check out the <a href="">tutorial</a> and other learning resources and examples available for MacRuby.</p>
+</div><!-- // end step3 -->
+

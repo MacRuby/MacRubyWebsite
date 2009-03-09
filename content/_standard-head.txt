@@ -1,0 +1,15 @@
+---
+filter: erb
+---
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>MacRuby &raquo; <%= @page.title %></title>
+  <meta name="author" content="<%= @page.author %>" />
+  <link rel="stylesheet" href="/css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/css/master.css" type="text/css" media="screen" />
+
+  <!-- CodeRay syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
+  
+</head>

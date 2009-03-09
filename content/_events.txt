@@ -1,0 +1,11 @@
+---
+filter: erb
+---
+<div id="eventbox">
+  <h3><img src="/images/h3_macruby-events.png" alt="MacRuby Events" /></h3>
+  <% macruby_events.each do |event| -%>
+  <p><span class="date"><%= event.date %> &raquo;</span> <a href="<%= event.href %>"><%= event.name %></a><br />
+    <%= event.location %><br />
+    <%= event.topic %></p>
+  <% end %>
+</div><!-- // end events -->
