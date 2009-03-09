@@ -1,0 +1,20 @@
+---
+title:      Learning About MacRuby
+created_at: 2009-03-07 16:48:32.084407 -05:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+Below are a list of tutorials, articles and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
+
+Articles found in the "MacRuby Blog":/blog/index.html
+
+h2. Tutorials
+
+Lists of tutorials...
+
+h2. Recipes
+
+Lists of recipes...

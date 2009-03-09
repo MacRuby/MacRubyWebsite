@@ -1,0 +1,15 @@
+--- 
+title:      Ruby Changes in 10.5.4 Update
+created_at: 2008-06-30 00:00:00 -04:00
+blog_post:  true
+author:     Laurent Sansonetti
+filter:
+  - erb
+  - textile
+---
+<% @page[:excerpt] = capture_erb do %>
+Mac OS X 10.5.4 has just been released, addressing the "latest Ruby security problems":http://www.ruby-lang.org/en/news/2008/06/20/arbitrary-code-execution-vulnerabilities/ discovered by Apple's product security team, and also fixing the "getaddrinfo regression":http://www.ruby-forum.com/topic/154556, that was introduced in 10.5.3 and breaking DRb.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+Please enjoy and do not hesitate to "contact us":http://bugreporter.apple.com/ if you discover regressions, and we will try to fix them as soon as possible.

@@ -1,0 +1,35 @@
+--- 
+title:      MacRuby 0.3
+created_at: 2008-09-08 00:00:00 -04:00
+blog_post:  true
+author:     Laurent Sansonetti
+filter:
+  - erb
+  - textile
+---
+<% @page[:excerpt] = capture_erb do %>
+It is a great pleasure to announce the immediate availability of MacRuby 0.3! We have been working very hard on this release for several months and, while it's still a developer release, we hope that you will give it a try. Get it while it's still hot!
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+First of all, MacRuby now ships with a core library called HotCocoa, something which greatly simplifies Cocoa programming while also using simple Ruby idioms. Rich Kilmer is the man behind this amazing work. You will find several examples in "/Developer/Examples/Ruby/MacRuby/HotCocoa":http://www.macruby.org/trac/browser/MacRuby/tags/0.3/sample-macruby/HotCocoa, and some initial bits of documentation in "http://www.macruby.org/trac/wiki/HotCocoa":http://www.macruby.org/trac/wiki/HotCocoa (which will be improved very soon).
+
+<% coderay :lang => 'ruby' do -%>
+require 'hotcocoa'
+include HotCocoa
+application do |app|
+  window :size => [100, 50] do |win|
+    b = button :title => 'Hello'
+    b.on_action { puts 'World!' }
+    win << b
+  end
+end
+<% end -%>
+
+Another big change in the method dispatcher, which is now entirely based on the Objective-C runtime. MacRuby is now using the Objective-C runtime to implement the Ruby class semantics and also to dispatch pure Ruby methods. This is an important change because it simplifies a lot the core implementation and also eliminates ambiguities between both worlds. Performance wise, we should be as performant as yarv:  Faster in some cases, slower in others.
+
+We also support Interface Builder in this release. You can define classes, outlets and actions in a MacRuby Xcode project and they will automatically appear in Interface Builder. We have a new Ruby metadata parser that works for both RubyCocoa and MacRuby files. The parser is written in MacRuby and uses the amazing ripper extension that comes with it to extract the parser tokens.
+
+Finally, of course, lots of bugs were fixed. We now have a pretty good Cocoa support and can run most of the "LimeChat":http://limechat.net/ application (which is currently being ported from RubyCocoa).  We also re-implemented the "PagePacker":http://weblog.bignerdranch.com/?p=23 application from Objective-C, which now ships "as an example":http://www.macruby.org/trac/browser/MacRuby/tags/0.3/sample-macruby/PagePacker in the MacRuby distribution.  On the pure Ruby side of things, a lot of bugs have been fixed and we are now able to run some commands of RubyGems. Installing simple gems should work. Don't expect MacRuby to run Rails yet, though!
+
+MacRuby is progressively turning more stable with every release. Please give it a try and report any problem you find!  If you want to join the project and help, volunteers are also greatly welcome!

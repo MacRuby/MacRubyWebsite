@@ -1,0 +1,16 @@
+---
+title:      Downloads
+created_at: 2009-03-08 22:40:01.091865 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+h2. Current Version
+
+Where there versions of MacRuby here, this is where you could download them.
+
+h2. Older versions
+
+This will be older versions...

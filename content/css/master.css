@@ -1,0 +1,210 @@
+body {
+  text-align: center;
+  font: 11px Verdana, "Trebuchet MS", sans-serif;
+  line-height: 18px;
+  color: #333;
+}
+
+#nest {
+  text-align: left;
+  width: 890px;
+  margin: 0 auto 50px auto;
+  padding: 20px 0;
+}
+
+img#equation {float: right;}
+
+ul#nav {
+  background: #1a1a1a url(../images/nav_background.png) repeat-x  top left;
+  height: 33px;
+}
+
+ul#nav li {
+  list-style-type: none;
+  margin: 0;
+  float: left;
+  display: inline;
+  
+}
+
+ul#nav li.last {float: right; width: 285px;}
+
+a, a:link, a:hover, a:visited {color: #900;}
+
+div#rightcol {
+  width: 285px;
+  float: right;
+  margin-top: 2px;
+}
+
+div#step1 {
+  background-image: url(../images/step1.png);
+  width: 265px;
+  height: 138px;
+  margin-bottom: 1px;
+  padding: 35px 0 0 20px;
+}
+
+div#step1 p {color: #fff;}
+div#step1 p a,
+div#step1 p a:link,
+div#step1 p a:hover,
+div#step1 p a:visited {color: #fff; font-weight: bold;}
+
+div#step2 {
+  background-image: url(../images/step2.png);
+  width: 285px;
+  height: 94px;
+}
+
+div#step3 {
+  background-image: url(../images/step3.png);
+  width: 220px;
+  height: 63px;
+  padding: 30px 50px 0 15px;
+}
+
+div#step3 p {color: #fff;}
+div#step3 p a,
+div#step3 p a:link,
+div#step3 p a:hover,
+div#step3 p a:visited {color: #fff; font-weight: bold;}
+
+div#leftcol {
+  width: 595px;
+  padding-right: 10px;;
+}
+
+p.callout {
+  padding: 5px 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: Georgia, Times, serif;
+}
+
+p.callout strong {
+  font-family: Verdana, "Trebuchet MS", sans-serif;
+  font-weight: bold;
+}
+
+hr.harvardrule {
+  /* Faking a Harvard Rule */
+  margin: 2px 0 7px 0;
+  color: #fff;
+  background-color: #fff;
+  height: 2px;
+  border: 0;
+  border-top: 4px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  }
+
+hr.doublerule {  /* Faking a Harvard Rule */
+  margin: 7px 0;
+  color: #f0efe9;
+  background-color: #f0efe9;
+  height: 2px;
+  border: 0;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  }
+
+  
+div#newsbox,
+div#eventbox {
+  width: 265px;
+  background-color: #f0efe9;
+  padding: 10px;
+}
+
+div#newsbox {float: left; margin-right: 10px;}
+div#eventbox {margin-top: 7px; font-size: 10px;}
+
+div#newsbox h3 {
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+div#eventbox h3 {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+div#eventbox p {
+  border-top: 1px solid #aaa;
+  padding-top: 5px;
+  margin-top: 5px;
+}
+
+div#newsbox h4 {
+  font-size: 18px;
+  color: #900;
+  font-family: Georgia, Times, serif;
+  line-height: 24px;
+}
+
+div#newsbox span.date,
+div#eventbox span.date {color: #999; font-style: italic;}
+
+h1.title {
+  font-size: 30px;
+  font-family: Georgia, Times, serif;
+  line-height: 30px;
+  margin-top: 10px;
+  color: #333;
+  padding-bottom: 5px; 
+  border-bottom: 1px solid #aaa; 
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 24px;
+  font-family: Georgia, Times, serif;
+  line-height: 30px;
+  color: #333;
+}
+
+p {margin-bottom: 10px;}
+
+pre.commands {
+  padding: 5px;
+  overflow: auto;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-family: Courier, Monaco, monospace;
+  background-color: #f0efe9;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+div.article .title {
+  font-size: 18px;
+  font-family: Georgia, Times, serif;
+  line-height: 30px;
+  color: #333;
+}
+
+div.article .title a {
+  font-size: 18px;
+  font-family: Georgia, Times, serif;
+  line-height: 30px;
+  color: #333;
+  text-decoration: none;
+}
+
+div.article .date {
+  padding-top: 7px;
+  float: right;
+  color: #999;
+}
+
+div.article .author {
+  color: #999;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+div.article .header {
+  border-bottom: 1px dotted #aaa;
+  margin-bottom: 4px;
+}

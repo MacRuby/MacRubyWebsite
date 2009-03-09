@@ -1,0 +1,94 @@
+--- 
+title:      MacRuby 0.2
+created_at: 2008-06-06 00:00:00 -04:00
+blog_post:  true
+author:     Laurent Sansonetti
+filter:
+  - erb
+  - textile
+---
+After 3 months of development, here comes the second release of MacRuby, 0.2! "Check it out while it's hot!":http://www.macruby.org/trac/wiki/InstallingMacRuby
+
+This is an important release which addresses many bugs but also re-implements parts of the runtime using the "CoreFoundation":http://developer.apple.com/corefoundation/ framework.
+
+In MacRuby 0.2, all strings, arrays and hashes are now native Cocoa types, represented by NSString, NSArray and NSDictionary objects, respectively.
+
+The entire String, Array and Hash interface was rewritten on top of the Cocoa equivalents using the powerful CoreFoundation framework.
+
+The previous implementation, inherited from MRI, is not used anymore. The rationale behind this change is simple:
+
+It is no longer necessary to convert Ruby primitive types to Cocoa or vice-versa. For example, a String created in MacRuby can be passed as is, without conversion, to an underlying C or Objective-C API that expects an NSString. Similarly, any method of the Ruby String class can be performed on an NSString that comes from Objective-C.
+
+Interestingly, the CoreFoundation implementation that MacRuby now uses has proven itself to be stable and performs quite well, even this early in the implementation process.
+
+We did not work on any performance improvements for MacRuby 0.2 (we will address performance in the next upcoming release), but we noticed some dramatic performance gains in some areas nonetheless.
+
+Inserting elements in an array is faster in MacRuby than the original 1.9 implementation, for example, mostly because CFArray switches on the fly its data structure to an implementation that performs well according to the current number of elements.
+
+<code><pre class="commands">
+a=[]; 100_000.times { |i| a.insert(0, i) }
+MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    0.326057
+    0.318714
+    0.314731
+ruby 1.9.0 (2008-06-03 revision 16762) [i686-darwin9.0.0]
+    4.308484
+    4.382623
+    4.36368
+ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
+    4.608796
+    4.595334
+    4.581045
+</pre></code>
+
+Regarding hashes, searching for a specific value (which isn't something that is typically done) is shown to be faster.
+
+<code><pre class="commands">
+h = Hash[*(1..10000).to_a]; 10000.times { |i| h.has_value?(i) }
+MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    0.965304
+    0.955293
+    0.950316
+ruby 1.9.0 (2008-06-03 revision 16762) [i686-darwin9.0.0]
+    3.790461
+    3.804271
+    3.815217
+ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
+    4.225632
+    4.225457
+    4.239244
+</pre></code>
+
+And to finish with strings, it turns out that manipulations on multi-byte strings are faster in MacRuby than 1.9.
+
+<code><pre class="commands">
+$ cat t3.rb 
+# -*- coding: utf-8 -*-
+s = "わたしはロランです。" * 2000
+s.length.times { |i| s[i] }
+$ ruby b.rb t3.rb 
+MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    0.180019
+    0.180165
+    0.177425
+ruby 1.9.0 (2008-06-03 revision 16762) [i686-darwin9.0.0]
+    1.624943
+    1.633502
+    1.62767
+</pre></code>
+
+Speaking of strings, since every of them is now a CFString, they get for free features that weren't present in the original 1.9 implementation, such as ICU transformations for example:
+
+<code><pre class="commands">
+$ cat t3.rb
+puts "watashiha".transform('Latin-Hiragana') +
+     "lauren".transform('Latin-Katakana') +
+     "desu.".transform('Latin-Hiragana')
+$ macruby -v t3.rb
+MacRuby version 0.2 (ruby 1.9.0 2008-05-17) [universal-darwin9.0]
+わたしはラウレンです。
+</pre></code>
+
+MacRuby is still slower in many cases, including very important ones such as objects allocation and methods dispatch. There are also too many areas in String, Array and Hash where we perform much less well than we should.
+
+We plan to address this in the next release (0.3) as well as many other things, so stay tuned!

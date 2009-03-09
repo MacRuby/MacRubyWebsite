@@ -1,0 +1,43 @@
+---
+title:       Home
+created_at:  2008-08-02 14:06:40.000000 -06:00
+filter:
+  - erb
+---
+<p class="callout"><strong>MacRuby</strong> is a version of Ruby 1.9, ported to run directly on top of Mac OS X core technologies such as the Objective-C common runtime and garbage collector, and the CoreFoundation framework. While still a work in progress, it is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby.</p>
+<hr size="0" noshade class="harvardrule" />
+
+<div id="newsbox">
+  <h3><img src="/images/h3_macruby_blog.png" alt="MacRuby Blog" /></h3>
+  
+  <%
+    articles = @pages.find(:all, :in_directory => File.join(@page.dir, 'blog'), :recursive => true,
+        :sort_by => "created_at", :reverse => true, :blog_post => true)
+    articles[0,3].each do |page|
+  -%>
+  <h4><%= page.title %></h4>
+  <%= blog_excerpt(page) %>
+  <hr size="0" noshade class="doublerule" />
+  <% end -%>
+  
+  <a href="/blog/index.html"><img src="/images/h3_see-older-articles.png" alt="See Older Articles" /></a>
+  
+</div><!-- //end newsbox -->
+
+<h2>HotCocoa Is For Me!</h2>
+<p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <a href="">Check out some of the cool things you can do with HotCocoa!</a></p>
+<% coderay :lang => 'ruby' do -%>
+require 'hotcocoa'
+include HotCocoa
+application do |app|
+  win = window :size => [100,50]
+  b = button :title => 'Hello'
+  b.on_action { puts 'World!' }
+  win << b
+end
+<% end -%>
+<hr size="0" noshade class="doublerule" />
+
+<h2>Why MacRuby?</h2>
+<p>MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in Ruby 1.8. Consequently, there are a number of reasons (e.g. conveience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href=""><i>Read more...</i></a></p>
+<hr size="0" noshade class="doublerule" />

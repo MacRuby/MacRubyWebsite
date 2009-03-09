@@ -1,0 +1,123 @@
+--- 
+title:      New Build System, Faster Objective-C Dispatcher, Screencast
+created_at: 2008-06-16 00:00:00 -04:00
+blog_post:  true
+author:     Laurent Sansonetti
+filter:
+  - erb
+  - textile
+---
+MacRuby trunk got a new build system, entirely written with "Rake":http://rake.rubyforge.org/. We managed to replace the previous autotools-based build system with a 570 lines of code Rakefile (which can still be refactored). We didn't really need autotools since MacRuby aims to be installed on only one platform: Mac OS X. Maintaining the autotools files were really difficult, and we are very glad to now have a pure-Ruby build script.
+
+Building and installing MacRuby is now very simple:
+
+<code><pre class="commands">
+$ rake
+$ sudo rake install
+</pre></code>
+
+This will build and install MacRuby in /Library/Frameworks/MacRuby.framework, executable symbolic links in /usr/local/bin (with a "mac" prefix, for example "macruby"), Xcode templates and sample code.
+
+To see the list of all tasks;
+
+<code><pre class="commands">
+$ rake -T
+(in /Volumes/Data/src/MacRuby)
+rake all                   # Build MacRuby and extensions
+rake clean                 # Clean local and extension build files
+rake clean:ext             # Clean extension build files
+rake clean:local           # Clean local build files
+rake config_h              # Create config.h
+rake default               # Same as all
+rake extensions            # Build extensions
+rake framework:info_plist  # Create the plist file for the framework
+rake framework:install     # Install the framework
+rake install               # Same as framework:install
+rake macruby               # Same as macruby:build
+rake macruby:build         # Build MacRuby
+rake macruby:dylib         # Build dynamic libraries for MacRuby
+rake macruby:static        # Build static libraries for MacRuby
+rake miniruby              # Create miniruby
+rake objects               # Build known objects
+rake rbconfig              # Create config file
+rake sample_test           # Run the sample tests
+rake test                  # Same as sample_test
+</pre></code>
+
+Also, MacRuby trunk has a faster Objective-C dispatcher. Around 4 times faster that MacRuby 0.2 (and way faster than RubyCocoa). This was possible by fixing bugs in the dispatcher and also cache some of the runtime information.
+
+Let's consider the following Objective-C class.
+
+<code><pre class="commands">
+$ cat dummy.m
+#import <Foundation/Foundation.h>
+
+@interface Dummy : NSObject
+@end
+
+@implementation Dummy
+
+- (id)doSomething
+{
+   return @""; 
+}
+
+- (id)doSomethingWith:(id)value
+{
+    return value;
+}
+
+@end
+
+void Init_dummy (void) {}
+</pre></code>
+
+We can build it as a Ruby extension.
+
+<code><pre class="commands">
+$ gcc dummy.m -o dummy.bundle -framework Foundation -dynamiclib -fobjc-gc"
+</pre></code>
+
+Then, test calling the methods. First, the doSomething method, which is a very simple case.
+
+<code><pre class="commands">
+$ ruby start.rb ruby -v -r osx/foundation -I. -r dummy -e "include OSX; o = Dummy.new; 1_000_000.times { o.doSomething }"
+ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
+    5.295735
+    5.290816
+    5.28286
+$ ../miniruby02 -v -I. -r dummy -e "o = Dummy.new; 1_000_000.times { o.doSomething }"
+MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    2.977553
+    2.98855
+    2.984585
+$ ../miniruby -v -I. -r dummy -e "o = Dummy.new; 1_000_000.times { o.doSomething }"
+MacRuby version 0.3 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    0.639648
+    0.65196
+    0.644522
+</pre></code>
+
+Then, the doSomethingWith: method, a bit more complicated because one argument is passed, so both RubyCocoa and MacRuby are using libffi to call it.
+
+<code><pre class="commands">
+$ ruby -v -r osx/foundation -I. -r dummy -e "include OSX; o = Dummy.new; o2 = 'foo'; 1_000_000.times { o.doSomethingWith(o2) }"
+ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
+    13.981403
+    13.943761
+    13.936082
+$ ../miniruby02 -v -I. -r dummy -e "o = Dummy.new; o2 = 'foo'; 1_000_000.times { o.doSomethingWith(o2) }"
+MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    7.267144
+    7.210777
+    7.267988
+$ ../miniruby -v -I. -r dummy -e "o = Dummy.new; o2 = 'foo'; 1_000_000.times { o.doSomethingWith(o2) }"
+MacRuby version 0.3 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
+    1.239323
+    1.259157
+    1.246987
+</pre></code>
+
+These are very premature results, we expect to continue reducing the time spent in the dispatcher, in the near future, and hopefully to make it twice faster.
+
+On a side note, Konrad M. Lawson was kind enough to generate a "very nice screencast of MacRuby":http://foolsworkshop.com/rubycocoa/2008/06/macruby-tutorial demonstrating the Xcode/IB integration. Thanks Konrad!

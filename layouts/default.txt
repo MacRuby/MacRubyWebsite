@@ -1,0 +1,65 @@
+---
+extension: html
+filter:    erb
+---
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>MacRuby &raquo; <%= @page.title %></title>
+  <meta name="author" content="<%= @page.author %>" />
+  <link rel="stylesheet" href="/css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/css/master.css" type="text/css" media="screen" />
+
+  <!-- CodeRay syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
+  
+</head>
+
+<body>
+  <div id="nest">
+    <a href="/"><img src="/images/macruby_logo.png" alt="MacRuby" id="logo" /></a>
+
+    <ul id="nav">
+      <li><a href="/" title="Home"><img src="/images/nav_home.png" alt="Home" /></a></li>
+      <li><a href="/downloads.html" title="Downloads"><img src="/images/nav_downloads.png" alt="Downloads" /></a></li>
+      <li><a href="/source.html" title="Source"><img src="/images/nav_source.png" alt="Source" /></a></li>
+      <li><a href="/documentation.html" title="Documentation"><img src="/images/nav_documentation.png" alt="Home" /></a></li>
+      <li><a href="http://www.macruby.org/trac/report/1" title="Tickets"><img src="/images/nav_tickets.png" alt="Tickets" /></a></li>
+      <li class="last"><img src="/images/three_easy_steps.png" alt="" id="3steps" /></li>
+    </ul><!-- // end nav -->
+    
+    <div id="rightcol">
+      <div id="step1">
+        <a href="" id="zip"><img src="/images/dmg.png" width="100" height="100" /></a>
+        <a href="" id="tar"><img src="/images/tar.png" width="100" height="100" /></a>
+        <p>or <a href="/source.html">checkout source from svn...</a>
+        
+      </div><!-- // end step1 -->
+      <div id="step2">
+        
+      </div><!-- // end step2 -->
+      <div id="step3">
+        <p>Check out the <a href="">tutorial</a> and other learning resources and examples available for MacRuby.</p>
+      </div><!-- // end step3 -->
+      
+      
+      <div id="eventbox">
+        <h3><img src="/images/h3_macruby-events.png" alt="MacRuby Events" /></h3>
+        <% macruby_events.each do |event| -%>
+        <p><span class="date"><%= event.date %> &raquo;</span> <a href="<%= event.href %>"><%= event.name %></a><br />
+          <%= event.location %><br />
+          <%= event.topic %></p>
+        <% end %>
+      </div><!-- // end events -->
+    </div><!-- // end rightcol -->
+    <div id="leftcol">
+      <%= @content %>
+    </div><!-- // end leftcol -->
+  </div><!-- // end nest -->
+  <p>This website was created with <a href="http://webby.rubyforge.org">Webby</a></p>
+</body>
+</html>

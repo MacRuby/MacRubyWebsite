@@ -1,0 +1,10 @@
+SITE.user = 'rich'
+SITE.host = 'infoether.com'
+SITE.remote_dir = '/var/www/macruby.infoether.com'
+
+task :default => :build
+
+desc 'deploy the site to the webserver'
+task :deploy => [:build, 'deploy:ssh']
+
+# EOF
