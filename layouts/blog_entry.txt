@@ -9,17 +9,11 @@ filter:    erb
 <%= render :partial => "/standard-head" %>
 <body>
   <div id="nest">
-    <a href="/"><img src="/images/macruby_logo.png" alt="MacRuby" id="logo" /></a>
-    <div id="current_version">
-      Current Version 0.4
-    </div>
+    <%= render :partial => "/header" %>
     <%= render :partial => "/navigation" %>
-    
     <div id="rightcol">
-    
       <%= render :partial => "/steps" %>
       <%= render :partial => "/events" %>
-
     </div><!-- // end rightcol -->
     <div id="leftcol">
     <div id="blog_backlink">

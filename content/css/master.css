@@ -5,6 +5,10 @@ body {
   color: #333;
 }
 
+#logo {
+  width=300px;
+}
+
 #nest {
   text-align: left;
   width: 890px;
