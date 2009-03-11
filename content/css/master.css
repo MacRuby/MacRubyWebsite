@@ -231,3 +231,13 @@ div.article .header {
   border-bottom: 1px dotted #aaa;
   margin-bottom: 4px;
 }
+
+div#footer {
+  margin-top: 20px;
+  color: #666;
+}
+
+div#footer p {
+  font-size: 10px;
+  margin: 0px;
+}

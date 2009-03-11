@@ -39,5 +39,6 @@ filter:    erb
     </div>
     </div><!-- // end leftcol -->
   </div><!-- // end nest -->
+  <%= render :partial => "/footer" %>
 </body>
 </html>

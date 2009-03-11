@@ -25,6 +25,6 @@ filter:    erb
       <%= @content %>
     </div><!-- // end leftcol -->
   </div><!-- // end nest -->
-  <p>This website was created with <a href="http://webby.rubyforge.org">Webby</a></p>
+  <%= render :partial => "/footer" %>
 </body>
 </html>
