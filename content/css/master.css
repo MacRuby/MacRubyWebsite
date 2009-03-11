@@ -58,6 +58,10 @@ div#rightcol {
   margin-top: 2px;
 }
 
+strong {
+  font-weight: bold;
+}
+
 div#step1 {
   background-image: url(../images/step1.png);
   width: 265px;
@@ -253,4 +257,17 @@ div#footer {
 div#footer p {
   font-size: 10px;
   margin: 0px;
+}
+
+div#project h3 {
+  margin-bottom: 10px;
+}
+
+div#project .affiliation {
+  font-style: italic;
+  color: #666;
+}
+
+div#project .summary {
+  
 }

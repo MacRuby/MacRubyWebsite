@@ -1,0 +1,26 @@
+---
+title:      Project Information
+created_at: 2009-03-11 11:46:35.667508 -04:00
+dirty:      true
+filter:
+  - erb
+---
+<h1 class='title'><%= h(@page.title) %></h1>
+
+<div id="project">
+<p>MacRuby is a free software project by Apple Inc. Sources are available under the Ruby license.</p>
+<p>Lots of folks contribute to the MacRuby project and this is just a list that will keep on growing.</p>
+
+<h3>Project Members</h3>
+
+<% team_members.each do |member| -%>
+  <%= render_member(member) %>
+<% end -%>
+
+<h3>Special Thanks</h3>
+
+<% kudos.each do |kudo| -%>
+  <%= render_kudo(kudo) %>
+<% end -%>
+
+</div>
