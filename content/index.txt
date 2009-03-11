@@ -40,5 +40,5 @@ end
 <hr size="0" noshade class="doublerule" />
 
 <h2>Why MacRuby?</h2>
-<p>MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in Ruby 1.8. Consequently, there are a number of reasons (e.g. conveience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href=""><i>Read more...</i></a></p>
+<p>MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in Ruby 1.8. Consequently, there are a number of reasons (e.g. conveience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href="/documentation/why-macruby.html"><i>Read more...</i></a></p>
 <hr size="0" noshade class="doublerule" />

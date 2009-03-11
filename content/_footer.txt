@@ -5,5 +5,5 @@ filter: erb
 <div id="footer">
 <p>MacRuby is a free software project by Apple Inc. Sources are available under the Ruby license.</p>
 <p>Hosting provided by <a href="http://macosforge.org">Mac OS Forge</a>. Use of this site is subject to the <a href="http://www.macosforge.org/terms/">Mac OS Forge Terms of Use</a>.</p>
-<p>Website design by <a href="http://www.boboroshi.com/">John Athayde</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
+<p>Website designed by <a href="http://www.boboroshi.com/">John Athayde</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
 </div>

@@ -1,0 +1,45 @@
+---
+title:      Why MacRuby?
+created_at: 2009-03-11 10:46:42.412497 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+"Mac OS X":http://en.wikipedia.org/wiki/Mac_OS_X 10.5 (Leopard) provides a build of "MRI":http://en.wikipedia.org/wiki/Ruby_MRI (Matz's Ruby Interpreter), version 1.8.6. This is the current de facto standard for Ruby interpreters; it is stable, well documented, tested, and understood, etc. If you need to run a legacy Ruby script, with a minimum of hassle, the default ruby(1) command is probably the right choice. Similarly, if you have a legacy "RubyCocoa":http://en.wikipedia.org/wiki/RubyCocoa application which you simply wish to run, RubyCocoa is certainly the right choice.
+
+However, if you have needs that aren't well met by these offerings, MacRuby is certainly worthy of your consideration. MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in "Ruby":http://en.wikipedia.org/wiki/Ruby_%28programming_language%29 1.8. Consequently, there are a number of reasons (e.g., convenience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications:
+
+h3. Interpreter Performance
+
+MacRuby is based on Ruby 1.9, so it is powered by the "YARV":http://en.wikipedia.org/wiki/YARV bytecode interpreter. This greatly reduces the execution time of Ruby programs.
+
+h3. Thread Support
+
+The Ruby 1.8 threading model uses green (emulated) threads. Calling Cocoa from a Ruby thread might cause unexpected problems, because in many places in Cocoa uses per-native-thread data. In Leopard, both Ruby and RubyCocoa were modified to appropriately save and restore autorelease pools and exception handlers, which are the most important per-thread data in Cocoa. While this works in most cases, it is clearly a non-optimal solution.
+
+Because the Ruby 1.8 runtime is not thread safe, it is impossible to call back to it from a different POSIX thread. RubyCocoa was modified to route calls from other threads to the main one, but this approach doesn't scale very well and can even cause deadlocks. The threading model in Ruby 1.9 has been significantly improved, allowing multiple threads to call back to the runtime. Also, Ruby threads in 1.9 are now native "POSIX threads":http://en.wikipedia.org/wiki/POSIX_threads.
+
+h3. Garbage Collection
+
+The Ruby "garbage collector":http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29 performs slow collections while stopping the program flow; it also integrates poorly with the Objective-C garbage collector. MacRuby doesn't use the traditional Ruby garbage collector. Instead, it uses the Objective-C garbage collector, which is new in Leopard. The new Objective-C garbage collector engine, due to its generational nature, performs fast collections. It also doesn't stop the world while collecting memory, because collections are done in a separate thread.
+
+h3. Mac OS X Framework Access
+
+Traditional Ruby provides no built-in way to access Mac OS X Frameworks. RubyCocoa provides this access, but at a large cost in convenience and efficiency:
+
+The class and object model has to be maintained on both sides, creating intermediate proxy objects when necessary. This is both painful and error prone.
+Objects and exceptions must be converted from one type to another when they cross the bridge. This has a significant performance impact.
+To avoid multiple proxies for the same instance, instances must be cached (and appropriately invalidated). Some objects cannot be cached, because there is no reliable way to invalidate them.
+In MacRuby, all Ruby classes and objects are actually Objective-C classes and objects. There is no need to create costly proxies, convert objects, and cache instances. A Ruby object can be cast (toll-free) at the C level as an Objective-C object. The Ruby VM can also handle incoming Objective-C objects without conversion.
+
+In MacRuby, the primitive Ruby classes (e.g., String, Array, and Hash) have been re-implemented on top of their Cocoa equivalents (respectively, NSString, NSArray, and NSDictionary). As an example, all strings in MacRuby are Cocoa strings, so they can be passed directly to underlying C or Objective-C APIs. It is also possible to call any method of the String interface on any Cocoa string, subclass Objective-C methods, etc.
+
+The Objective-C calling syntax doesn't translate well to idiomatic Ruby when used from RubyCocoa. As an example, the setObject:forKey: selector is transformed to setObject_forKey_, replacing colons with underscores. MacRuby enhances the existing Ruby syntax to allow keyed arguments, as used in Objective-C. As an example, you call dict.setObject(o, forKey:k). The new syntax can be used to send messages and to define new Objective-C methods.
+
+Together, these improvements provide convenient, efficient access to a broad range of Mac OS X facilities, including Core "Audio":http://en.wikipedia.org/wiki/Core_Audio, "Data":http://en.wikipedia.org/wiki/Core_Data, "Foundation":http://en.wikipedia.org/wiki/Core_Foundation, "Image":http://en.wikipedia.org/wiki/Core_Image, "Text":http://en.wikipedia.org/wiki/Core_Text, etc.
+
+h3. Experimentation
+
+MacRuby provides a convenient way to experiment with Ruby 1.9 on Mac OS X (e.g., trying out new syntax). At the same time, MacRuby provides a convenient way to experiment with the Mac OS X frameworks. For example, macirb allows interactive access to both Ruby and Mac OS X libraries. So, for example, a Cocoa programmer might find MacRuby to be a congenial prototyping environment, even if the ultimate product needs to be written strictly in Objective-C.
