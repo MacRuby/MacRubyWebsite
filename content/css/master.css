@@ -22,6 +22,15 @@ div#current_version {
   font-weight: bold;
 }
 
+.tutorial ul {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.tutorial li {
+  list-style-type: square;
+}
+
 ul#nav {
   background: #1a1a1a url(../images/nav_background.png) repeat-x  top left;
   height: 33px;

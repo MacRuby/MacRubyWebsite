@@ -10,6 +10,6 @@ filter: erb
   
 </div><!-- // end step2 -->
 <div id="step3">
-  <p>Check out the <a href="">tutorial</a> and other learning resources and examples available for MacRuby.</p>
+  <p>Check out the <a href="/documentation/tutorial.html">tutorial</a> and other learning resources and examples available for MacRuby.</p>
 </div><!-- // end step3 -->
 

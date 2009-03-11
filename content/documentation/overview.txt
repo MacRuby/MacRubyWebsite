@@ -1,0 +1,62 @@
+---
+title:      Overview
+created_at: 2009-03-11 08:15:23.948782 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+MacRuby is a unique blend of Ruby 1.9 and Objective-C.  The goal of the MacRuby project is to be 100% compatible syntactically and behaviorally with Ruby 1.9.  Because of the project's goals of seamless integration with Objective-C, however, there are significant differences in the internals of the runtime.  The following presents an overview of what is unique to MacRuby vs. the standard Ruby 1.9 'MRI' interpreter.
+
+h3. Class and Object Model
+
+Ruby classes in MacRuby are in fact Objective-C classes. Because it is not yet possible to completely express the Ruby semantics with the Objective-C runtime, some extra bits are still being allocated per class. For example, Objective-C doesn't allow instance variables to be added at runtime to a class, or classes to be nested, so MacRuby has to work around that.
+
+Every method defined on a class from Ruby is registered with the Objective-C runtime. On a similar note, all Objective-C methods are lazily available from Ruby too. The [Libffi] library is used to create closures at runtime and inject them, either in the Objective-C runtime or YARV, but also to perform C or Objective-C calls.
+
+All Ruby classes inherit from NSObject, the root class of most Objective-C objects in the Cocoa world. This means that by default, all Ruby objects respond to a bunch of handful methods defined in NSObject, including some that are required by the GC.
+
+Objective-C classes are imported in the Ruby runtime on demand, along with their full hierarchy.
+
+All Ruby objects are actually Objective-C objects. The basic Ruby object structure was modified to conform to the basic Objective-C object structure. This means that Ruby objects can be passed to the Objective-C runtime without any conversion. They will be recognized in the Objective-C world because they have an Objective-C class.
+
+Vice-versa, Objective-C objects can be passed to the Ruby VM without any conversion. They will be recognized as pure Objective-C objects.
+
+h3. Primitives Classes
+
+The primitive Ruby classes (String, Array, and Hash) have been re-implemented on top of their Cocoa equivalents (respectively, NSString, NSArray, and NSDictionary).
+
+As an example, String is no longer a class, but a pointer (alias) to NSMutableString. All strings in MacRuby are genuine Cocoa strings and can be passed (without conversion) to underlying C or Objective-C APIs that expect Cocoa strings.
+
+The whole String interface was re-implemented on top of NSString. This means that you can call any method of String on any Cocoa string. Because Cocoa strings can be either mutable and immutable, if you try to call a method that is supposed to modify its receiver on an immutable string, a runtime exception will be raised.
+
+Because NSString was not designed to handle bytestrings, MacRuby will automatically (and silently) create an NSData object when necessary, attach it to the string object, and proxy the methods to its content. This will typically be used when you read binary data from a file or a network socket.
+
+h3. Loading Frameworks
+
+MacRuby introduces the Kernel#framework method to require a given C or Objective-C framework into the current runtime.
+
+The method will also locate all the "BridgeSupport":http://trac.macosforge.org/projects/bridgesupport files in the framework and its dependencies, parse them, and accordingly construct new Ruby APIs. These can be used to access all static APIs, such as C functions, structures, enumerations, constants, and more.
+
+The BridgeSupport parser has been extracted from the RubyCocoa project and rewritten to be language-agnostic. It is very fast, using libxml2's xmlTextReader and gperf(1). All symbols retrieved from the BridgeSupport parser are located on demand to avoid unnecessary dlsym(3) calls.
+
+h3. Keyed Arguments
+
+MacRuby uses a special syntax to call and define Objective-C methods with keyed/named arguments. It is based on the same syntax that is used to define key/value hash pairs: key:value or :key => value.
+
+MacRuby has a modified version of the parser which detects calls or method definitions using one regular argument, and other arguments using the key/value pair syntax. It will reconstruct the Objective-C full selector if needed. The method name that will be used in the Ruby VM is the same as the Objective-C selector.
+
+The argument order is respected. Multiple arguments with the same name can co-exist, as in Objective-C.
+
+Compatibility is preserved for Ruby-defined methods that expect to receive many key/value pairs, by sending a traditional Hash instead.
+
+h3. Garbage Collection
+
+MacRuby uses the new Objective-C garbage collector engine, instead of the traditional Ruby GC.
+
+The new collector is generational. It uses write barriers to filter modifications inside the object store to quickly collect generations of young objects. The Ruby runtime was heavily modified to explicitly set the write barriers.
+
+Collections are performed in a separate thread, which doesn't interrupt the program execution flow, except to call finalizers. Fortunately, this happens quite rarely.
+
+The GC and ObjectSpace APIs have been re-implemented for the new GC. This has led to, for instance, ObjectSpace#each_object being available by default, with no runtime cost at all! It even includes all pure Objective-C objects, which is great for debugging purposes.

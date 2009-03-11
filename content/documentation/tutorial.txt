@@ -1,0 +1,476 @@
+---
+title:      Tutorial
+created_at: 2009-03-11 08:25:23.244103 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+<div class='tutorial'>
+Welcome to the MacRuby Tutorial. In this tutorial, you will learn the basic things you need to know in order to develop with Mac OS X frameworks using MacRuby.
+
+This tutorial is not about learning Ruby or Objective-C. There are many resources about that on the web. In any case, you don't need to know Objective-C to follow this tutorial.
+
+MacRuby, as a port of the official Ruby code base, should run your existing Ruby code. Just take into account that it is based on the 1.9 version, which presents some incompatibilities with the current stable version, 1.8.
+
+Please download MacRuby and install before preceeding with this tutorial.
+
+If you want to check out some example code before starting the tutorial, you will find some in the <code>/Developer/Examples/Ruby/MacRuby</code> directory (or you can read them from your browser).
+
+h3. Loading Frameworks
+
+The first thing you have to do in your MacRuby script is to load the framework you want to use.
+
+If you plan to work on a Cocoa application, you will need the Cocoa framework. You can load it using the framework method:
+
+<code><pre class="commands">
+$ /usr/local/bin/macirb --simple-prompt
+>> framework 'Cocoa'
+=> true
+</pre></code>
+
+When you load a framework, MacRuby will also automatically load all of its dependencies. For example, both Foundation and AppKit will be loaded for you if you load Cocoa.
+
+A framework can be written in C, Objective-C, or both. The C definitions, such as structures, constants, enumerations, functions, and more, will also be available when you call the framework method.
+
+You can read a complete list of frameworks that ship with Mac OS X here.
+
+h3. Accessing Classes
+
+It is very easy to use an Objective-C class from MacRuby. You just have to refer to it as if it was a Ruby class. For example, to access the NSSound class:
+
+<code><pre class="commands">
+$ /usr/local/bin/macirb --simple-prompt
+>> framework 'Cocoa'
+=> true
+>> NSSound.ancestors
+=> [NSSound, Object, NSObject, Kernel]
+</pre></code>
+
+In MacRuby, all classes, including Ruby core classes, always inherit from NSObject, the root class of most Objective-C classes.
+
+<code><pre class="commands">
+>> Regexp.ancestors
+=> [Regexp, Object, NSObject, Kernel]
+</pre></code>
+
+This means that every object in MacRuby responds to methods defined in the NSObject class.
+
+For example,
+
+<code><pre class="commands">
+>> s = "foo"
+=> "foo"
+>> s.respond_to?(:upcase)
+=> true
+>> s.upcase
+=> "FOO"
+</pre></code>
+
+This can also be written using equivalent methods from NSObject.
+
+<code><pre class="commands">
+>> s.respondsToSelector(:upcase)
+=> true
+>> s.performSelector(:upcase)
+=> "FOO"
+</pre></code>
+
+To get a list of methods on a MacRuby object, just call #methods on it. You will see that objects in MacRuby respond to more methods than standard Ruby.
+
+<code><pre class="commands">
+$ ruby -ve "p ''.methods.size" 
+ruby 1.8.6 (2007-09-24 patchlevel 111) [universal-darwin9.0] 
+143 
+$ /usr/local/bin/macruby -ve "p ''.methods.size" 
+MacRuby version 0.1 (ruby 1.9.0 2008-02-18 revision 0) [i686-darwin9.2.0] 
+564
+</pre></code>
+
+Unlike RubyCocoa, all classes in MacRuby automatically inherit from NSObject, so it is not necessary to explicitly subclass NSObject.
+
+<% coderay :lang => 'ruby' do -%>
+# RubyCocoa
+class MyController < OSX::NSObject
+  # ...
+end
+
+# MacRuby
+class MyController
+  # ...
+end
+<% end -%>
+
+
+h3. Sending Messages
+
+When you call a method on an object in Ruby, the interpreter sends a message to the object, including the names of the method and arguments. Messages in Objective-C are referred as selectors. Selectors are a little bit different than genuine Ruby messages, in the sense that method arguments can have a name (or key) which is also part of the selector.
+
+For example, let's imagine a Person Objective-C class that responds to 3 simple selectors. Assuming that the Person class is properly defined (we will see that later), here is how you would call the selectors from Objective-C:
+
+<code><pre class="commands">
+Person *person = [Person new];                // create an instance of the Person class.
+
+[person name];                                // send selector 'name'.
+[person setName:name];                        // send selector 'setName:', passing the 'name' variable as an argument. 
+[person setFirstName:first lastName:last];    // send selector 'setFirstName:lastName:', 
+                                              // passing both 'first' and 'last' variables as arguments. 
+</pre></code>
+                                              
+Sending selectors in MacRuby is just as easy as in Objective-C. Here is the same example, but converted to MacRuby:
+
+<% coderay :lang => 'ruby' do -%>
+person = Person.new
+person.name
+person.setName(name) 
+person.setFirstName(first, lastName:last)
+<% end -%>
+
+If you're used to writing RubyCocoa code, the first 3 lines might not be new to you, but the last one most probably is. This uses the new MacRuby syntax to define keyed arguments.
+
+You can use either key:value or :key => value to define keyed arguments. For instance, the last line could also be written as:
+
+<% coderay :lang => 'ruby' do -%>
+person.setFirstName first, :lastName => last
+<% end -%>
+
+When calling a method using this syntax, MacRuby will actually reconstruct the full method name and send it to the object.
+
+A few notes:
+
+The order of the keys is significant, because it is used to build the selector.
+Multiple arguments can have the same key', as in Objective-C.
+If the selector is not found, a Hash object is built and sent instead, to stay compatible with Ruby code that expects receiving one.
+Let's take a more concrete example, creating an NSWindow object. In Objective-C:
+
+<code><pre class="commands">
+NSWindow *window = [[NSWindow alloc] 
+    initWithContentRect:frame 
+    styleMask:NSBorderlessWindowMask 
+    backing:NSBackingStoreBuffered 
+    defer:false];
+</pre></code>
+    
+Here is the MacRuby equivalent:
+
+<% coderay :lang => 'ruby' do -%>
+window = NSWindow.alloc.initWithContentRect frame, 
+    styleMask:NSBorderlessWindowMask,
+    backing:NSBackingStoreBuffered,
+    defer:false
+<% end -%>
+
+To compare, here is the RubyCocoa version, which doesn't support keyed arguments:
+
+<% coderay :lang => 'ruby' do -%>
+window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(
+    frame,
+    NSBorderlessWindowMask,
+    NSBackingStoreBuffered,
+    false)
+<% end -%>
+    
+To call setter methods on Objective-C objects, you normally call a method like setName, using the name as the argument. MacRuby provides a facility which allows the use of standard attribute writer methods:
+
+<% coderay :lang => 'ruby' do -%>
+person.name = name                 # send selector 'setName:', passing the 'name' variable 
+<% end -%>
+
+The same goes for predicate method. You can, for example, call loaded? instead of isLoaded:
+
+<% coderay :lang => 'ruby' do -%>
+framework 'foundation'
+NSBundle.mainBundle.loaded?        # send selector 'isLoaded'
+<% end -%>
+
+
+h3. Defining Methods
+
+Now that we know how to send Objective-C messages, let's learn how to create methods from Ruby.
+
+Here is how the Person class that we introduced in the previous section could be implemented with MacRuby:
+
+<% coderay :lang => 'ruby' do -%>
+class Person
+  def name
+    @name
+  end
+  def setName(name)
+    @name = name
+  end
+  def setFirstName(first, lastName:last)
+    @name = "#{first} #{last}"
+  end
+end
+<% end -%>
+
+You can see that the setFirstName:lastName: method is defined in the same way we called it.
+
+During your development with Objective-C frameworks, you may have to subclass an existing Objective-C class to override or add new behaviors. Subclassing an Objective-C class in MacRuby is just like subclassing any Ruby class. For example, here is how to create an NSView subclass that performs some custom drawing:
+
+<% coderay :lang => 'ruby' do -%>
+class HelloView < NSView
+  def drawRect(rect)
+    # Set the window background to transparent
+    NSColor.clearColor.set
+    NSRectFill(bounds)
+
+    # Draw the text in a shade of red and in a large system font
+    attributes = {
+      NSForegroundColorAttributeName => NSColor.redColor,
+      NSFontAttributeName => NSFont.boldSystemFontOfSize(48.0)
+    } 
+    str = "Hello, Ruby Baby"
+    str.drawAtPoint(NSPoint.new(0, 0), withAttributes:attributes)
+  end
+end 
+
+# ...
+# Then, later, the custom view can be instantiated and added as the window's content view:
+window.contentView = HelloView.alloc.initWithFrame(frame)
+<% end -%>
+
+When you override an Objective-C method and want to call the super implementation, you can just use super as if you were overriding a Ruby method.
+
+<% coderay :lang => 'ruby' do -%>
+class MyObject
+  # Redefine NSObject's initializer.
+  def init
+    # Call the super initializer.
+    if super
+      # ...
+      # You must always return self in an NSObject initializer.
+      self
+    end
+  end
+end
+
+o = MyObject.new # Shortcut to MyObject.alloc.init
+<% end -%>
+
+
+h3. Primitive Objects
+
+Thanks to the design of MacRuby, Objective-C objects can be passed to Ruby with no conversion. Conversely, Ruby objects can be passed into Objective-C methods without needing to be converted.
+
+Ruby defines its own set of primitive classes, String, Array, and Hash. Equivalent classes (NSString, NSArray, and NSDictionary) exist in Cocoa.
+
+In MacRuby, the Ruby primitives classes have been re-modeled on top of their Cocoa equivalents. For example, String does not exist anymore as a class, but as a pointer to NSMutableString. Additionally, the existing String interface has been re-implemented on NSString.
+
+This means that all strings that you create in MacRuby are Cocoa strings. Consequently, they respond to the NSString interface. There is no conversion or data loss when you pass them to an underlying C or Objective-C API that expects an NSString. Alternatively, you can call any method of String on an NSString.
+
+<code><pre class="commands">
+$ macirb 
+>> String
+=> NSMutableString
+>> "foo".class
+=> NSCFString
+>> "foo".class.ancestors
+=> [NSCFString, NSMutableString, NSString, Comparable, Object, NSObject, Kernel]
+>> "foo".upcase            # calling String#upcase
+=> "FOO"
+>> "foo".uppercaseString   # calling NSString#uppercaseString
+=> "FOO"
+</pre></code>
+
+An interesting detail of this behavior has to do with dtynamic behavior. Frameworks that define methods on the Cocoa primitive classes on the fly will also share the same functionality with the Ruby primitive classes. If you look closely at the previous code snippet, you will see the following:
+
+<% coderay :lang => 'ruby' do -%>
+attributes = {
+  NSForegroundColorAttributeName => NSColor.redColor,
+  NSFontAttributeName => NSFont.boldSystemFontOfSize(48.0)
+} 
+str = "Hello, Ruby Baby"
+str.drawAtPoint(NSPoint.new(0, 0), withAttributes:attributes)
+<% end -%>
+
+This code passes a Ruby Hash object to the [NSString -drawAtPoint:attributes:] method, which expects an NSDictionary. Because Hash implements the NSDictionary API, this works! Notice that you also have drawAtPoint:attributes: on NSString (and thus on all Ruby strings).
+
+Because Cocoa types can be either mutable and immutable, if you try to call a method that is supposed to modify its receiver on an immutable object, a runtime exception will be raised. By default, strings, arrays, or hashes that you create in MacRuby are mutable.
+
+<code><pre class="commands">
+$ macirb
+>> 'foo'.capitalize!
+=> "Foo"
+>> NSMutableString.stringWithString('foo').capitalize!
+=> "Foo"
+>> NSString.stringWithString('foo').capitalize!
+RuntimeError: can't modify immutable string
+        from (irb):3:in `capitalize!'
+        from (irb):3
+        from /usr/local/bin/macirb:12:in `<main>'
+</pre></code>
+
+h3. Accessing Static APIs
+
+Many Mac OS X framework APIs are not introspectable because they are static, but thanks to the BridgeSupport project, static APIs can be called from MacRuby.
+
+The following API types are available:
+
+* CoreFoundation types (CFType)
+* C structures
+* C opaque types
+* C enumerations
+* C and Objective-C constants (including preprocessor-defined constants)
+* C functions (including inline functions)
+* Objective-C informal protocols
+
+
+As an example, you can access the NSRect, NSPoint, and NSSize C structures in MacRuby as if these were real classes, and call C functions on them:
+
+<code><pre class="commands">
+$ /usr/local/bin/macirb --simple-prompt
+>> framework 'foundation'
+=> true
+>> point = NSPoint.new(1, 2)
+=> #<NSPoint x=1.0 y=2.0>
+>> point.x += 1
+=> 2.0
+>> rect = NSRect.new(point, NSZeroSize)
+=> #<NSRect origin=#<NSPoint x=2.0 y=2.0> size=#<NSSize width=0.0 height=0.0>>
+>> point.x -= 1
+=> 1.0
+>> NSEqualRects(rect, NSRect.new(point, NSZeroSize))
+=> false
+>> point.x += 1
+=> 2.0
+>> NSEqualRects(rect, NSRect.new(point, NSZeroSize))
+=> true
+</pre></code>
+
+Mentioning structures, there are different ways of creating them. You can either manually allocate them using #new, use one of the helper functions part of Cocoa, or pass a Ruby array:
+
+<code><pre class="commands">
+>> r = NSRect.new(NSPoint.new(1, 2), NSSize.new(3, 4))
+=> #<NSRect origin=#<NSPoint x=1.0 y=2.0> size=#<NSSize width=3.0 height=4.0>>
+>> NSEqualRects(r, NSMakeRect(1, 2, 3, 4))
+=> true
+>> NSEqualRects(r, [1, 2, 3, 4])
+=> true
+>> NSEqualRects(r, [[1, 2], [3, 4]])
+=> true
+</pre></code>
+
+Some Cocoa classes are toll-free bridged with corresponding Core Foundation types (CFTypes). You can safely call Core Foundation functions and pass objects.
+
+<code><pre class="commands">
+>> CFStringGetLength('foo')
+=> 3
+>> url = CFURLCreateWithString(nil, "http://apple.com", nil)
+=> #<NSURL:0x1492230>
+>> url.fileURL?
+=> false
+>> CFURLHasDirectoryPath(url)
+=> false
+>> CFEqual(url, NSURL.URLWithString("http://apple.com"))
+=> true
+</pre></code>
+
+On some occasions. you will want to load bridge support files that you personally generated using gen_bridge_metadata(1). To do that, you can use the Kernel#load_bridge_support_file method.
+
+A typical use case is when you want to access enumerated constants from a scriptable dictionary, in order to control an application using the Scripting Bridge framework.
+
+<code><pre class="commands">
+$ sdef /Applications/iTunes.app | sdp -fh --basename ITunes
+</pre></code>
+
+<code><pre class="commands">
+$ gen_bridge_metadata -c '-I.' ITunes.h > ITunes.bridgesupport
+</pre></code>
+
+<code><pre class="commands">
+$ grep enum ITunes.bridgesupport | head -n 10
+<enum name='ITunesEKndAlbumListing' value='1799449698'/>
+<enum name='ITunesEKndCdInsert' value='1799570537'/>
+<enum name='ITunesEKndTrackListing' value='1800696427'/>
+<enum name='ITunesEPlSFastForwarding' value='1800426310'/>
+<enum name='ITunesEPlSPaused' value='1800426352'/>
+<enum name='ITunesEPlSPlaying' value='1800426320'/>
+<enum name='ITunesEPlSRewinding' value='1800426322'/>
+<enum name='ITunesEPlSStopped' value='1800426323'/>
+<enum name='ITunesERptAll' value='1800564801'/>
+<enum name='ITunesERptOff' value='1800564815'/>
+</pre></code>
+
+<code><pre class="commands">
+$ /usr/local/bin/macirb --simple-prompt
+>> load_bridge_support_file 'ITunes.bridgesupport'
+=> main
+>> ITunesEKndAlbumListing
+=> 1799449698
+>> ITunesEKndCdInsert
+=> 1799570537
+>>
+</pre></code>
+
+h3. Starting a New Project
+
+Note: this part of the tutorial is also available as a screencast. Note: the tutorial uses the ib_outlet and ib_action syntax, which has been deprecated since MacRuby 0.3. Read below for the new syntax.
+
+The easiest way to start a new MacRuby project is to use Xcode.
+
+Click on File, then on New Project, selecting MacRuby Application in the projects list.
+
+You should then get a new empty MacRuby project. You will see that the project contains two files:
+
+main.m, a small C file, which contains the traditional main entry point function. The function just calls the MacRuby initializer, passing the path of the Ruby script that will be loaded once the runtime has been initialized.
+rb_main.rb: this is the Ruby script that will be executed once your application is starting. This file loads the Cocoa framework, all other .rb (Ruby) files present in your application bundle, then calls the NSApplicationMain function of the Application kit. This will enter the Cocoa run-loop.
+You can build and run the project, it will show you an empty window.
+
+To add functionality, click on on File, then on New File, selecting Empty File in Project. Name your file MyController.rb, then paste the following code into it.
+
+<% coderay :lang => 'ruby' do -%>
+class MyController < NSWindowController
+  attr_writer :button
+  def clicked(sender)
+    puts "Button clicked!"
+  end
+end
+<% end -%>
+
+This code defines a subclass of NSWindowController with 2 methods, button= and clicked, which will be respectively mapped as an Interface Builder outlet and action. Outlets are references to user-interface elements; actions are methods that will be called when a certain action occurs.
+
+Note: attr_accessor can also be used to generate an Interface Builder outlet.
+
+Note: to make sure a method will be recognized by Interface Builder as an action, it must have only one argument and the argument must be named sender. Other methods will not be recognized.
+
+Right now, your Ruby code is completely disconnected from the interface. Do not forget to save the MyController.rb file, then double-click on MainMenu.nib, which is under the Resources folder of the sidebar. This will open Interface Builder.
+
+First, let's instantiate our class. In the Library pane, drag-and-drop an NSObject item to the main window. Then, make sure you selected it, and open the inspector pane (click on Window, then Document Info). In the Object Identity tab, select MyController as the object class.
+
+You will then see that IB knows about your class, and especially the outlet and action defined earlier.
+
+Drag an NSButton item from the Library pane to your window. Then, connect it to the MyController object, by clicking on it while maintaining the control key, dragging the mouse over the object, then releasing the button. A small, translucent window will appear, showing you the object's actions; there you can select clicked:.
+
+For the clarity of this tutorial, we are not going to connect the button outlet, as it is not required.
+
+You can now save the MainMenu.nib file, then go back in Xcode, build, and run. Your new window should appear, and when you click on the button, you should see the Button clicked message in the Console window. Congratulations!
+
+h3. Embedding MacRuby in Your Application
+
+Once your application is done you may want to deliver it to people and not force them to install MacRuby in order to run it.
+
+It is possible to embed MacRuby.framework inside your application.
+
+If you are using Xcode, you can add the Embed MacRuby target (new in 0.4). Then, change your rb_main.rb file to add the following lines at its very beginning:
+
+<% coderay :lang => 'ruby' do -%>
+$:.map! { |x| x.sub(/^\/Library\/Frameworks/, NSBundle.mainBundle.privateFrameworksPath) }
+$:.unshift NSBundle.mainBundle.resourcePath.fileSystemRepresentation
+<% end -%>
+
+Then you can build the target and your .app bundle should have a self-contained MacRuby.
+
+If you are currently working on a HotCocoa project, simply run a macrake deploy and everything else will be handled for you.
+
+h3. Using MacRuby in an Objective-C Project
+
+You may already have an existing Cocoa project written in Objective-C and you are considering using MacRuby to implement additional functionality or add a scripting interface to your native objects.
+
+Since 0.4, MacRuby ships with an Objective-C interface that you can call from your application to control the runtime.
+
+The interface is described in the <code>/Library/Frameworks/MacRuby.framework/Headers/ruby/objc.h</code> header file.
+
+The <code>/Developer/Examples/Ruby/MacRuby/EmbeddedMacRuby</code> sample code shows how to use this new functionality.
+</div>

@@ -5,7 +5,7 @@ dirty:       true
 filter:
   - erb
 ---
-<p class="callout"><strong>MacRuby</strong> is a version of Ruby 1.9, ported to run directly on top of Mac OS X core technologies such as the Objective-C common runtime and garbage collector, and the CoreFoundation framework. While still a work in progress, it is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby.</p>
+<p class="callout"><strong>MacRuby</strong> is a version of Ruby 1.9, ported to run directly on top of Mac OS X core technologies such as the Objective-C common runtime and garbage collector, and the CoreFoundation framework. While still a work in progress, it is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby. <a href="/documentation/overview.html"><i>Read more...</i></a></p>
 <hr size="0" noshade class="harvardrule" />
 
 <div id="newsbox">
