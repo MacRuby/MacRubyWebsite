@@ -7,7 +7,6 @@ module MacRubyTeamHelper
     html += (member.href ? "<a href='#{member.href}'>#{member.name}</a>" : member.name)
     html += "</strong>"
     html += "<span class='affiliation'>, #{member.affiliation}</span>" if member.affiliation
-    html += "<br><span class='summary'>#{member.summary}</span>"
     html += "</p>"
     html
   end

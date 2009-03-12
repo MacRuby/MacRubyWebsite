@@ -13,7 +13,7 @@ filter:
 
 <h3>Project Members</h3>
 
-<% team_members.each do |member| -%>
+<% team_members.sort {|m1, m2| m1.name <=> m2.name}.each do |member| -%>
   <%= render_member(member) %>
 <% end -%>
 

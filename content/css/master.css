@@ -260,12 +260,18 @@ div#footer p {
 }
 
 div#project h3 {
+  margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 20px;
 }
 
 div#project .affiliation {
   font-style: italic;
   color: #666;
+}
+
+div#project p {
+  margin-bottom: 5px;
 }
 
 div#project .summary {
