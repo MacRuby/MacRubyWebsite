@@ -1,0 +1,34 @@
+---
+title:      Contact Us
+created_at: 2009-03-12 18:23:12.884193 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+Please feel free to contact us if you have any questions, ideas or bugs to report.  
+
+Here's all the ways of getting ahold of us:
+
+h2. Twitter
+
+You can follow us on Twitter by following the "@macruby":http://twitter.com/macruby account.
+
+h2.
+
+You can also join the #ruby-osx IRC channel on freenode to discuss with developers.
+
+h2. Mailing Lists
+
+"MacRuby-devel":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel is the developer mailing-list. Please subscribe to it, if you are interested in following the MacRuby development process or would like to start a discussion. All activity in the tracker generates notifications in this list.
+
+"MacRuby-changes":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-changes is the SVN changes mailing-list. This is a read-only list, but you might want to subscribe to it if you are interested in tracking all of the changes in the project's source code.
+
+h2. Contributions
+
+Please "file a ticket":http://trac.macosforge.org/projects/ruby/newticket on the MacRuby Trac component, if you want to contribute an enhancement request or a bug report. Patches with test cases are welcome.
+
+You can also send your feedback to the MacRuby-devel mailing-list.
+
+If you want to help us, do not hesitate to introduce yourself in the mailing-list; we will give you an overview of things that need to be done. If you want to commit your code directly in the repository, please note that you will have to sign a committer agreement first; we will provide this to you.

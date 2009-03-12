@@ -6,7 +6,7 @@ filter: erb
   <li><a href="/blog/index.html" title="Blog"><img src="/images/nav_blog.png" alt="Blog" /></a></li>
   <li><a href="/source.html" title="Source"><img src="/images/nav_source.png" alt="Source" /></a></li>
   <li><a href="/documentation.html" title="Documentation"><img src="/images/nav_documentation.png" alt="Home" /></a></li>
-  <li><a href="http://www.macruby.org/trac/report/1" title="Tickets"><img src="/images/nav_tickets.png" alt="Tickets" /></a></li>
+  <li><a href="/contact-us.html" title="Contact"><img src="/images/nav_tickets.png" alt="Contact Us" /></a></li>
   <li class="last"><img src="/images/three_easy_steps.png" alt="" id="3steps" /></li>
 </ul><!-- // end nav -->
 
