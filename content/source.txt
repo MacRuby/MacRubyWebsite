@@ -16,7 +16,12 @@ $ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
 </pre></code>
 
 
-For building instructions, please refer to
+For building instructions, please refer to README.macruby file, but the basic build instructions are:
+
+<code><pre class="commands">
+$ rake
+$ sudo rake install
+</pre></code>
 
 h2. Git
 
@@ -24,5 +29,5 @@ Git aficionados will be glad to learn that there is a mirror of the SVN trunk re
 
 h2. Roadmap
 
-Check out the "MacRubyRoadmap":http://www.macruby.org/trac/wiki/MacRubyRoadmap
+Check out the "MacRubyRoadmap":/roadmap.html
 

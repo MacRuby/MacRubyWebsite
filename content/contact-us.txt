@@ -15,7 +15,7 @@ h2. Twitter
 
 You can follow us on Twitter by following the "@macruby":http://twitter.com/macruby account.
 
-h2.
+h2. Internet Relay Chat
 
 You can also join the #ruby-osx IRC channel on freenode to discuss with developers.
 

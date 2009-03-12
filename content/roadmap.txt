@@ -1,0 +1,55 @@
+---
+title:      Roadmap
+created_at: 2009-03-12 18:37:31.833759 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+MacRuby Roadmap
+Important: this roadmap represents some general guidelines for upcoming releases and doesn't attempt to make any guarantee.
+
+h2. 0.1 (released 2008-03-13)
+
+* First public release.
+* Object model is based on the Objective-C runtime.
+* Basic Objective-C messaging.
+* Can read BridgeSupport files.
+* Integration with the Objective-C garbage collector.
+ 
+h2. 0.2 (released 2008-06-06 for WWDC)
+
+* Rewrite of the String, Array and Hash builtin classes using CoreFoundation.
+* Re-implementation of the Ruby interface on the CoreFoundation classes.
+* Toll-free bridging between Ruby primitive classes and CoreFoundation.
+* Pseudo-stability. Eliminating all discovered GC crashers and memory leaks.
+
+h2. 0.3 (released 2008-09-08)
+
+* Using the Objective-C method dispatcher for pure Ruby method dispatch.
+* RubyGems should work.
+* IB3 support.
+* HotCocoa layer.
+* Performance work, should be fast.
+
+h2. 0.4 (to be released, soon)
+
+* Threaded GC by default.
+* 64-bit support.
+* DTrace probes.
+* MacRuby Objective-C API, to control the runtime from a pure Objective-C environment.
+* Embeddable MacRuby.framework.
+* Support for passed-by-reference arguments.
+
+h2. 0.5 (to be released, no release date planned yet)
+
+* Better support for bytestrings.
+* Rewrite IO with CoreFoundation.
+* New virtual machine.
+
+h2. 0.6 (to be released, no release date planned yet)
+
+* RubyCocoa compatible layer.
+* OSA (Open Scripting Architecture) conformance.
+* AppleEvent API.
