@@ -1,11 +1,17 @@
 ---
-title:      Tutorial
+title:      Introductory Tutorial
 created_at: 2009-03-11 08:25:23.244103 -04:00
+tutorial:   true
+author:     lrz
 filter:
   - erb
   - textile
 ---
 h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
 
 <div class='tutorial'>
 Welcome to the MacRuby Tutorial. In this tutorial, you will learn the basic things you need to know in order to develop with Mac OS X frameworks using MacRuby.

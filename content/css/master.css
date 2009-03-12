@@ -238,7 +238,7 @@ div.article .date {
   color: #999;
 }
 
-div.article .author {
+.author {
   color: #999;
   font-style: italic;
   margin-bottom: 5px;
@@ -276,4 +276,31 @@ div#project p {
 
 div#project .summary {
   
+}
+
+ul.tutorial_list li {
+  margin-bottom: 10px;
+}
+
+ul.tutorial_list li span.date {
+  padding-right: 15px;
+  color: #999;
+}
+
+ul.tutorial_list li span.name {
+  padding-right: 15px;
+}
+
+
+ul.recipe_list li {
+  margin-bottom: 10px;
+}
+
+ul.recipe_list li span.date {
+  padding-right: 15px;
+  color: #999;
+}
+
+ul.recipe_list li span.name {
+  padding-right: 15px;
 }

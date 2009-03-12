@@ -18,7 +18,7 @@ filter:
     <div class="title"><%= link_to_page(page) %></div>
   </div>
   <div class="author">
-    By <%= page.author %>
+    By <%= member_name(page.author) %>
   </div>
   <div class="body">
     <%= render(page) %>

@@ -1,6 +1,7 @@
 ---
 title:      Learning About MacRuby
 created_at: 2009-03-07 16:48:32.084407 -05:00
+dirty:      true
 filter:
   - erb
   - textile
@@ -14,10 +15,33 @@ MacRuby is a free software project by Apple Inc.  Many folks inside and outside 
 Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
 
 
-h2. Tutorials
+h3. Tutorials
 
-Lists of tutorials...
+<ul class="tutorial_list">
+<%
+  tutorials = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
+      :sort_by => "created_at", :reverse => true, :tutorial => true)
+  tutorials.delete(@page)
+  tutorials.each do |page|
+-%>
+<li><span class="date"><%= page.created_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><span class="author">By <%= member_name(page.author) %></span>
+<% end -%>
+</ul>
 
-h2. Recipes
+h3. Recipes
 
-Lists of recipes...
+<ul class="recipe_list">
+<%
+  recipes = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
+      :sort_by => "created_at", :reverse => true, :recipe => true)
+  recipes.delete(@page)
+-%>
+<% if recipes.empty? -%>
+  <li><span class='author'>No recipes have been written yet.</span>
+<% else 
+  recipes.each do |page|
+-%>
+<li><span class="date"><%= page.created_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><span class="author">By <%= member_name(page.author) %></span>
+<% end -%>
+<% end -%>
+</ul>
