@@ -15,7 +15,7 @@ MacRuby is a free software project by Apple Inc.  Many folks inside and outside 
 Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
 
 
-h3. Tutorials
+h2. Tutorials
 
 <ul class="tutorial_list">
 <%
@@ -28,7 +28,7 @@ h3. Tutorials
 <% end -%>
 </ul>
 
-h3. Recipes
+h2. Recipes
 
 <ul class="recipe_list">
 <%
