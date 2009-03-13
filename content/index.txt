@@ -26,7 +26,7 @@ filter:
 </div><!-- //end newsbox -->
 
 <h2>HotCocoa Is For Me!</h2>
-<p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <a href="">Check out some of the cool things you can do with HotCocoa!</a></p>
+<p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <a href="/hotcocoa.html">Read more...</a></p>
 <% coderay :lang => 'ruby' do -%>
 require 'hotcocoa'
 include HotCocoa

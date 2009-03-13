@@ -1,6 +1,7 @@
 --- 
 title:      <%= title %>
 created_at: <%= Time.now.to_y %>
+updated_at: <%= Time.now.to_y %>
 tutorial:   true
 author:     Your Name Here
 filter:

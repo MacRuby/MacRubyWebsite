@@ -1,0 +1,50 @@
+---
+title:      HotCocoa
+created_at: 2009-03-12 21:06:50.998294 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+HotCocoa is a thin, idiomatic Ruby layer that sits above Cocoa and other frameworks. HotCocoa will be included with MacRuby when it ships in future versions of OS X and is currently included in the MacRuby distributions. 
+
+Cocoa classes have extremely large method and constant names. A substantial amount of code is written to just instantiate and configure instances of these classes. Interface Builder is used by most developers because it hides the complexity of manually configuring controls, but at the expense have having to use a GUI builder and the obscuring those configuration options inside the IB user interface. One of HotCocoa's chief goals is to allow Interface Builder simplicity, but in Ruby code. 
+
+Buttons, Sliders, Windows, WebViews...the whole works...HotCocoa simplifies this process by creating a mapping layer over the top of Objective C classes. HotCocoa adds Ruby-friendly methods, constants and delegate techniques that look refreshingly simple, but do not prevent full use of the Cocoa APIs.  If you've done any amount of programming on OS X, you know that the API can be quite verbose. 
+
+Even with MacRuby's wonderful keyword arguments, it can be daunting to enter this...
+
+<code><pre class="commands">
+win = NSWindow.alloc.initWithContentRect [10,20,300,300], 
+  :styleMask => (NSTitledWindowMask         |
+                 NSClosableWindowMask       |
+                 NSMiniaturizableWindowMask |
+                 NSResizableWindowMask)
+</pre></code>                 
+                 
+...every time you want to create and configure a new NSWindow instance!
+
+This is the reason most developers use Interface Builder to configure interface components. The purpose of HotCocoa is to allow you to use the flexible syntax of Ruby and its dynamic nature to simplify programmatically constructing user interfaces on OS X without an Interface Builder.
+
+With HotCocoa, creating the NSWindow instance above is as simple as:
+
+<code><pre class="commands">
+win = window :frame => [10,20,300,300]
+</pre></code>
+
+HotCocoa achieves this feat by creating Mappings over the most common Classes and Constants used on OS X. Those mappings create constructor methods on the HotCocoa module (like the "window" method above). Each constructor method accepts an optional block which yields the created instance (more on that in the HotCocoaTutorial). Mappings also decorate the standard Objective-C API with nice Ruby APIs for common operations. The important thing to realize is the constructor methods return real instances of these common classes, not high-level abstractions. So, you can call any Objective-C method available on those objects.
+
+h3. In HotCocoa, Mappings provide the following:
+
+* <strong>Defaults:</strong> Smart default constructor parameters (like the styles in window) to minimize the parameters you have to pass in.
+* <strong>Constants:</strong>	Mapping of constants to Ruby symbols to minimize the text and readability of HotCocoa applications.
+* <strong>Constructors:</strong>	Building the instances of the mapped classes using the correct class-specific APIs.
+* <strong>Custom Methods:</strong>	Ruby-friendly API for commonly used methods (like << for addSubview on NSView subclasses).
+* <strong>Delegate Methods:</strong>	Simplified Ruby-friendly methods for delegating instances that use Ruby blocks
+
+<div style="margin-top:8px;"></div>
+
+h3. Want to learn more about HotCocoa?
+
+Now that you understand the basics of what HotCocoa is and why we are building it, please look at the "HotCocoa Tutorial":/hotcocoa/tutorial.html for examples of how to build OS X applications with it. For a more detailed understanding of how to read, create, edit or contribute mapping files, see "HotCocoa Mappings":/hotcocoa/mappings.html. For the current status of the project, see "HotCocoa Mapping Status":/hotcocoa/status.html.

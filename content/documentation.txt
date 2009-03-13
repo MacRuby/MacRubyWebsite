@@ -20,11 +20,11 @@ h2. Tutorials
 <ul class="tutorial_list">
 <%
   tutorials = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
-      :sort_by => "created_at", :reverse => true, :tutorial => true)
+      :sort_by => "updated_at", :reverse => true, :tutorial => true)
   tutorials.delete(@page)
   tutorials.each do |page|
 -%>
-<li><span class="date"><%= page.created_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><span class="author">By <%= member_name(page.author) %></span>
+<li><span class="date"><%= page.updated_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><%= new_or_updated_indicator(page) %><span class="author">By <%= member_name(page.author) %></span>
 <% end -%>
 </ul>
 

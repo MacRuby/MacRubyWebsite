@@ -1,0 +1,367 @@
+---
+title:      HotCocoa Mappings Tutorial
+created_at: 2008-10-31 21:06:50.998294 -04:00
+updated_at: 2008-10-31 21:06:50.998294 -04:00
+tutorial:   true
+author:     rich
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
+h3. Introduction
+
+A HotCocoa mapping defines a structure that sits on top of a particular Objective-C class and simplifies its usage in !MacRuby.  
+
+This structure is defined in a simple, Ruby-based "DSL":http://en.wikipedia.org/wiki/Domain-specific_language DSL (domain-specific language).The HotCocoa DSL includes syntax to aid in object instantiation, constant mapping, default options, customized methods, and delegate-method mappings. The only required section is object instantiation; the other four sections are only required if the Objective-C class in question requires it. Once defined, a mapping is registered with the <code>HotCocoa::Mappings</code> module, using the names of the mapping and the mapped Objective-C class.  
+
+The mappings that ship with HotCocoa are found in the @lib/ruby/1.8/hotcocoa/mappings@ directory. You can easily define your own mappings for classes by following the examples below. Place mappings in files of your own, loading them after you load the <code>hotcocoa</code> library.
+
+h3. Basic Mapping Syntax
+
+The basic syntax for defining a mapping is:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mappings.map(
+  :name => :CocoaClassNameAsSymbol, 
+  :framework => :FrameworkName) do ... end 
+<% end %>
+
+To create a mapping, call the <code>map</code> method on <code>HotCocoa::Mappings</code>, passing in an options hash. The first (and required) option is the <strong>:name</strong> parameter. Replace <strong>:name</strong> with the desired name of the method you want to be generated and made available to users of HotCocoa. For example, the mapping definition for an <code>NSButton</code> might be:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(
+  :button    => :NSButton,
+  :framework => :Cocoa) do ... end
+<% end %>
+
+This creates a method on HotCocoa named <code>#button</code>,
+which will return an instance of an <code>NSButton</code> class.
+Because the default value for <code>:framework</code> is <code>:Cocoa</code>,
+this option can often be omitted:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(
+  :button => :NSButton) do ... end
+<% end %>
+
+
+h3. HotCocoa Option Values
+
+HotCocoa option values (eg, <code>:NSButton</code>, <code>:Cocoa</code>) are encoded as symbols,
+rather than constants (eg, <code>NSButton</code>),
+so that the named class or framework will only be loaded when the method created is ''called''.
+At that time, HotCocoa will take care of translating each symbol into the corresponding reference.
+
+h3. Object Instantiation Method (required)
+
+There are two methods (<code>init_with_options</code> and <code>alloc_with_options</code>)
+that you can implement to support object instantiation.
+Define these methods within the block that you pass to the <code>#map</code> method.
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(
+  :button => :NSButton) do
+    def init_with_options(button, options)
+      button.initWithFrame options.delete(:frame)
+    end
+  end
+<% end %>
+
+As you can see from the method definition above,
+the <code>init_with_options</code> method is provided with an instance of the class that you declared
+in the mapping <code>(NSButton)</code> which is created with <code>NSButton.alloc</code>.
+This implementation just calls the proper <code>init</code> method.
+This example calls <code>initWithFrame</code> and passes the options value for the <code>:frame</code>.
+The options hash is passed to this function when you call the <code>#button</code> method:
+
+<% coderay :lang => 'ruby' do -%>
+button :frame => [0,0,20,100]
+<% end %>
+
+Note that the mapping must delete any option that it consumes.
+Every option used in the construction of the object should be removed from the hash.
+Any options that are left in the hash after begin processed by the instantiation methods
+will be dispatched to the <code>NSButton</code> instance.
+
+The second method you can implement is:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(:button => :NSButton) do
+  def alloc_with_options(options)
+    NSButton.alloc.initWithFrame options.delete(:frame)
+  end
+end
+<% end %>
+
+Here you are not provided with the <code>alloc</code>'d object as the first parameter, but simply the options hash. This is helpful for classes that use class methods for instantiation, such as:
+
+<% coderay :lang => 'ruby' do -%>
+NSImage.imageNamed('my_image')
+<% end %>
+
+You should implement either <code>#init_with_options</code> or <code>#alloc_with_options</code>, but not both. If <code>alloc_with_options</code> exists, 
+it will be called and <code>init_with_options</code> will be ignored.
+
+h3. Default Options (optional)
+
+You can provide a hash of default options in the definition of your mapping.
+This is very useful for many Cocoa classes, because there are so many options.
+Defaults are appended to the options hash that is passed into the constructor method
+if a value of the same key does not exist.
+
+Supplying your defaults is simple.
+In the example below, if you provide a <code>:frame</code>,
+it will be used instead of <code>DefaultEmptyRect</code>:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(
+  :button => :NSButton) do
+    defaults :bezel  => :rounded, 
+             :frame  => DefaultEmptyRect, 
+             :layout => {}
+  end
+<% end %>
+
+A few of the defaults shown above are pretty important to UI classes;
+specifically, <code>:frame</code> and <code>:layout</code>.
+The <code>NSButton</code> example uses <code>:frame => DefaultEmptyRect</code>.
+The <code>DefaultEmptyRect</code> constant equals a rectangle of <code>[0,0,0,0]</code>.
+The <code>:layout =></code> part is important for using the <code>layout_view</code> classes,
+which are included in HotCocoa.
+
+
+This default value is an empty hash, but if it's not passed,
+the default value  for the layout is actually <code>nil</code>.
+If the layout is <code>nil</code>,
+the component is not included when the <code>layout_view</code> computes the layout for the components.
+All of the UI mappings that ship with HotCocoa provide an empty hash as a default <code>:layout</code>. 
+
+h3. Constant Mapping (optional, inherited)
+
+Because constant names need to be globally unique in Objective-C, they can get very long.
+What the constant mapping provides in HotCocoa is the ability to use short symbol names
+and map them to the constant names that are scoped to the wrapped class.
+This is an example of mapping constants to represent button state:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(:button => :NSButton) do
+  constant :state, {
+    :on    => NSOnState,
+    :off   => NSOffState,
+    :mixed => NSMixedState
+  }
+end
+<% end %>
+
+A constant map includes the key (<code>:state</code>),
+followed by a hash which maps symbols to actual constants.
+When you provide options to the constructor method that match a constant key,
+it looks up the corresponding value in that hash
+and replaces the value in the option hash with the constant's value.  
+
+So, when you call:
+
+<% coderay :lang => 'ruby' do -%>
+button :state => :on
+<% end %>
+
+It's replaced with:
+
+<% coderay :lang => 'ruby' do -%>
+button :state => NSOnState
+<% end %>
+
+You can have as many constant maps in each class as you need.
+Constant maps are also inherited by subclasses.
+A constant map on <code>NSView</code> is also available
+on <code>NSControl</code> and <code>NSButton</code> (as subclasses). 
+
+If you provide a value for a constant key that is an array rather than a single symbol,
+the constants in the array are OR'd with each other.
+This is useful when the constants are masked.
+For <code>NSWindow</code>'s mapping of style:
+
+<% coderay :lang => 'ruby' do -%>
+:style => [:titled,
+           :closable,
+           :miniaturizable,
+           :resizable]
+<% end %>
+
+is equivalent to:
+
+<% coderay :lang => 'ruby' do -%>
+:style = NSTitledWindowMask         |
+         NSClosableWindowMask       |
+         NSMiniaturizableWindowMask |
+         NSResizableWindowMask
+<% end %>
+
+h3. Custom Methods (optional, inherited)
+
+Custom methods are simply modules that are included in the instance;
+they provide idiomatic Ruby methods for the mapped Objective-C class instance.
+Providing custom methods in your mapping is easy:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(:button => :NSButton) do
+  custom_methods do
+    def bezel=(value)
+      setBezelStyle(value)
+    end
+    def on?
+      state == NSOnState
+    end
+  end
+end
+<% end %>
+
+In the first method (<code>bezel=</code>),
+we provide a better method name than <code>setBezelStyle</code>.
+Although we could provide idiomatic Ruby methods for every Objective-C method,
+the number of these methods is huge.
+The general principle is to customize where this provides something better,
+not just syntactically better.
+Custom methods, like constant mappings, are inherited by subclasses.
+
+h3. Constant Mappings and Custom Methods
+
+In the last example,
+the <code>bezel=</code> method serves as a corresponding method name
+to the constant map for bezel style:
+
+<% coderay :lang => 'ruby' do -%>
+constant :bezel, {
+   :rounded             => NSRoundedBezelStyle,
+   :regular_square      => NSRegularSquareBezelStyle,
+   :thick_square        => NSThickSquareBezelStyle,
+   :thicker_square      => NSThickerSquareBezelStyle,
+   :disclosure          => NSDisclosureBezelStyle,
+   :shadowless_square   => NSShadowlessSquareBezelStyle,
+   :circular            => NSCircularBezelStyle,
+   :textured_square     => NSTexturedSquareBezelStyle,
+   :help_button         => NSHelpButtonBezelStyle,
+   :small_square        => NSSmallSquareBezelStyle,
+   :textured_rounded    => NSTexturedRoundedBezelStyle,
+   :round_rect          => NSRoundRectBezelStyle,
+   :recessed            => NSRecessedBezelStyle,
+   :rounded_disclosure  => NSRoundedDisclosureBezelStyle
+}
+<% end %>
+
+This way, you can easily create buttons of the provided bezel style:
+
+<% coderay :lang => 'ruby' do -%>
+button :bezel => :circular
+<% end %>
+
+If you recall from the default options section (above),
+you can also include default values that are constant mapped values
+(eg, <code>:bezel => :rounded</code> is the default for a button).
+In this way, constant mappings and custom methods work together
+to provide a vastly better syntax for using constants in your code.
+
+h3. Delegate Method Mapping (optional)
+
+Delegate method mapping is a little more complex then the prior sections.
+Delegate methods are used pervasively in Cocoa to facilitate customization of controls.
+Normally, what you need to do is implement the methods
+that the control is looking for in a class of your own.
+You would then set an instance of that class as the delegate of the control,
+using <code>setDelegate(instance)</code>.
+
+In HotCocoa, we wanted to enable the use of Ruby blocks for delegate method calls,
+so the Objective-C code:
+
+<% coderay :lang => 'ruby' do -%>
+class MyDelegate
+  def windowWillClose(sender)
+    // perform something
+  end
+end
+
+window.setDelegate(MyDelegate.new)
+<% end %>
+
+is simplified to the Ruby code:
+
+<% coderay :lang => 'ruby' do -%>
+window.will_close { # perform something }
+<% end %>
+
+To enable this, you map individual delegate methods to a symbol name,
+then map parameters that are passed to that delegate method to the block parameters.
+For <code>NSWindow</code> the definition for delegating <code>windowWillClose</code>,
+which passes no parameters to the block, would be:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(:window => :NSWindow) do
+  delegating 'windowWillClose:', :to => :will_close
+end
+<% end %>
+
+This creates a <code>#will_close</code> method that accepts the block (as above).
+For the sake of efficiency, it:
+
+* creates an object
+* adds the delegating method (<code>windowWillClose</code>) as a method on that object's singleton class
+* stores the passed-in block inside that object
+
+The generated <code>windowWillClose</code> method calls that block
+when Cocoa calls the <code>windowWillClose</code> method.
+Each time a delegate method is created,
+the object is set as the delegate (using <code>setDelegate</code>).  
+
+When a delegate needs to forward parameters to the block,
+the definition becomes a little more complex:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(
+  :window => :NSWindow) do
+    delegating 'window:willPositionSheet:usingRect:', 
+               :to         => :will_position_sheet,
+               :parameters => [:willPositionSheet, :usingRect]
+  end
+<% end %>
+
+The <code>:parameters</code> list contains the corresponding selector name from the Objective-C selector.
+Even though the delegate method normally has three parameters
+(<code>window</code>, <code>willPositionSheet</code>, and <code>usingRect</code>),
+the block will only be passed the last two.
+Using this method would look like:
+
+<% coderay :lang => 'ruby' do -%>
+window.will_position_sheet {|sheet, rect| ... }
+<% end %>
+
+It's also possible to map a parameter,
+in cases where you have to invoke a more complex calling on the parameter:
+
+<% coderay :lang => 'ruby' do -%>
+HotCocoa::Mapping.map(:window => :NSWindow do
+  delegating "windowDidExpose:",
+    :to         => :did_expose,
+    :parameters => ["windowDidExpose.userInfo['NSExposedRect']"]
+end
+<% end %>
+
+Here we want to walk the first parameter's <code>userInfo</code> dictionary,
+get the <code>NSExposedRect</code> rectangle,
+and pass it as a parameter to the <code>did_expose</code> block. 
+Using this method would look like:
+
+<% coderay :lang => 'ruby' do -%>
+window.did_expose { | rect| ... }
+<% end %>
+
+Each method for a delegate has to be mapped with an individual delegating call.
+
+</div>
