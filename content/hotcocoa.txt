@@ -15,13 +15,13 @@ Buttons, Sliders, Windows, WebViews...the whole works...HotCocoa simplifies this
 
 Even with MacRuby's wonderful keyword arguments, it can be daunting to enter this...
 
-<code><pre class="commands">
+<% coderay :lang => 'ruby' do -%>
 win = NSWindow.alloc.initWithContentRect [10,20,300,300], 
   :styleMask => (NSTitledWindowMask         |
                  NSClosableWindowMask       |
                  NSMiniaturizableWindowMask |
                  NSResizableWindowMask)
-</pre></code>                 
+<% end %>
                  
 ...every time you want to create and configure a new NSWindow instance!
 
@@ -29,9 +29,9 @@ This is the reason most developers use Interface Builder to configure interface 
 
 With HotCocoa, creating the NSWindow instance above is as simple as:
 
-<code><pre class="commands">
-win = window :frame => [10,20,300,300]
-</pre></code>
+<% coderay :lang => 'ruby' do -%>
+win = window( :frame => [10,20,300,300] )
+<% end %>
 
 HotCocoa achieves this feat by creating Mappings over the most common Classes and Constants used on OS X. Those mappings create constructor methods on the HotCocoa module (like the "window" method above). Each constructor method accepts an optional block which yields the created instance (more on that in the HotCocoaTutorial). Mappings also decorate the standard Objective-C API with nice Ruby APIs for common operations. The important thing to realize is the constructor methods return real instances of these common classes, not high-level abstractions. So, you can call any Objective-C method available on those objects.
 
@@ -47,4 +47,4 @@ h3. In HotCocoa, Mappings provide the following:
 
 h3. Want to learn more about HotCocoa?
 
-Now that you understand the basics of what HotCocoa is and why we are building it, please look at the "HotCocoa Tutorial":/hotcocoa/tutorial.html for examples of how to build OS X applications with it. For a more detailed understanding of how to read, create, edit or contribute mapping files, see "HotCocoa Mappings":/hotcocoa/mappings.html. For the current status of the project, see "HotCocoa Mapping Status":/hotcocoa/status.html.
+Now that you understand the basics of what HotCocoa is and why we are building it, please look at the "HotCocoa Tutorial":# (coming soon) for examples of how to build OS X applications with it. For a more detailed understanding of how to read, create, edit or contribute mapping files, see "HotCocoa Mappings Tutorial":/hotcocoa/mappings.html. For the current status of the project, see "HotCocoa Mapping Status":/hotcocoa/status.html.

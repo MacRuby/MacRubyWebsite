@@ -8,7 +8,7 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
-Welcome to MacRuby's documentation center.  Here you will find the information you need to get up and running and building OS X applications with MacRuby in no time.  If you have not read the "Introductory Tutorial":/documentation/tutorial.html, its a great way to get started.  If you are wondering why in the world MacRuby exists you can read that in the "Why MacRuby?":/documentation/why-macruby.html page.
+Welcome to MacRuby's documentation center.  Here you will find the information you need to get up and running and building OS X applications with MacRuby in no time.  If you have not read the "Introductory Tutorial":/documentation/tutorial.html, its a great way to get started.  If you are wondering why in the world MacRuby exists you can read that in the "Why MacRuby?":/documentation/why-macruby.html page.  If you want documentation on HotCocoa you can "find it here":/hotcocoa.html.
 
 MacRuby is a free software project by Apple Inc.  Many folks inside and outside of Apple contribute to this great project and we have a "MacRuby Project Team":/project.html page to list them.  Please also catch up on the latest news by following the "MacRuby Blog":/blog or following the project on the "@macruby":http://twitter.com/macruby Twitter account.
 

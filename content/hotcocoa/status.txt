@@ -1,0 +1,10 @@
+---
+title:      HotCocoa Mapping Status
+created_at: 2009-03-12 21:06:50.998294 -04:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+Coming soon...
