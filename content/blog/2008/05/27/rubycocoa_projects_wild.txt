@@ -1,0 +1,24 @@
+--- 
+title:      More RubyCocoa Projects in the Wild
+created_at: 2008-05-27 00:00:00 -04:00
+blog_post:  true
+layout:     blog_entry 
+author:     lrz
+filter:
+  - erb
+  - textile
+---
+<% @page[:excerpt] = capture_erb do %>
+Very recently some new projects using <a href="http://rubycocoa.sf.net/">RubyCocoa</a> were released to the public.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+"TimeToTicket":http://www.pimsnel.com/timetoticket/Home.html, a tool to report your working hours in the RedMine project management system.
+
+"CocoaNav":http://inexdo.com/CocoaNav, an application to elegantly browse frameworks and classes. Very cool animations.
+
+"osx_trash":http://www.dribin.org/dave/blog/archives/2008/05/24/osx_trash, a command-line tool to easily manipulate the Mac OS X Finder's trash.
+
+And, it's hard to not mention "GitNub":http://github.com/Caged/gitnub/wikis, a desktop frontend to the git source control management system. This isn't really a new project, but it's starting to be popular in the development community.
+
+This really demonstrates that RubyCocoa is being adopted by more people, and more importantly, Ruby as a language to write Mac OS X applications. And "the future":/documentation/why-macruby.html is not that far now!
