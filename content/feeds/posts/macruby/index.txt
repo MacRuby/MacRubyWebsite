@@ -2,7 +2,7 @@
 title:       MacRuby Posts
 description: News posts for the MacRuby project at Mac OS Forge.
 created_at:  2008-08-02 14:06:40.000000 -06:00
-link:        http://www.macruby.org
+link:        http://macruby.infoether.com
 extension:   xml
 layout:      nil
 dirty:       true
