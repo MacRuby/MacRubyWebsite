@@ -5,13 +5,13 @@ dirty:       true
 filter:
   - erb
 ---
-<a style="float:right" href="/blog/title_index.html">Summary Articles</a>
+<a style="float:right" href="/blog/title_index.html">Blog Overview</a>
 <h1 class="title"> <%= h(@page.title) %> </h1>
 <%
   articles = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
       :sort_by => "created_at", :reverse => true, :blog_post => true)
   articles.delete(@page)
-  paginate(articles, 10) do |page|
+  paginate(articles, 3) do |page|
 -%>
 <div class="article">
   <div class="header">
@@ -26,3 +26,7 @@ filter:
   </div>
 </div>
 <% end -%>
+<hr size="0" noshade class="doublerule" />
+<p style="text-align: center"><%= @pager.prev? ? "&laquo; "+link_to("newer", @pager.prev) : "<span style='color:#999'>&laquo; newer</span>" %> | Page <%= @pager.number %> of <%= @pager.number_of_pages %> | <%= @pager.next? ? link_to("older", @pager.next)+" &raquo;" : "<span style='color:#999'>older &raquo;</span>" %></p>
+
+

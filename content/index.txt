@@ -9,7 +9,7 @@ filter:
 <hr size="0" noshade class="harvardrule" />
 
 <div id="newsbox">
-  <h3><img src="/images/h3_macruby_blog.png" alt="MacRuby Blog" /></h3>
+  <h3><a href="/blog/index.html"><img src="/images/h3_macruby_blog.png" alt="MacRuby Blog" /></a></h3>
   
   <%
     articles = @pages.find(:all, :in_directory => File.join(@page.dir, 'blog'), :recursive => true,
@@ -21,7 +21,7 @@ filter:
   <hr size="0" noshade class="doublerule" />
   <% end -%>
   
-  <a href="/blog/index.html"><img src="/images/h3_see-older-articles.png" alt="See Older Articles" /></a>
+  <a href="/blog/index2.html"><img src="/images/h3_see-older-articles.png" alt="See Older Articles" /></a>
   
 </div><!-- //end newsbox -->
 

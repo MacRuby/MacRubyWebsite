@@ -5,7 +5,7 @@ dirty:       true
 filter:
   - erb
 ---
-<a style="float:right" href="/blog/index.html">Full Articles</a>
+<a style="float:right" href="/blog/index.html">Full Blog</a>
 <h1 class="title"> <%= h(@page.title) %> </h1>
 <%
   articles = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
