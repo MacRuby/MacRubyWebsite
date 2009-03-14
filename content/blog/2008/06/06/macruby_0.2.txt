@@ -8,7 +8,10 @@ filter:
   - erb
   - textile
 ---
-After 3 months of development, here comes the second release of MacRuby, 0.2! "Check it out while it's hot!":http://www.macruby.org/trac/wiki/InstallingMacRuby
+<% @page[:excerpt] = capture_erb do %>
+After 3 months of development, here comes the second release of MacRuby, 0.2! Check it out while it's hot!
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
 
 This is an important release which addresses many bugs but also re-implements parts of the runtime using the "CoreFoundation":http://developer.apple.com/corefoundation/ framework.
 

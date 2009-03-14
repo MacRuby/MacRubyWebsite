@@ -8,7 +8,10 @@ filter:
   - erb
   - textile
 ---
+<% @page[:excerpt] = capture_erb do %>
 MacRuby trunk got a new build system, entirely written with "Rake":http://rake.rubyforge.org/. We managed to replace the previous autotools-based build system with a 570 lines of code Rakefile (which can still be refactored). We didn't really need autotools since MacRuby aims to be installed on only one platform: Mac OS X. Maintaining the autotools files were really difficult, and we are very glad to now have a pure-Ruby build script.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
 
 Building and installing MacRuby is now very simple:
 
