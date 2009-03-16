@@ -7,7 +7,7 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
-Please feel free to contact us if you have any questions, ideas or bugs to report.  
+MacRuby is a free software project by Apple Inc.  Many folks inside and outside of Apple contribute to this great project and we have a "MacRuby Project Team":/project.html page to list them.  Please feel free to contact us if you have any questions, ideas or bugs to report.  
 
 Here's all the ways of getting ahold of us:
 
