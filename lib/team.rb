@@ -39,7 +39,7 @@ module MacRubyTeamHelper
   def kudos
     [
       Kudo.new("John Athayde", "http://www.boboroshi.com", "Website design, layout, graphics, cool icon!"),
-      Kudo.new("MacOSForge", "http://macosforge.org", "Hosting the MacRuby project")
+      Kudo.new("Mac OS Forge", "http://macosforge.org", "Hosting the MacRuby project")
     ]
   end
 end
