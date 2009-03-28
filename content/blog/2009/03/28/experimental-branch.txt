@@ -1,0 +1,44 @@
+--- 
+title:      An Experimental MacRuby
+created_at: 2009-03-28 08:24:51.725991 -04:00
+blog_post:  true
+layout:     blog_entry 
+author:     lrz
+filter:
+  - erb
+  - textile
+--- 
+<% @page[:excerpt] = capture_erb do %>
+As you might have noticed, MacRuby 0.4 has just been released a few days ago. It's now time to focus on the next release, 0.5, which will be principally dedicated to performance.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+h3. New Virtual Machine
+
+A new virtual machine based on the "LLVM compiler infrastructure":http://llvm.org/ has been developed and integrated as a replacement for YARV.
+
+The new VM transforms the abstract source tree (AST) directly from the parser into LLVM's intermediate representation (IR), which is then compiled into optimized machine code.  A number of other key optimizations have also been completed, such as fast fixnum arithmetic, cached method dispatch, zero-cost IA64 exceptions, fast instance variable access, constants caching, fast break/next, cheap local variables, tail call optimization and much more.
+
+While the amount of work remaining is significant, the compiler is already able to compile most of the Ruby syntax and the new runtime is mostly complete.  Early performance measurements are also very promising, with substantial room for improvement remaining.
+
+h3. New IO Subsystem
+
+A new IO implementation based on "CoreFoundation streams":http://developer.apple.com/documentation/CoreFOundation/Reference/CFStreamConstants/Reference/reference.html is under active development. The objective of this work is to provide a cleaner and faster implementation of the various IO operations; additionally, we will be able to perform asynchronous operations through the principal run loop.
+
+A ByteString class which silently inherits from String has been introduced and is now used as the return value of all IO operations. Its backing store is a "CFMutableDataRef":http://developer.apple.com/DOCUMENTATION/CoreFoundation/Reference/CFMutableDataRef/Reference/reference.html, which integrates better with the new IO subsystem and offers substantially better performance.
+
+h3. RubySpec Integration
+
+Performance without compatibility is, of course, meaningless. We have therefore integrated the "RubySpec":http://rubyspec.org/ project and are aiming to pass all the specifications. 
+
+The current experimental branch is already able to pass most of the language specifications and will be a standard part of our regression test suite. We are also actively working on upgrading the specifications to match the Ruby 1.9 behaviors. 
+
+h3. Want to Help?
+
+If you want to help or simply give the new changes a try, everything is on the experimental SVN branch.
+
+<pre class="commands">
+$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/branches/experimental macruby-experimental
+</pre>
+
+Please make sure to read the README file for information regarding requirements, dependencies and build instructions. Do not hesitate to contact us if you need more info!
