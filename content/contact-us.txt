@@ -27,7 +27,7 @@ h2. Mailing Lists
 
 h2. Contributions
 
-Please "file a ticket":http://trac.macosforge.org/projects/ruby/newticket on the MacRuby Trac component, if you want to contribute an enhancement request or a bug report. Patches with test cases are welcome.
+Please "file a ticket":https://www.macruby.org/trac/newticket on the MacRuby Trac component, if you want to contribute an enhancement request or a bug report. Patches with test cases are welcome.
 
 You can also send your feedback to the MacRuby-devel mailing-list.
 
