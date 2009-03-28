@@ -1,6 +1,6 @@
-SITE.user = 'rich'
-SITE.host = 'infoether.com'
-SITE.remote_dir = '/var/www/macruby.infoether.com'
+SITE.user = 'sansonet'
+SITE.host = 'gamma.macosforge.org'
+SITE.remote_dir = '/www/hosts/www.macruby.org'
 
 task :default => :build
 
