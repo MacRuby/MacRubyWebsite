@@ -18,7 +18,7 @@ h2. 0.1 (released 2008-03-13)
 * Can read BridgeSupport files.
 * Integration with the Objective-C garbage collector.
  
-h2. 0.2 (released 2008-06-06 for WWDC)
+h2. 0.2 (released 2008-06-06)
 
 * Rewrite of the String, Array and Hash builtin classes using CoreFoundation.
 * Re-implementation of the Ruby interface on the CoreFoundation classes.
@@ -33,7 +33,7 @@ h2. 0.3 (released 2008-09-08)
 * HotCocoa layer.
 * Performance work, should be fast.
 
-h2. 0.4 (to be released, soon)
+h2. 0.4 (released 2009-03-09)
 
 * Threaded GC by default.
 * 64-bit support.
@@ -46,7 +46,7 @@ h2. 0.5 (to be released, no release date planned yet)
 
 * Better support for bytestrings.
 * Rewrite IO with CoreFoundation.
-* New virtual machine.
+* New virtual machine based on LLVM.
 
 h2. 0.6 (to be released, no release date planned yet)
 
