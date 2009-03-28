@@ -11,17 +11,17 @@ h2. MacRuby Development
 
 MacRuby development happens in the trunk SVN branch. However, be careful, because trunk may not work (or even compile) all of the time.
 
-<code><pre class="commands">
+<pre class="commands">
 $ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
-</pre></code>
+</pre>
 
 
 For building instructions, please refer to README.macruby file, but the basic build instructions are:
 
-<code><pre class="commands">
+<pre class="commands">
 $ rake
 $ sudo rake install
-</pre></code>
+</pre>
 
 h2. Git
 

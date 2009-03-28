@@ -31,11 +31,11 @@ The first thing you have to do in your MacRuby script is to load the framework y
 
 If you plan to work on a Cocoa application, you will need the Cocoa framework. You can load it using the framework method:
 
-<code><pre class="commands">
+<pre class="commands">
 $ /usr/local/bin/macirb --simple-prompt
 >> framework 'Cocoa'
 => true
-</pre></code>
+</pre>
 
 When you load a framework, MacRuby will also automatically load all of its dependencies. For example, both Foundation and AppKit will be loaded for you if you load Cocoa.
 
@@ -47,53 +47,53 @@ h3. Accessing Classes
 
 It is very easy to use an Objective-C class from MacRuby. You just have to refer to it as if it was a Ruby class. For example, to access the NSSound class:
 
-<code><pre class="commands">
+<pre class="commands">
 $ /usr/local/bin/macirb --simple-prompt
 >> framework 'Cocoa'
 => true
 >> NSSound.ancestors
 => [NSSound, Object, NSObject, Kernel]
-</pre></code>
+</pre>
 
 In MacRuby, all classes, including Ruby core classes, always inherit from NSObject, the root class of most Objective-C classes.
 
-<code><pre class="commands">
+<pre class="commands">
 >> Regexp.ancestors
 => [Regexp, Object, NSObject, Kernel]
-</pre></code>
+</pre>
 
 This means that every object in MacRuby responds to methods defined in the NSObject class.
 
 For example,
 
-<code><pre class="commands">
+<pre class="commands">
 >> s = "foo"
 => "foo"
 >> s.respond_to?(:upcase)
 => true
 >> s.upcase
 => "FOO"
-</pre></code>
+</pre>
 
 This can also be written using equivalent methods from NSObject.
 
-<code><pre class="commands">
+<pre class="commands">
 >> s.respondsToSelector(:upcase)
 => true
 >> s.performSelector(:upcase)
 => "FOO"
-</pre></code>
+</pre>
 
 To get a list of methods on a MacRuby object, just call #methods on it. You will see that objects in MacRuby respond to more methods than standard Ruby.
 
-<code><pre class="commands">
+<pre class="commands">
 $ ruby -ve "p ''.methods.size" 
 ruby 1.8.6 (2007-09-24 patchlevel 111) [universal-darwin9.0] 
 143 
 $ /usr/local/bin/macruby -ve "p ''.methods.size" 
 MacRuby version 0.1 (ruby 1.9.0 2008-02-18 revision 0) [i686-darwin9.2.0] 
 564
-</pre></code>
+</pre>
 
 Unlike RubyCocoa, all classes in MacRuby automatically inherit from NSObject, so it is not necessary to explicitly subclass NSObject.
 
@@ -116,14 +116,14 @@ When you call a method on an object in Ruby, the interpreter sends a message to 
 
 For example, let's imagine a Person Objective-C class that responds to 3 simple selectors. Assuming that the Person class is properly defined (we will see that later), here is how you would call the selectors from Objective-C:
 
-<code><pre class="commands">
+<pre class="commands">
 Person *person = [Person new];                // create an instance of the Person class.
 
 [person name];                                // send selector 'name'.
 [person setName:name];                        // send selector 'setName:', passing the 'name' variable as an argument. 
 [person setFirstName:first lastName:last];    // send selector 'setFirstName:lastName:', 
                                               // passing both 'first' and 'last' variables as arguments. 
-</pre></code>
+</pre>
                                               
 Sending selectors in MacRuby is just as easy as in Objective-C. Here is the same example, but converted to MacRuby:
 
@@ -151,13 +151,13 @@ Multiple arguments can have the same key', as in Objective-C.
 If the selector is not found, a Hash object is built and sent instead, to stay compatible with Ruby code that expects receiving one.
 Let's take a more concrete example, creating an NSWindow object. In Objective-C:
 
-<code><pre class="commands">
+<pre class="commands">
 NSWindow *window = [[NSWindow alloc] 
     initWithContentRect:frame 
     styleMask:NSBorderlessWindowMask 
     backing:NSBackingStoreBuffered 
     defer:false];
-</pre></code>
+</pre>
     
 Here is the MacRuby equivalent:
 
@@ -267,7 +267,7 @@ In MacRuby, the Ruby primitives classes have been re-modeled on top of their Coc
 
 This means that all strings that you create in MacRuby are Cocoa strings. Consequently, they respond to the NSString interface. There is no conversion or data loss when you pass them to an underlying C or Objective-C API that expects an NSString. Alternatively, you can call any method of String on an NSString.
 
-<code><pre class="commands">
+<pre class="commands">
 $ macirb 
 >> String
 => NSMutableString
@@ -279,7 +279,7 @@ $ macirb
 => "FOO"
 >> "foo".uppercaseString   # calling NSString#uppercaseString
 => "FOO"
-</pre></code>
+</pre>
 
 An interesting detail of this behavior has to do with dtynamic behavior. Frameworks that define methods on the Cocoa primitive classes on the fly will also share the same functionality with the Ruby primitive classes. If you look closely at the previous code snippet, you will see the following:
 
@@ -296,7 +296,7 @@ This code passes a Ruby Hash object to the [NSString -drawAtPoint:attributes:] m
 
 Because Cocoa types can be either mutable and immutable, if you try to call a method that is supposed to modify its receiver on an immutable object, a runtime exception will be raised. By default, strings, arrays, or hashes that you create in MacRuby are mutable.
 
-<code><pre class="commands">
+<pre class="commands">
 $ macirb
 >> 'foo'.capitalize!
 => "Foo"
@@ -307,7 +307,7 @@ RuntimeError: can't modify immutable string
         from (irb):3:in `capitalize!'
         from (irb):3
         from /usr/local/bin/macirb:12:in `<main>'
-</pre></code>
+</pre>
 
 h3. Accessing Static APIs
 
@@ -326,7 +326,7 @@ The following API types are available:
 
 As an example, you can access the NSRect, NSPoint, and NSSize C structures in MacRuby as if these were real classes, and call C functions on them:
 
-<code><pre class="commands">
+<pre class="commands">
 $ /usr/local/bin/macirb --simple-prompt
 >> framework 'foundation'
 => true
@@ -344,11 +344,11 @@ $ /usr/local/bin/macirb --simple-prompt
 => 2.0
 >> NSEqualRects(rect, NSRect.new(point, NSZeroSize))
 => true
-</pre></code>
+</pre>
 
 Mentioning structures, there are different ways of creating them. You can either manually allocate them using #new, use one of the helper functions part of Cocoa, or pass a Ruby array:
 
-<code><pre class="commands">
+<pre class="commands">
 >> r = NSRect.new(NSPoint.new(1, 2), NSSize.new(3, 4))
 => #<NSRect origin=#<NSPoint x=1.0 y=2.0> size=#<NSSize width=3.0 height=4.0>>
 >> NSEqualRects(r, NSMakeRect(1, 2, 3, 4))
@@ -357,11 +357,11 @@ Mentioning structures, there are different ways of creating them. You can either
 => true
 >> NSEqualRects(r, [[1, 2], [3, 4]])
 => true
-</pre></code>
+</pre>
 
 Some Cocoa classes are toll-free bridged with corresponding Core Foundation types (CFTypes). You can safely call Core Foundation functions and pass objects.
 
-<code><pre class="commands">
+<pre class="commands">
 >> CFStringGetLength('foo')
 => 3
 >> url = CFURLCreateWithString(nil, "http://apple.com", nil)
@@ -372,21 +372,21 @@ Some Cocoa classes are toll-free bridged with corresponding Core Foundation type
 => false
 >> CFEqual(url, NSURL.URLWithString("http://apple.com"))
 => true
-</pre></code>
+</pre>
 
 On some occasions. you will want to load bridge support files that you personally generated using gen_bridge_metadata(1). To do that, you can use the Kernel#load_bridge_support_file method.
 
 A typical use case is when you want to access enumerated constants from a scriptable dictionary, in order to control an application using the Scripting Bridge framework.
 
-<code><pre class="commands">
+<pre class="commands">
 $ sdef /Applications/iTunes.app | sdp -fh --basename ITunes
-</pre></code>
+</pre>
 
-<code><pre class="commands">
+<pre class="commands">
 $ gen_bridge_metadata -c '-I.' ITunes.h > ITunes.bridgesupport
-</pre></code>
+</pre>
 
-<code><pre class="commands">
+<pre class="commands">
 $ grep enum ITunes.bridgesupport | head -n 10
 <enum name='ITunesEKndAlbumListing' value='1799449698'/>
 <enum name='ITunesEKndCdInsert' value='1799570537'/>
@@ -398,9 +398,9 @@ $ grep enum ITunes.bridgesupport | head -n 10
 <enum name='ITunesEPlSStopped' value='1800426323'/>
 <enum name='ITunesERptAll' value='1800564801'/>
 <enum name='ITunesERptOff' value='1800564815'/>
-</pre></code>
+</pre>
 
-<code><pre class="commands">
+<pre class="commands">
 $ /usr/local/bin/macirb --simple-prompt
 >> load_bridge_support_file 'ITunes.bridgesupport'
 => main
@@ -409,7 +409,7 @@ $ /usr/local/bin/macirb --simple-prompt
 >> ITunesEKndCdInsert
 => 1799570537
 >>
-</pre></code>
+</pre>
 
 h3. Starting a New Project
 
