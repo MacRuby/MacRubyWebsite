@@ -19,7 +19,12 @@ h2. Screencasts
 <ul class="screencast_list">
   <li>
     <span class="date">2009-05-05</span>
-    <span class="name"><a href="http://pragmaticstudio.com/screencasts/6-macruby">Free MacRuby Bonus Track</a></span>
+    <span class="name"><a href="http://pragmaticstudio.com/screencasts/6-macruby">MacRuby - Bonus Track (Free)</a></span>
+    <span class="author">Mike Clark (The Pragmatic Studio)</span>
+  </li>
+  <li>
+    <span class="date">2009-05-11</span>
+    <span class="name"><a href="http://pragmaticstudio.com/screencasts/7-embedding-macruby">Embedding MacRuby - Bonus track (Free)</a></span>
     <span class="author">Mike Clark (The Pragmatic Studio)</span>
   </li>
 </ul>
