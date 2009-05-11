@@ -14,6 +14,15 @@ If you are wondering why in the world MacRuby exists you can read that in the "W
 
 Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
 
+h2. Screencasts
+
+<ul class="screencast_list">
+  <li>
+    <span class="date">2009-05-05</span>
+    <span class="name"><a href="http://pragmaticstudio.com/screencasts/6-macruby">Free MacRuby Bonus Track</a></span>
+    <span class="author">Mike Clark (The Pragmatic Studio)</span>
+  </li>
+</ul>
 
 h2. Tutorials
 

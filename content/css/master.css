@@ -318,3 +318,16 @@ ul.recipe_list li span.date {
 ul.recipe_list li span.name {
   padding-right: 15px;
 }
+
+ul.screencast_list li {
+  margin-bottom: 10px;
+}
+
+ul.screencast_list li span.date {
+  padding-right: 15px;
+  color: #999;
+}
+
+ul.screencast_list li span.name {
+  padding-right: 15px;
+}
