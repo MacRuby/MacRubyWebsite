@@ -18,6 +18,16 @@ h2. Screencasts
 
 <ul class="screencast_list">
   <li>
+    <span class="date">2009-05-19</span>
+    <span class="name"><a href="http://peepcode.com/products/meet-macruby">Meet MacRuby</a></span>
+    <span class="author">Geoffrey Grosenbach (Peepcode)</span>
+  </li>
+  <li>
+    <span class="date">2009-05-16</span>
+    <span class="name"><a href="http://nubyonrails.com/articles/macruby-presentation-from-rubyfest">MacRuby Presentation (Free)</a></span>
+    <span class="author">Geoffrey Grosenbach (Peepcode)</span>
+  </li>
+  <li>
     <span class="date">2009-05-05</span>
     <span class="name"><a href="http://pragmaticstudio.com/screencasts/6-macruby">MacRuby - Bonus Track (Free)</a></span>
     <span class="author">Mike Clark (The Pragmatic Studio)</span>
@@ -41,6 +51,33 @@ h2. Tutorials
 <li><span class="date"><%= page.updated_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><%= new_or_updated_indicator(page) %><span class="author">By <%= member_name(page.author) %></span>
 <% end -%>
 </ul>
+
+h2. Talks
+
+<ul class="screencast_list">
+  <li>
+    <span class="date">2009-04-22 (GoGaRuCo)</span>
+    <span class="name"><a href="http://www.slideshare.net/mattetti/macruby-hotcocoa-presentation-by-rich-kilmer">MacRuby and HotCocoa (slides only)</a></span>
+    <span class="author">Rich Kilmer</span>
+  </li>
+  <li>
+    <span class="date">2009-01-13 (SDRuby)</span>
+    <span class="name"><a href="http://sdruby.com/podcast/58">MacRuby: What's the big deal?</a> <a href="http://www.slideshare.net/mattetti/macruby-when-objectivec-and-ruby-meet">(slides)</a></span>
+    <span class="author">Matt Aimonetti</span>
+  </li>
+  <li>
+    <span class="date">2008-11-07 (RubyConf)</span>
+    <span class="name"><a href="http://rubyconf2008.confreaks.com/os-x-application-development-with-hotcocoa.html">OS X Application Development with HotCocoa</a></span>
+    <span class="author">Rich Kilmer</span>
+  </li>
+  <li>
+    <span class="date">2008-11-06 (RubyConf)</span>
+    <span class="name"><a href="http://rubyconf2008.confreaks.com/macruby-ruby-for-your-mac.html">MacRuby: Ruby for your Mac  </a></span>
+    <span class="author">Laurent Sansonetti</span>
+  </li>
+  
+</ul>
+
 
 h2. Recipes
 
