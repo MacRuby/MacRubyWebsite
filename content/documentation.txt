@@ -44,9 +44,9 @@ h2. Talks
 <ul class="screencast_list">
   <% macruby_talks.each do |talk| -%>
     <li>
-       <span class="date"><%= talk.date %> <%= "(#{talk.location})" if talk.location %></span>
+       <span class="date"><%= talk.date %></span>
        <span class="name"><a href="<%= talk.href %>"><%= talk.name %></a> <%= "<a href='#{talk.slides_href}'>(slides)</a>" if talk.slides_href %></span>
-       <span class="author"><%= talk.author%></span>
+       <span class="author"><%= talk.author%> <%= "(#{talk.location})" if talk.location %></span>
      </li>
   <% end -%>
 </ul>
