@@ -7,4 +7,29 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
-Coming soon...
+<div id="status">
+The goal of this page is to keep a permanent status of frameworks and classes that need to be mapped in HotCocoa.
+
+Possible statuses:
+* <span class="hc_status_unknown">unknown</span> - the mapping state of this class is unknown
+* <span class="hc_status_partial">partial</span> - this class is partially mapped
+* <span class="hc_status_complete">complete</span> - this class is completely mapped
+* <span class="hc_status_skip">skip</span> - this class will not be mapped
+
+
+h2. Foundation
+
+<table>
+  <% hotcocoa_foundation_status.sort { |m1, m2| m1.name <=> m2.name }.each do |hc_class| -%>
+    <%= render_hotcocoa_status(hc_class) %>
+  <% end -%>
+</table>
+
+h2. AppKit
+
+<table>
+  <% hotcocoa_appkit_status.sort { |m1, m2| m1.name <=> m2.name }.each do |hc_class| -%>
+     <%= render_hotcocoa_status(hc_class) %>
+  <% end -%>
+</table>
+</div>

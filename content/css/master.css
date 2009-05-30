@@ -331,3 +331,8 @@ ul.screencast_list li span.date {
 ul.screencast_list li span.name {
   padding-right: 15px;
 }
+
+.hc_status_unknown { color: red; }
+.hc_status_partial { color: blue; }
+.hc_status_complete { color: green; }
+.hc_status_skip { color: black; }
