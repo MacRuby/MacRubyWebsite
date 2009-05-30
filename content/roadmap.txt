@@ -8,6 +8,7 @@ filter:
 h1(title). <%= h(@page.title) %>
 
 MacRuby Roadmap
+
 Important: this roadmap represents some general guidelines for upcoming releases and doesn't attempt to make any guarantee.
 
 h2. 0.1 (released 2008-03-13)
@@ -17,7 +18,7 @@ h2. 0.1 (released 2008-03-13)
 * Basic Objective-C messaging.
 * Can read BridgeSupport files.
 * Integration with the Objective-C garbage collector.
- 
+
 h2. 0.2 (released 2008-06-06)
 
 * Rewrite of the String, Array and Hash builtin classes using CoreFoundation.

@@ -23,11 +23,13 @@ $ rake
 $ sudo rake install
 </pre>
 
+You can also "browse the repository":http://svn.macosforge.org/repository/ruby/MacRuby/trunk online.
+
 h2. Git
 
 Git aficionados will be glad to learn that there is a mirror of the SVN trunk repository on GitHub, maintained by Claudio Poli: "MacRuby Git Repository":http://github.com/masterkain/macruby/tree/master
 
 h2. Roadmap
 
-Check out the "MacRubyRoadmap":/roadmap.html
+Check out the "MacRuby Roadmap":/roadmap.html
 

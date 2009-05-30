@@ -11,5 +11,6 @@ filter: erb
 
   <!-- CodeRay syntax highlighting CSS -->
   <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
-  
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feeds/posts/macruby/index.xml" />
 </head>
