@@ -1,0 +1,280 @@
+---
+title:      HotCocoa Tutorial -- Adding Functionality
+created_at: 2009-05-29 22:11:00.0 -05:00
+updated_at: 2009-05-29 22:11:00.0 -05:00
+tutorial:   true
+author:     dj2
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
+h3. Introduction
+
+In the words of Homer Simpsons, "forward not backwards, upwards not forwards and always twirling, twirling, twirling towards freedom". With that, we're back for part III of my "HotCocoa":http://www.macruby.org/trac/wiki/HotCocoa tutorial. For those of you just joining the party, you'll probably want to take a look at "Getting Started":/hotcocoa/getting_started.html and "Application Layout":/hotcocoa/application_layout.html.
+
+The latest code to our application is available "on GitHub":http://github.com/dj2/Postie.
+
+<a href="/images/hotcocoa/functional_app.png"><img src="/images/hotcocoa/functional_app_thumb.png" class="alignright" /></a>When we last left off we'd created the basic layout for our application with our button and table views setup. With this installment, we're going to go a step further and get a fully working application. We're going to use the feed entered into the text field to query PostRank to get the current posts in the feed along with there PostRank and metric information. I'm going to be skipping over sections of code that haven't changed from part I or part II for the sake of brevity. 
+
+OK, let's go.
+<br /><br />
+
+<% coderay :lang => 'ruby' do -%>
+POSTRANK_URL_BASE = "http://api.postrank.com/v2"
+APPKEY = "appkey=Postie"
+<% end %>
+
+All of our calls to PostRank will use the same URL prefix and we'll need to provide our appkey. I've placed both of these into constants.
+
+<% coderay :lang => 'ruby' do -%>
+vert << scroll_view(:layout => {:expand => [:width, :height]}) do |scroll|
+  scroll.setAutohidesScrollers(true)
+
+  pr_column = column(:id => :postrank, :title => '')
+  pr_column.setDataCell(PostRankCell.new)
+  pr_column.setMaxWidth(34)
+  pr_column.setMinWidth(34)
+            
+  info_column = column(:id => :data, :title => '')
+  info_column.setDataCell(PostCell.new)
+            
+  scroll << @table = table_view(:columns => [pr_column, info_column],
+                                :data => []) do |table|
+    table.setRowHeight(PostCell::ROW_HEIGHT)
+    table.setUsesAlternatingRowBackgroundColors(true)
+    table.setGridStyleMask(NSTableViewSolidHorizontalGridLineMask)                             
+    table.setDelegate(self)
+    table.setDoubleAction(:table_clicked)
+  end
+end
+<% end %>
+
+I've made one layout modification which was to add an extra column to our table to display the PostRank for each post. The PostRank column and post data columns use custom cell formatters so we can get the layout we want. I also wanted to constrain the PostRank column to a set size, 34 pixels seemed to look good.  In order to use my custom formatters I use <code>setDataCell</code> on the <code>column</code> objects. The parameter to <code>setDataCell</code> is an instantiated instance of our formatter class. I have two classes, <code>PostRankCell</code> and <code>PostCell</code> for the PostRank and post columns respectively.
+
+Along with the column changes we're also setting a default height on the table rows as defined in the <code>PostCell</code> class.  We set the Postie instance as the delegate for the table so we can receive the <code>tableView(table, heightOfRow:row)</code> callback (thanks "@macruby":http://www.twitter.com/macruby for the pointer).  The last addition to the table is to hookup the double click action with <code>@table.setDoubleAction(:table_clicked)</code>. The parameter is the name of the method that will be called, as a symbol.
+
+<% coderay :lang => 'ruby' do -%>
+def table_clicked
+  url = NSURL.URLWithString(@table.dataSource.data[@table.clickedRow][:data][:link])
+  NSWorkspace.sharedWorkspace.openURL(url)
+end
+<% end %>
+
+When a table row is double clicked we want to open the corresponding posts page in the users brower. We'll be storing the link in the data attached to our table. We can get the clicked row with <code>@table.clickedRow</code> and access the link with <code>@table.dataSource.data[@table.clickedRow][:data][:link]</code>. We then create a <code>NSURL</code> with this string. The created URL object is passed to <code>NSWorkspace.sharedWorkspace.openURL(url)</code> causing the page to open in the browser.
+
+<% coderay :lang => 'ruby' do -%>
+def tableView(table, heightOfRow:row)
+  metrics = @table.dataSource.data[row][:data][:metrics].keys.length
+    
+  num_rows = (metrics / PostCell::NUM_METRICS_PER_ROW) + 1
+  num_rows -= 1 if metrics > 0 && (metrics % PostCell::NUM_METRICS_PER_ROW) == 0
+  num_rows = 0 if metrics == 0
+
+  num_rows * PostCell::ROW_HEIGHT + PostCell::ROW_HEIGHT  # 2nd row height for the title
+end
+<% end %>
+
+<a href="/images/hotcocoa/cell_wrapping.png"><img src="/images/hotcocoa/cell_wrapping_thumb.png" class="alignright" /></a>The <code>tableView(table, heightOfRow:row)</code> callback is triggered each time the table is rendered out to determine the height for a given row. In the case of Postie we're going to display the post title on the first line and the metrics on subsequent lines. I've constrained the metrics to allow a maximum of 6 metrics on each line.  All of the metrics are stored in a <code>:metrics</code> key of the data attached to our table. Both the number of metrics and a row and the row height are constants stored in the <code>PostCell</code> class.
+
+<% coderay :lang => 'ruby' do -%>
+def load_feed
+  @table.data = []
+
+  str = @feed_field.stringValue
+  unless str.nil? || str =~ /^s*$/
+    fetch_feed(str)
+  end
+end
+<% end %>
+
+<code>load_feed</code> has been updated to empty our tables data by assigning a new array and, assuming we've received a valid feed, call <code>fetch_feed</code> to start retrieving the feed data.
+
+There are a few different ways we could go about querying the data from the PostRank APIs. We could use <em>Net::HTTP</em>, <em>Curb</em>, <em>NSXMLDocument</em> or, as I've done, <em>NSURLConnection</em>. The reason I used <code>NSURLConnection</code> is so that I can have the requests run asynchronously. As well, the UI won't block as we're off fetching the data. A handy feature when you want things to remain responsive.
+
+Let's take a quick look at the wrapper class I've put around <code>NSURLConnection</code> before looking at <code>fetch_feed</code>.  The reason I created a wrapper is that <code>NSURLConnection</code>, because it's asynchronous, works through callbacks. I'm going to need to query three different PostRank APIs and take different actions for each query. Instead of trying to do some magic in the callbacks, I've created a wrapper class that accepts a block. The block is called when the data has been successfully retrieved. (The wrapper just spits out an error if something goes wrong, the block is never called.) For example, to download the Google.ca homepage we could do:
+
+<% coderay :lang => 'ruby' do -%>
+DataRequest.new("http://google.ca") do |data|
+  NSLog "Data: #{data}"
+end
+<% end %>
+
+<% coderay :lang => 'ruby' do -%>
+class DataRequest
+  def get(url, &blk)
+    @buf = NSMutableData.new
+    @blk = blk
+    req = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
+    NSURLConnection.alloc.initWithRequest(req, delegate:self)
+  end
+  
+  def connection(conn, didReceiveResponse:resp)
+    @buf.setLength(0)
+  end
+  
+  def connection(conn, didReceiveData:data)
+    @buf.appendData(data)
+  end
+
+  def connection(conn, didFailWithError:err)
+    NSLog "Request failed"
+  end
+  
+  def connectionDidFinishLoading(conn)
+    @blk.call(NSString.alloc.initWithData @buf, encoding:NSUTF8StringEncoding)
+  end
+end
+<% end %>
+
+As <code>NSURLConnection</code> executes it returns data to the application. We're storing this data in a <code>NSMutableData</code> object called <code>@buf</code>.  The callbacks we're interested in are:
+<dl>
+ <dt><code>connection(conn, didReceiveResponse:resp)</code></dt>
+ <dd>Called when we receive a response from the server. This can be called multiple times if there are any server redirects in place. We reset the length of our data buffer each time this callback is called.</dd>
+ <dt><code>connection(conn, didReceiveData:data)</code></dt>
+ <dd>Called each time data is received from the server. This can be called multiple times and we just append the data to our buffer each time.</dd>
+ <dt><code>connection(conn, didFailWithError:err)</code></dt>
+ <dd>Called if there is an error retrieving the data. We, basically, just ignore the error. You'd probably want to do something sane in your application.</dd>
+ <dt><code>connectionDidFinishLoading(conn)</code></dt>
+ <dd>Called when all of the data has been retrieved from the remote server. Since we're not working with binary data I convert the <code>NSMutableData</code> to an <code>NSString</code> using the <code>initWithData:encoding</code> method. Note the use of <code>alloc</code> on the <code>NSString</code>. If you try to use <code>new</code> you'll, like me, spend the next 30 minutes trying to figure out why your application is crashing.</dd>
+</dl>
+
+<% coderay :lang => 'ruby' do -%>
+def fetch_feed(url)
+  DataRequest.new.get("#{POSTRANK_URL_BASE}/feed/info?id=#{url}&#{APPKEY}") do |data|
+    feed_info = JSON.parse(data)
+    unless feed_info.has_key?('error')
+      DataRequest.new.get("#{POSTRANK_URL_BASE}/feed/#{feed_info['id']}?#{APPKEY}") do |data|
+        feed = JSON.parse(data)
+        feed['items'].each do |item|
+          post_data = {:title => item['title'], :link => item['original_link'], :metrics => {}}
+          @table.dataSource.data << {:data => post_data,
+                                     :postrank => {:value => item['postrank'],
+                                                   :color => item['postrank_color']}}
+          DataRequest.new.get("#{POSTRANK_URL_BASE}/entry/#{item['id']}/metrics?#{APPKEY}") do |data|
+            metrics = JSON.parse(data)
+            metrics[item['id']].each_pair do |key, value|
+              next if key == 'friendfeed_comm' || key == 'friendfeed_like'
+              post_data[:metrics][key.to_sym] = value
+            end
+            @table.reloadData
+          end
+        end
+      end
+    end
+  end
+end
+<% end %>
+
+Most of the code in <code>fetch_feed</code> should probably be refactored into <code>Feed</code>, <code>Post</code> and <code>Metrics</code> classes, but, for the tutorial, I'm not going to bother.
+
+You can see we're doing three successive data requests. The first is to the "Feed Info":http://www.postrank.com/developers/api#feed_info API. From this call we can retrieve the <em>feed_hash</em> which allows us to uniquely identify our feed in the PostRank system. By default all the PostRank API calls will return the data in JSON format. We could, and I did this initially use <code>format=xml</code> and <code>NSXMLDocument.initWithContentsOfURL</code> to pullback and parse all the data (the problem being, metrics only responds in JSON).
+
+Now, as long as the query to Feed Info didn't return an error we use the <code>id</code> to access the "Feed":http://www.postrank.com/developers/api#feed API. The Feed API will return the posts in the given feed. The default is to return 10 posts which works for our purposes. We could, if we wished, add a button to retrieve the next set of posts from the API using the <code>start</code> and <code>num</code> parameters.
+
+With the feed in hand we're interested in the <code>items</code> attribute. This is an array of the posts in the feed. Using these items we can start to create our table data. For each item we're going to create two hashes of data, one for each column of our table.  The PostRank column will contain the <code>:postrank</code> and <code>:postrank_color</code> and the post column will contain the <code>:title</code>, <code>:link</code> and <code>:metrics</code>.
+
+Finally, we query the metrics API for each post to retrieve the metrics data. The metrics API will provide us with a hash with a single key based on our post's ID. Under this key we receive a hash containing the metric source names and the values. We're skipping <code>friendfeed_comm</code> and <code>friendfeed_like</code> as they've been renamed to <code>ff_comments</code> and <code>ff_links</code> and only remain as legacy.
+
+Once we've got all the metrics source information packed into our <code>post_data</code> hash we call <code>@table.reloadData</code> so everything gets rendered properly.
+
+Since the calls to <code>DataRequest</code> are asynchronous, we have to call reload  inside the metrics block. This guarantees the table will be reloaded after we've received our data.
+
+With that out of the way, we're onto our formatting cells. In order to get our custom table display we need to subclass <code>NSCell</code> and override the <code>drawInteriorWithFrame(frame, inView:view)</code> where we can layout our cell as desired.
+
+<% coderay :lang => 'ruby' do -%>
+class PostRankCell < NSCell
+  def drawInteriorWithFrame(frame, inView:view)
+    m = objectValue[:color].match(/#(..)(..)(..)/)
+    NSColor.colorWithCalibratedRed(m[1].hex/ 255.0, green:m[2].hex/255.0, blue:m[3].hex/255.0, alpha:100).set
+    NSRectFill(frame)
+  
+    rank_frame = NSMakeRect(frame.origin.x + (frame.size.width / 2) - 12,
+                            frame.origin.y + (frame.size.height / 2) - 8, frame.size.width, 17)
+  
+    objectValue[:value].to_s.drawInRect(rank_frame, withAttributes:nil)
+  end
+end
+<% end %>
+
+The <code>PostRankCell</code> is pretty simple. We parse the provided PostRank colour, which comes as <code>#ffffff</code> into separate red, green and blue values. These values are passed to <code>NSColor.colorWithCalibratedRed(red, green:green, blue:blue, alpha:alpha)</code> in order to create a <code>NSColor</code> object representing our PostRank colour. We need to divided each value by <code>255</code> as <code>colorWithCalibratedRed:green:blue:alpha:</code> expects a value between <code>0.0</code> and <code>1.0</code>.  Once we've got our colour we call <code>set</code> to make that colour active and, using <code>NSRectFill</code> we fill then entire frame with the provided <code>postrank_color</code>.
+
+I'm, kinda, sorta, centering the PostRank values in the column so we need to create a <code>NSRect</code> to specify the box where we want to draw the numbers. This is done by calling <code>NSMakeRect</code> and providing the x, y, width and height values for the rectange. Once we've got our <code>NSRect</code> in hand we call <code>drawInRect(rank_frame, withAttributes:nil)</code> on the PostRank value. This will draw the string in the rectangle specified. We could set extra attributes on the string but, I don't need any, so I just leave it <code>nil</code>.
+
+You'll notice I'm using <code>objectValue</code> in a few places. <code>objectValue</code> is a <code>NSCell</code> method that will return the value assigned to this cell as retrieved based on the column key from our table data source.
+
+<% coderay :lang => 'ruby' do -%>
+class PostCell < NSCell
+  ROW_HEIGHT = 20
+  NUM_METRICS_PER_ROW = 6
+  SPRITE_SIZE = 16
+  
+  @@sprites = {:default => 0, :blogines => 16, :reddit => 32, :reddit_votes => 32,
+      :technorati => 48, :magnolia => 64, :digg => 80, :twitter => 96, :comments => 112,
+      :icerocket => 128, :delicious => 144, :google => 160, :pownce => 176, :views => 192,
+      :bookmarks => 208, :clicks => 224, :jaiku => 240, :digg_comments => 256,
+      :diigo => 272, :feecle => 288, :brightkite => 304, :furl => 320, :twitarmy => 336,
+      :identica => 352, :ff_likes => 368, :blip => 384, :tumblr => 400,
+      :reddit_comments => 416, :ff_comments => 432}
+  @@sprite = nil
+
+  def drawInteriorWithFrame(frame, inView:view)
+    unless @@sprite
+      bundle = NSBundle.mainBundle
+      @@sprite = NSImage.alloc.initWithContentsOfFile(bundle.pathForResource("sprites", ofType:"png"))
+      @@sprite.setFlipped(true)
+    end
+
+  	title_rect = NSMakeRect(frame.origin.x, frame.origin.y + 1, frame.size.width, 17)
+  	metrics_rect = NSMakeRect(frame.origin.x, frame.origin.y + ROW_HEIGHT, frame.size.width, 17)
+
+    title_str = "#{objectValue[:title]}"
+    title_str.drawInRect(title_rect, withAttributes:nil)
+
+    count = 0
+    orig_x_orign = metrics_rect.origin.x
+    
+    objectValue[:metrics].each_pair do |key, value|
+      s = metrics_rect.size.width
+      metrics_rect.size.width = SPRITE_SIZE
+      
+      y = if @@sprites.has_key?(key)
+        @@sprites[key.to_sym]
+      else
+        0
+      end
+      r = NSMakeRect(0, y, SPRITE_SIZE, SPRITE_SIZE)
+      @@sprite.drawInRect(metrics_rect, fromRect:r,
+                          operation:NSCompositeSourceOver, fraction:1.0)
+      metrics_rect.origin.x += 21
+      metrics_rect.size.width = s - 21
+       
+      "#{value}".drawInRect(metrics_rect, withAttributes:nil)
+      s = "#{value}".sizeWithAttributes(nil)
+      metrics_rect.origin.x += s.width + 15
+      
+      count += 1
+      if count == NUM_METRICS_PER_ROW
+        metrics_rect.origin.y += ROW_HEIGHT
+        metrics_rect.origin.x = orig_x_orign
+        count = 0
+      end
+    end
+  end
+end
+<% end %>
+
+<code>PostRankCell</code> is similar to <code>PostCell</code> in that we're basically creating bounding rectangles and drawing into them. The extra little bit we're doing here is loading up a <code>NSImage</code> which is our sprite set and using that to pull out all of the individual service icons. <code>NSImage</code> makes it easy to work with our sprite image by providing <code>drawInRect(rect, fromRect:from_rect, operation:op, fraction:val)</code>. <code>drawInRect:fromRect:operation:fraction:</code> draws into the rectangle defined by <code>rect</code> retrieving the pixels in your <code>NSImage</code> that are inside the <code>from_rect</code>. I'm using <code>NSCompositeSourceOver</code> because some of my images are semi-transparent. The fraction parameter is a the alpha setting for the image.
+
+With that, well, you'll probably need to download the source code to see it all in one file, you should have a working application that will query PostRank for a feed and display the posts and metrics for the feed.
+
+As for the next installment. I've got a few things I still want to do, including: tabbing between widgets, submitting the text field on return, a progress indicator as the feed information is being retrieved and adding a tabbed interface to allow showing feed, post and top post information. I'm not sure which of these things I'll tackle next. There are a few helper methods I want to try to add to HotCocoa from this article that I'll probably do first.  So, until next time.
+
+</div>

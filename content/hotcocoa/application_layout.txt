@@ -1,0 +1,220 @@
+---
+title:      HotCocoa Tutorial -- Application Layout
+created_at: 2009-05-29 22:10:00.0 -05:00
+updated_at: 2009-05-29 22:10:00.0 -05:00
+tutorial:   true
+author:     dj2
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
+h3. Introduction
+
+Welcome back. In "HotCocoa Tutorial -- Getting Started":/hotcocoa/getting_started.html we created a basic "HotCocoa":http://www.macruby.org/trac/wiki/HotCocoa application and took a look at the created files and some of their workings. In this installment we're going get our UI laid out and hooked up.
+
+We'll be creating a text field, button, scroll view and a table. When the button is pressed, for now, the content of the text field will be appended to the table view.
+
+A good thing to keep in mind when hacking around with MacRuby and HotCocoa is that the methods available in the OS X frameworks you're using are available in Ruby. This means, if you don't know how to do something, the Apple documentation is awesome at trying to figure out the right methods use.
+
+I'm going to start off with the complete listing of the code. Don't worry if this doesn't make any sense at the moment as we're going to go through all of the relevant portions. Some of this should look familiar from the basic HotCocoa generated code seen in the getting started tutorial
+
+<% coderay :lang => 'ruby' do -%>
+require 'hotcocoa'
+
+class Postie
+  include HotCocoa
+
+  def start
+    application(:name => "Postie") do |app|
+      app.delegate = self
+      window(:size => [640, 480], :center => true, :title => "Postie", :view => :nolayout) do |win|
+        win.will_close { exit }
+
+        win.view = layout_view(:layout => {:expand => [:width, :height],
+                                           :padding => 0, :margin => 0}) do |vert|
+          vert << layout_view(:frame => [0, 0, 0, 40], :mode => :horizontal,
+                              :layout => {:padding => 0, :margin => 0,
+                                          :start => false, :expand => [:width]}) do |horiz|
+            horiz << label(:text => "Feed", :layout => {:align => :center})
+            horiz << @feed_field = text_field(:layout => {:expand => [:width]})
+            horiz << button(:title => 'go', :layout => {:align => :center}) do |b|
+              b.on_action { load_feed }
+            end
+          end
+
+          vert << scroll_view(:layout => {:expand => [:width, :height]}) do |scroll|
+            scroll.setAutohidesScrollers(true)
+            scroll << @table = table_view(:columns => [column(:id => :data, :title => '')],
+                                          :data => []) do |table|
+               table.setUsesAlternatingRowBackgroundColors(true)
+               table.setGridStyleMask(NSTableViewSolidHorizontalGridLineMask)                             
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def load_feed
+    str = @feed_field.stringValue
+    unless str.nil? || str =~ /^\s*$/
+      @table.dataSource.data << {:data => str}
+      @table.reloadData
+    end
+  end
+end
+
+Postie.new.start
+<% end %>
+
+I'm going to skip the parts that we saw in part I and just mention the changes and new additions in part II.
+
+<% coderay :lang => 'ruby' do -%>
+window(<em>:size => [640, 480], :center => true</em>, :title => "Postie", :view => :nolayout)
+<% end %>
+
+Instead of using the <code>:frame => [100, 100, 500, 500]</code> as seen in part I, I prefer to use <code>:size => [640, 480]</code><code> and </code><code>:center => true</code> to set the window with a starting size of 640x480 position in the center of the screen.
+
+You'll also notice the addition of <code>:view => :nolayout</code> tacked on the end of the <code>window</code> method. This isn't strictly necessary but saves the creation of an object we're just going to destroy anyway. By default when a window is created a <code>LayoutView</code> will be created and appended to the window. I'm going to be creating my own layout and overriding the created one so I'm just telling the window to skip the creation of the default view.
+
+Before we dig into the next chunk of code lets take a little diversion to look at <code>layout_view</code>. The <code>layout_view</code> is one of the basic building blocks for organizing your application layout. The <code>layout_view</code> method will create a <code>LayoutView</code> object which is a subclass of <code>NSView</code>. Any Cocoa methods available for an <code>NSView</code> can be called on a <code>LayoutView</code>.
+
+When working with <code>layout_view</code> there are a few parameters we're interested in. The first, similar to <code>window</code> is <code>:frame</code>. As with <code>window</code> the <code>:frame</code> parameter allows us to set the frame position and size for the view. Note, if you don't set a <code>:frame</code> then, it appears, that the view may have 0 size. This can be changed by the children placed in the view but not always. I spent a while trying to figure out why removing the <code>:frame => [0, 0, 0, 40]</code> from the code above caused my label, text field and button to disappear.
+
+A handy little trick when working with <code>layout_view</code> is to run your application in the  <code>$DEBUG</code> mode of Ruby. When <code>$DEBUG</code> is active each layout will have a red border.
+
+To execute your application in <code>$DEBUG</code> you can do:
+
+<% coderay :lang => 'sh' do -%>
+titania:Postie dj2$ macruby -d lib/application.rb
+<% end %>
+
+Other parameters we're using for the <code>layout_view</code> calls are <code>:mode</code>, <code>:margin</code>, <code>:spacing</code> and <code>:layout</code>.
+
+<dl>
+ <dt><code>:mode</code></dt>
+ <dd>Lets us specify if this view has a <code>:vertical</code> or <code>:horizontal</code> layout. The default layout is <code>:vertical</code>.</dd>
+
+ <dt><code>:margin</code></dt>
+ <dd>Allows us to specify a margin size for the layout. The provided value is a single integer which will be applied to top, bottom, left and right margins of the view.</dd>
+
+ <dt><code>:spacing</code></dt>
+ <dd>Allows us to set the spacing for items placed into the view. The value is a single integer.</dd>
+</dl>
+
+The last option we're going to look at is <code>:layout</code>. The layout option isn't restricted to just <code>layout_view</code> calls and is available on all of the other widgets I've created so far.
+
+The <code>:layout</code> hash will be turned into a <code>LayoutOptions</code> object. The available keys are: <code>:start</code>, <code>:expand</code>, <code>:padding</code>, <code>:[left | right | bottom | top]_padding</code> and <code>:align</code>.
+
+<dl>
+ <dt><code>:start</code></dt>
+ <dd>Signifies if the view is packed at the start or end of the packing view. I'll admit, I don't really know what that means. I'm stealing it from the <code>LayoutOption docs</code>. It appears, in my limited fiddling, that setting it to <code>false</code> causes your subviews to end up at the top of the layout. The default value is <code>true</code>.</dd>
+
+ <dt><code>:expand</code></dt>
+ <dd>Specifies how the view will grow when the window is resized. The available options are: <code>:height</code>, <code>:width</code>, <code>[:height, :width]</code> and <code>nil</code>. The default setting is <code>nil</code>.</dd>
+
+ <dt><code>:*padding</code></dt>
+ <dd>Allows you to set the padding around the view. The padding values are specified as a float with a default of <code>0.0</code>.</dd>
+
+ <dt><code>:align</code></dt>
+ <dd>Allows us to specify the alignment of the view as long as it isn't set to <code>:expand</code> in the other direction. The available options are: <code>:left</code>, <code>:center</code>, <code>:right</code>, <code>:top</code> and <code>:bottom</code>.</dd>
+</dl>
+
+With that out of the way, back to our code. As you can see by the layout image, our layout isn't overly complicated. All of the layout is handled by two layout views and a scroll view.
+
+<% coderay :lang => 'ruby' do -%>
+win.view = layout_view(:layout => {:expand => [:width, :height], :padding => 0}) do |vert|
+<% end %>
+
+<a href="/images/hotcocoa/layout.png"><img src="/images/hotcocoa/layout_thumb.png" class="alignright" /></a> We start by creating the main window view. If you remember, we created the window with <code>:view => :nolayout</code> so there is currently no view in our window. We assign the new <code>layout_view</code> to the <code>win.view</code> instead of using <code>&lt;&lt;</code> to pack it into the view. We remove the padding on the view and set the expand to <code>[:width, :height]</code> so the view will fill the entire window and resize correctly.
+
+Since we didn't specify a <code>:mode</code> the main window will layout its packed widgets in a vertical fashion.
+
+As each layout view is created you can attach a block to the <code>layout_view</code> call. The block will be called with the <code>LayoutView</code> object that was just created. This makes it easy to pack subviews into the views as they're created.
+
+<br />
+
+<% coderay :lang => 'ruby' do -%>
+vert << layout_view(:frame => [0, 0, 0, 40], :mode => :horizontal,
+                    :layout => {:padding => 0, :start => false, :expand => [:width]}) do |horiz|
+<% end %>
+
+Next we pack a horizontal view (<code>:mode => :horizontal</code>) to hold the label, text field and button. We set the view to <code>:expand => [:width]</code> so we'll only get horizontal expansion and maintain the height specified in our <code>:frame</code> parameter. You'll notice we're setting a <code>:frame</code> on this <code>layout_view</code>. If we don't have this parameter it appears that the view will be drawn with 0 height. Effectively making the view invisible.
+
+<% coderay :lang => 'ruby' do -%>
+horiz << label(:text => "Feed", :layout => {:align => :center})
+horiz << @feed_field = text_field(:layout => {:expand => [:width]})
+horiz << button(:title => 'go', :layout => {:align => :center}) do |b|
+  b.on_action { load_feed }
+end
+<% end %>
+
+Into the horizontal layout we pack our <code>label</code>, <code>text_field</code> and <code>button</code>. For both the label and button we're specifying an <code>:align => :center</code>  to line them up with the center of the text field. The only item we're setting an expand on is the <code>text_field</code>. The other two widgets will maintain their positions and sizes when the window is resized.
+
+When we create the <code>button</code> we attach a block for the <code>on_action</code> callback. This will be triggered when the button is pressed. In our case we're just calling the <code>load_feed</code> method.
+
+<% coderay :lang => 'ruby' do -%>
+vert << scroll_view(:layout => {:expand => [:width, :height]}) do |scroll|
+  scroll.setAutohidesScrollers(true)
+<% end %>
+
+With the horizontal view out of the way we create a <code>scroll_view</code> and pack it into our main vertical view. We want the scroll view to <code>:expand => [:width, :height]</code> so it fills the entire window on resize. There is currently no exposed HotCocoa sugar for auto hiding the scrollbars so we drop down and call <code>setAutohidesScrollers</code> to set the scrollbars to auto hide.
+
+<% coderay :lang => 'ruby' do -%>
+scroll << @table = table_view(:columns => [column(:id => :data, :title => '')],
+                              :data => []) do |table|
+  table.setUsesAlternatingRowBackgroundColors(true)
+  table.setGridStyleMask(NSTableViewSolidHorizontalGridLineMask)                             
+end
+<% end %>
+
+The last view we pack is a <code>table_view</code>.  We're again dropping down to Cocoa for the <code>setUsesAlternatingRowBackgroundColors</code> and <code>setGridStyleMask</code>.
+
+Now, the <code>table_view</code> itself. The table view is more complicated then the other widgets we've looked at in that it requires column and data source information.
+
+The column information is provided by the <code>:columns => [column(:id => :data, :title => '')]</code> parameter. You provide an array of <code>column</code> objects which define the table columns. The <code>:title</code> will be displayed at the top of a column. If you don't provide a <code>:title</code> the default is <em>Column</em>. We also providing an <code>:id</code> parameter to our column method. This parameter will be passed when we're accessing our data source, and, if you're using the default data source, used to access the specific column information. We'll dig into columns and their relations to data sources in a moment.
+
+There are two ways to provide data source information. You can either pass an array, which is what we're doing here or provide your own data source object. 
+
+If you decide to define your own data source then it must respond to <code>numberOfRowsInTable(tableView) => integer</code> and <code>tableView(view, objectValueForTableColumn:column, row:i) => string</code>. 
+
+If you opt to use the default data source then you provide an array of hashes. The keys into the hash are the <code>:id</code> values set when we created our columns.
+
+<img src="/images/hotcocoa/data_cell.png" class="alignright" />Hopefully an example will make this a bit clearer. Lets say we want to create a table with three columns, name, age and sex. We would define our table as:
+
+<% coderay :lang => 'ruby' do -%>
+@table = table_view(:columns => [column(:id => :name, :title => 'Name'),
+                                 column(:id => :age, :title => 'Age'),
+                                 column(:id => :sex, :title => 'Sex')],
+                    :data => [{ :name => 'Betty Sue', :age => 29, :sex => 'F' },
+                              { :name => 'Brandon Oberon', :age => 0.005, :sex => 'M' },
+                              { :name => 'Sally Joe', :age => 48, :sex => 'F'}])
+<% end %>
+
+With the table view finished all that's left is to define the <code>load_feed</code> method. For this first iteration we're just going to take the content of the feed text field and load it into our table view.
+
+<% coderay :lang => 'ruby' do -%>
+def load_feed
+  str = @feed_field.stringValue
+  unless str.nil? || str =~ /^\s*$/
+    @table.dataSource.data << {:data => str}
+    @table.reloadData
+  end
+end
+<% end %>
+
+<img src="/images/hotcocoa/final_layout.png" class="alignleft" />We use the Cocoa <code>stringValue</code> method to retrieve the value set into the text field. As long as it isn't blank we append a new hash (with our <code>:data</code> key as defined in our <code>column</code> setup) into the <code>@table.dataSource.data</code>. We then call <code>@table.reloadData</code> to get the table to re-display its content.
+
+That's it. You should be able to run the application, enter some text in the text field, hit go and see the text appear in the table view. As you add more table rows, scrollbars should appear and you can scroll in the table as needed.
+
+The third part of this series will be, hopefully, pulling real data back from "PostRank":http://postrank.com and displaying it in a custom cell in our table.
+
+</div>
