@@ -217,4 +217,6 @@ That's it. You should be able to run the application, enter some text in the tex
 
 The third part of this series will be, hopefully, pulling real data back from "PostRank":http://postrank.com and displaying it in a custom cell in our table.
 
+<a href="/hotcocoa/functionality.html">Read the next article: "Adding Functionality"</a>
+
 </div>

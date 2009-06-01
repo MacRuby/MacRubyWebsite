@@ -18,7 +18,7 @@ module MacRubyTeamHelper
       Member.new("patrick", "Patrick Thomson", "Apple, Inc.", nil, "pthomson@apple.com", "All things OS X"),
       Member.new("eloy", "Eloy Duran", nil, nil, "eloy.de.enige@gmail.com", "Testing"),
       Member.new("vincent", "Vincent Isambart"),
-      Member.new("matt", "Matt Aimonetti", "m|a agile consulting", nil, "http://merbist.com", "HotCocoa")
+      Member.new("matt", "Matt Aimonetti", "m|a agile consulting", "http://merbist.com", "mattaimonetti@gmail.com" "HotCocoa")
     ]
   end
   

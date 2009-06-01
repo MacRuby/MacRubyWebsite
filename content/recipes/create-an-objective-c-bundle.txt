@@ -1,0 +1,91 @@
+--- 
+title:      Creating an Objective-C bundle to use with MacRuby
+created_at: 2009-05-31 18:51:36.516659 -07:00
+recipe:     true
+author:     Matt Aimonetti
+filter:
+  - erb
+  - textile
+--- 
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='recipe'>
+
+Objective-C has a lot of very interesting libraries and Free Open Source code that 
+you might want to use in your MacRuby/HotCocoa projects.
+
+h3. Creating a MacRuby compatible bundle
+
+If you are using MacRuby with Xcode, adding Objective-C frameworks, 
+dynamic libraries and third party code is easy and you just need to add the code 
+you want to use and make it available in your build target.
+
+You might wonder how to do that when using HotCocoa or pure Ruby.
+
+If you want to use a Cocoa Framework, you just need to make sure it's in your path and then require it.
+
+The easiest way to add non framework code is to create a Dynamic Library compatible with MacRuby and simply require it.
+
+Let's see how to do that:
+
+h3. Xcode template
+
+Start Xcode and choose the Cocoa Bundle template.
+
+!http://img.skitch.com/20090601-q4gwtihhbcfcgy4ndjg8jgs3it.jpg!
+
+Choose a name for your project and add the Objective-C files you want to make bundle.
+
+h3. Build settings
+
+Edit your build settings as follows:
+
+Click on: Project > Edit Active Target "TheNameOfYourTarget"
+
+!http://img.skitch.com/20090601-g8qg3hipqutewktankus5q9796.jpg!
+
+Pick the appropriate architectures and choose GCC version 4.0 or more recent.
+
+!http://img.skitch.com/20090601-fhtbsq4t3rwuegussa6c1r26f4.jpg!
+
+Change the executable from 'dylib' to 'bundle'. An if you want to, change the 'product name'.
+(From the Ruby side, we will later on require the bundle using this product name)
+
+!http://img.skitch.com/20090601-jc6qmc3bnmex4cme7tfa5sfx5q.jpg!
+
+Finally, enable the Objective-C Garbage Collector.
+
+Your project should now be properly setup to build, but we need one more thing.
+
+h3. MacRuby compatibility
+
+Because we want our bundle/dynamic library to behave like a C extension and just require it, we need to add a constructor.
+Choose an implementation file (.m file) and add an empty function as follows:
+
+<% coderay :lang => 'Objective-C' do -%>
+// Added for MacRuby
+void Init_twitter_engine(void) { }
+<% end %>
+
+In this case 'twitter_engine' is the name of our bundle/dylib. (The name was set as `product name` in our build settings)
+Use Init_XXX where XXX is the name of your bundle. When requiring your bundle, Ruby will automatically call this method.
+If it doesn't exist, Ruby will throw an exception.
+
+h3. Requiring the bundle
+
+Your bundle now behaves just like a Ruby C extension, require it and start using it directly:
+
+<% coderay :lang => 'ruby' do -%>
+[mattetti@matt-aimonettis-macbook lib (master)]$ macirb
+>> require 'twitter_engine'
+=> true
+>> engine = MGTwitterEngine.alloc.initWithDelegate(self)
+=> #<MGTwitterEngine:0x8007a0e40>
+<% end %>
+
+Pretty easy, isn't it?
+</div>

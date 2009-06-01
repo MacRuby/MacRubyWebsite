@@ -240,4 +240,5 @@ The <code>will_close</code> callback is the HotCocoa name for the Cocoa <code>wi
 
 That's it for part I. We've now setup with our basic application structure and have an idea of what we're working with. In the next installment, we'll work on getting our application views setup as we want.
 
+<a href="/hotcocoa/application_layout.html">Read the next article: "Application Layout"</a>
 </div>
