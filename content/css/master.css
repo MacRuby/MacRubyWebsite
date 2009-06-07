@@ -332,6 +332,12 @@ ul.screencast_list li span.name {
   padding-right: 15px;
 }
 
+ul.faq li {
+	margin-bottom: 0.5em;
+	margin-left: 1em;
+	list-style: disc;
+	list-style-position: inside;
+}
 .hc_status_unknown { color: red; }
 .hc_status_partial { color: blue; }
 .hc_status_complete { color: green; }

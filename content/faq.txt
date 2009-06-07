@@ -1,0 +1,38 @@
+---
+title:      FAQ
+created_at: 2009-06-01 20:54 -05:00
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
+
+h2. What is MacRuby?
+
+MacRuby is a Ruby implementation running directly on top of Mac OS X Open Source core technologies such as the Objective-C common runtime and garbage collector as well as the CoreFoundation framework. 
+
+
+h2. What is HotCocoa?
+
+HotCocoa is a thin, idiomatic Ruby layer that sits above Cocoa and other frameworks. HotCocoa is included with the MacRuby distributions. More specifically, HotCocoa is a mapping framework using intelligent defaults.  
+
+h2. How do I get started using MacRuby?
+
+You have two options described on the right hand side of this page. 
+You can install MacRuby using the provided installer, or build and from source.
+
+You will find links to various presentations and HOWTOs in the "Documentation":/documentation.html section.
+
+h2. How can I contribute to MacRuby?
+
+You can contribute in a lot of different ways:
+
+<ul class="faq">
+  <li>Report issues, bugs, fixes, suggestions using our "ticketing system":http://www.macruby.org/trac/newticket.</li>
+  <li>Write tutorials and/or recipes (shorter tutorial) for this website.</li>
+  <li>Write or translate sample code that would be bundled and shipped with MacRuby.</li>
+  <li>Help with the "RubySpec":http://rubyspec.org/ 1.8 to Ruby 1.9 transition effort.</li>
+  <li>Help the specs work using RubySpec and MacRuby's specific specs.</li>
+  <li>Port C extensions to the "Ruby FFI API":http://kenai.com/projects/ruby-ffi/pages/Home. (There is a plan to support C extensions in the future, but FFI performance will be better)</li>
+  <li>Check the TODO file (in the source code) containing lower level things pending tasks do.</li>
+</ul>
