@@ -1,0 +1,158 @@
+--- 
+title:      Contributing to the MacRuby website
+created_at: 2009-08-28 01:26:11.881716 -04:00
+updated_at: 2009-08-28 01:26:11.881910 -04:00
+tutorial:   true
+author:     Mike Sassak
+filter:
+  - erb
+  - textile
+--- 
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
+Contributing to the MacRuby website is an easy way to give back to the project. This tutorial will tell you everything you need to get started by showing you how to grab a copy of the website, build it on your local machine, add different kinds of content to it, and have your changes committed back in. But first, some guidelines. 
+
+h3. *Guidelines*
+
+* Get in touch! Whether you have an idea of your own or simply would like to offer a hand, send a message to the mailing list. That way we can minimize the possibilities of duplicating work. You can find more information on joining the mailing list "here":/contact-us.html.
+
+* If you'd like to post to the blog, we're looking for major releases or announcements at the moment. More in-depth content should become tutorials or recipes. Whatever the case, if you've got an idea and you're unsure of where to put it, just ask on the mailing list. If you've already put something up on your own blog, send us the link and we'll be sure to fit it in somewhere.
+
+* If it looks like your pull request has been forgotten, don't hesitate to send a polite reminder to Matt or the mailing list.
+
+With that out of the way, let's see how to get set up.
+
+h3. *Setting Up*
+
+The MacRuby website is developed with "webby":http://webby.rubyforge.org, a RubyGem that builds websites from static files, so the first step is to install webby and its supporting gems coderay (for source code syntax highlighting), and RedCloth (for textile formatting). To do that, run the following commands (with sudo if need be):
+
+<pre class="commands">
+$ gem install webby
+$ gem install coderay
+$ gem install RedCloth
+</pre>
+
+When that's done, you should be able to run 
+
+<pre class="commands">
+$ webby -h
+</pre>
+
+and see the help. Next up, you'll need a copy of the website source. To get it you can use either git or subversion. Both will work just fine in the end, but git is preferred because it makes it easier to track and merge changes to the source.
+
+Follow these steps to grab a copy with git:
+
+1. If you don't already have a "github":http://www.github.com account, make one.
+2. Fork "Matt Aimonetti's website repo":http://github.com/mattetti/macruby_website/ on github
+3. Clone your fork onto your local machine: 
+
+<pre class="commands">
+git clone git@github.com:username/macruby_website.git
+</pre>
+
+With subversion, all you need to do is checkout the repo from Mac OS Forge:
+
+<pre class="commands">
+$ svn co http://svn.macosforge.org/repository/ruby/MacRubyWebsite/trunk macruby_website 
+</pre>
+
+If everything is in place, you should now be able to build a copy of the website on your local machine:
+
+<pre class="commands">
+$ cd /path/to/macruby_website
+$ webby autobuild
+</pre>
+
+The webby autobuild command fires up a local webserver and builds the website. It polls for changes to the content directory and regenerates the files that have been modified, so it's a great way to get quick visual feedback on content you're developing. Just save, refresh the browser, and there are your changes! When it runs, it should also automatically open a new browser window pointing to your local copy of the website. If for some reason that doesn't work, you can always visit it yourself at http://localhost:4331.
+
+If autobuild works, you're ready to create some content.
+
+h3. *Creating Content*
+
+Several different kinds of content make up the MacRuby website, e.g. blog posts, tutorials and recipes. Whatever type you're creating though, when you're done you'll need to merge your content back into the official source tree. To make this easy we recommend following a specific workflow, the goal of which is to keep your content changes within a single commit or patch, which in turn makes for simple merges. 
+
+The steps are as follows:
+
+1. Create a new, descriptively named, topic branch that will contain your content. 
+2. Use webby to generate the correct kind of template for your content, of which more below. 
+3. Make the necessary changes to the template, committing as you go. (This is where autobuild really shines.)
+4. When you're satisfied, use git rebase interactive to squash all the little commits into one big one. If you're not sure how to use git rebase, you can start reading about it "here":http://www.gitready.com/intermediate/2009/01/31/intro-to-rebase.html. The man page is also helpful. Just remember: please *do not* rebase a branch that you have made public and others have already pulled. You won't make many friends that way. 
+5. When you've squashed all the commits into one, push your branch and email the list, (or send Matt a pull request on github), to let everyone know your changes are ready. 
+
+When that's done, Matt will cherry pick your commit and push it to the svn repo, at which time Laurent will verify the changes and redeploy the site. If you're not using git, you can still use svn and follow approximately the same steps, though you'll need to format a patch with svn diff when you're done.
+
+So now that you know how to submit your changes, you're ready to make some content. 
+
+h3. *Creating a New Blog Post*
+
+Blog posts are intended to cover major releases and announcements. If you have other ideas for something you think would make a great post, let us know. Once you know what you're going to write, follow the steps above to create a new branch, and run the following from the root of the website.
+
+<pre class="commands">
+$ webby blog:post my_cool_blog_post
+</pre>
+
+You will see output such as:
+
+<pre class="commands">
+[09:00:21]  INFO: creating content/blog/2009/08/index.txt
+[09:00:21]  INFO: creating content/blog/2009/08/20/my-cool-blog-post.txt
+</pre>
+
+So there you see it created a structure with today's date and the post's template. Open *my-cool-blog-post.txt* in your text editor of choice and start by editing the YAML fields at the top. Make sure to pick a more expressive title and fill in your name as the author. In most cases you won't need to change the rest. The next step is to create the excerpt (or slug, if you like) for the blog post. This is what will be displayed on the main page of the website. Include the following, adjusted for your post of course, underneath the YAML headers:
+
+<% coderay :lang => 'ruby' do -%>
+<%% @page[:excerpt] = capture_erb do %>
+  MacRuby displaces Objective-C in the hearts and minds of 
+  OS X application developers. Keyboards everywhere rejoice.
+<%% end %>
+<%%= RedCloth.new(@page.excerpt).to_html %>
+<% end %>
+
+Now you can move on to the rest of the post. When everything looks good, push to your repo and submit a pull request. 
+
+h3. *Creating a New Recipe*
+
+Change your directory to the root of the website, then generate the recipe from the template:
+
+<pre class="commands">
+$ webby create:recipe recipes/my_cool_recipe
+</pre>
+
+If you'd like, you can preface the recipe with your name like *rich_kilmer_my_cool_recipe*. Whatever the case, please note that it's important when generating a recipe to include the recipes directory in the argument to the create:recipe command. Otherwise you'll put the recipe in the root of the site rather than where it belongs. 
+
+Now open the generated file (it should be in content/recipes/my_cool_recipe) and update the header information:
+
+<% coderay :lang => 'yaml' do -%>
+ title:      rich_kilmer_my_cool_recipe
+ created_at: 2009-04-17 15:07:10.638684 -04:00
+ recipe:     true
+ author:     Your Name Here
+<% end %>
+
+You will want to change that title to be more expressive. And then replace 'Your Name Here' with your name. Now you're ready to edit the recipe. When you're done, follow the steps in "Creating Content" to fix up and submit your patch.
+
+h3. *Formatting Tips*
+
+The templates are "Textile formatted":http://textile.thresholdstate.com/ by default. Format code snippets with erb and coderay, like so:
+
+<% coderay :lang => 'ruby' do -%>
+ <%% coderay :lang => 'ruby' do -%>
+   puts "Hello, MacRuby world!"
+ <%% end %>
+<% end %>
+
+and shell commands like this:
+
+<% coderay :lang => 'html' do -%>
+ <pre class="commands">
+ $ /usr/local/bin/macirb --simple-prompt
+ </pre>
+<% end %>
+
+</div>
