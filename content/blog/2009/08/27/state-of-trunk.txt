@@ -1,0 +1,83 @@
+--- 
+title:      State of Trunk
+created_at: 2009-08-27 21:37:49.208018 -07:00
+blog_post:  true
+layout:     blog_entry
+author:     Matt Aimonetti
+filter:
+  - erb
+  - textile
+--- 
+
+It has been a while since our last update. Our last blog post was published
+at the end of last March but in our defense, we communicated a lot via the "mailing list":http://lists.macosforge.org/pipermail/macruby-devel/ and "twitter":http://twitter.com/macruby.
+However, it's time for a formal update to keep everyone posted.
+
+h3. From experimental to trunk 
+
+In our last post, we explained the work which started on an experimental branch.
+This idea of this new branch was to implement and test a few ideas.
+
+* A new "LLVM":http://llvm.org/ based Virtual Machine
+* A new IO Subsystem 
+* RubySpec Integration    
+<br/>
+
+
+h3. New Virtual Machine
+
+Up to version 0.4, we were using YARV as our virtual machine. To improve the performance, 
+we spent some time writing a new VM. 
+Here is how it works: MacRuby parses the source code and transforms the abstract source tree (AST) directly into a LLVM's intermediate representation (IR).
+LLVM then compiles the code into optimized machine code.
+
+A lot of optimizations have been added and the work is not over yet but the initial 
+results are very promising. But wait, that's not it.         
+
+The new VM allows for one more trick: ahead-of-time (AOT) compilation.
+As shown "here":http://merbist.com/2009/07/12/compiled-hello-world-with-macruby/ you 
+can now compile Ruby code into "Mach-O object":http://en.wikipedia.org/wiki/Mach-O file and produce an executable.
+The output code embeds all the compiled Ruby code as well as MacRuby, statically.
+It can be distributed as is and does not depend on anything MacRuby or LLVM at runtime.
+The Ruby source code is compiled into native machine code (same process as we do at runtime with the JIT compiler), so it’s also a good way to obfuscate the source code.
+The final binary looks like an Objective-C binary.
+
+Eventually you will be able to choose one of the two compilation mode:
+
+* normal mode: full ruby specs, compile down to machine code and use LLVM at runtime. (recommended for desktop/server apps)
+* full mode: no full ruby spec support, no runtime code generation, no LLVM. ( designed for very light application and/or if the environment does not support runtime code generation.)
+
+
+h3. RubySpec integration
+
+The best way for MacRuby to make sure it stays a compliant Ruby implementation is to integrate the "RubySpec project":(http://rubyspec.org/), an executable specification for the Ruby programming language. MacRuby aims for Ruby 1.9 compliance, and we have been actively working on upgrading the specifications to match the 1.9 behaviors.
+
+Here are the spec stats as of today:
+
+* language:
+  -> 0 failures, 0 errors (2354 expectations, 838 examples, 117 examples skipped, 52 files) 
+* library:
+  -> 0 failures, 0 errors (2074 expectations, 968 examples, 62 examples skipped, 333 files) 
+* core:
+  -> 0 failures, 0 errors (14971 expectations, 5090 examples, 1998 examples skipped, 1287 files) 
+
+As you can see we are still skipping quite a large amount of examples.
+We are working our way through the specs and are enabling examples as we work through their related
+code. The goal is to be fully compliant and things are moving quickly.
+
+Not all the standard libraries are working yet, but we are working on that. Socket is currently 
+being implemented and that's one of the last big missing piece.
+
+h3. New IO Subsystem
+     
+
+
+h3. MacOSX Snow Leopard
+
+The latest version of Apple's OS just got released. This is a very exciting news for 
+MacRuby as we will be able to take advantage of the new technical improvements offered
+by the update.
+
+The bad news is that MacRuby 0.4 is not compatible with 0.5, the good news is that 
+we are going to setup an automated nightly build system.
+In the meantime we prepared a temporary build for you to try today.
