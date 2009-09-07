@@ -55,11 +55,11 @@ The best way for MacRuby to make sure it stays a compliant Ruby implementation i
 Here are the spec stats as of today:
 
 * language:
-  -> 0 failures, 0 errors (2354 expectations, 838 examples, 117 examples skipped, 52 files) 
-* library:
-  -> 0 failures, 0 errors (2074 expectations, 968 examples, 62 examples skipped, 333 files) 
+  -> 0 failures, 0 errors (2586 expectations, 988 examples, 102 examples skipped, 61 files)
 * core:
-  -> 0 failures, 0 errors (14971 expectations, 5090 examples, 1998 examples skipped, 1287 files) 
+   -> 0 failures, 0 errors (15798 expectations, 5448 examples, 2142 examples skipped, 1349 files)  
+* library:
+   -> 0 failures, 0 errors (2073 expectations, 967 examples, 63 examples skipped, 333 files) 
 
 As you can see we are still skipping quite a large amount of examples.
 We are working our way through the specs and are enabling examples as we work through their related
@@ -69,7 +69,9 @@ Not all the standard libraries are working yet, but we are working on that. Sock
 being implemented and that's one of the last big missing piece.
 
 h3. New IO Subsystem
-     
+
+There is not much to say except that the new IO implementation was written on top of CFStream which will allow
+better performance and more flexibility.
 
 
 h3. MacOSX Snow Leopard
@@ -79,5 +81,14 @@ MacRuby as we will be able to take advantage of the new technical improvements o
 by the update.
 
 The bad news is that MacRuby 0.4 is not compatible with 0.5, the good news is that 
-we are going to setup an automated nightly build system.
-In the meantime we prepared a temporary build for you to try today.
+a Release Candidate version will soon be available.
+In the meantime, check the mailing list for nightly build installers.
+
+The release of Snow Leopard brings a very important a new API to OSX developers: "Grand Central Dispatch.":http://developer.apple.com/mac/library/documentation/Performance/Reference/GCD_libdispatch_Ref/Reference/reference.html This new API has for goal to offer an easy way for developers to do concurrency programming without most of its challenges. The API is pretty straight forward and uses something that Ruby developers are very familiar with: blocks/procs/lambdas/anonymous methods also known as closures.
+
+The API will soon be fully available via MacRuby and more information, documentation and examples will be released to show you how to take advantage of this new API.
+
+h3. Tasks pending before the 0.5 release
+
+Rubygems isn't yell fully working, the migration to LLVM 2.6 is still in the work and standard libraries are not all available. Finally some work is being done on the compiler to allow easier and better AOT compilation.
+
