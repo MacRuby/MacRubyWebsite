@@ -1,5 +1,5 @@
 ---
-title:      Downloads
+title:      Download MacRuby
 created_at: 2009-03-08 22:40:01.091865 -04:00
 filter:
   - erb
@@ -7,10 +7,29 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
-h2. Current Version
+h2. Latest Stable Release
 
-Where there versions of MacRuby here, this is where you could download them.
+<p>
+You can download the <a href="http://www.macruby.org/files/MacRuby%200.4.zip">latest stable release</a> as a standalone binary installer.
+Latest Release</a>
+<em>Note: this release will not work on Snow Leopard or higher.</em>
+</p>
 
-h2. Older versions
+h2. Nightly builds
 
-This will be older versions...
+<p>
+You can download one of MacRuby's development branch <a href="http://macruby.icoretech.org/">nightly builds</a>, which also come as standalone binaries. Please note that these builds are development versions of MacRuby and might perhaps be unstable.
+<em>Note: these builds only work on Intel machines running on Snow Leopard or higher.</em>
+</p>
+
+h2. Source
+
+<p>
+  You can always get the latest sources from our <a href='/source'>SVN or GIT repository</a>. Building is trivial:
+
+<pre class="commands">
+  $ rake
+  $ sudo rake install
+</pre>
+
+</p>
