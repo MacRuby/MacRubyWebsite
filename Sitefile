@@ -1,7 +1,6 @@
 SITE.user = 'sansonet'
 SITE.host = 'gamma.macosforge.org'
 SITE.remote_dir = '/www/hosts/www.macruby.org'
-SITE.blog_dir = 'blog'
 
 task :default => :build
 
