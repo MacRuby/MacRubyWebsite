@@ -27,7 +27,7 @@ h3. DTrace Probes
 
 DTrace probes have been added to the core of the interpreter. You can now trace various things such as method calls or exceptions. All of that can be done on any MacRuby processes in the system.
 
-<code><pre class="commands">
+<pre class="commands">
 provider macruby {
     probe insn__entry(char *insnname, char *sourcefile, int sourceline);
     probe insn__return(char *insnname, char *sourcefile, int sourceline);
@@ -36,7 +36,7 @@ provider macruby {
     probe raise(char *classname, char *sourcefile, int sourceline);
     probe rescue(char *sourcefile, int sourceline);
 };
-</pre></code>
+</pre>
 
 DTrace is a very powerful tool that has proven to be extremely useful when debugging live applications. MacRuby ships with several DTrace scripts in "/Developer/Examples/Ruby/MacRuby/DTrace":http://www.macruby.org/trac/browser/MacRuby/trunk/sample-macruby/DTrace to profile various things such as method count, duration or even objects collected by the GC.
 
@@ -44,7 +44,7 @@ h3. Runtime Objective-C API
 
 MacRuby now exposes "an Objective-C API":http://www.macruby.org/trac/browser/MacRuby/trunk/include/ruby/objc.h that can be used to control the runtime from a pure Cocoa environment.
 
-<code><pre class="commands">
+<pre class="commands">
 $ cat hello_macruby.m 
 #import <Foundation/Foundation.h>
 #import <MacRuby/MacRuby.h>
@@ -57,7 +57,7 @@ int main(void) {
 $ gcc hello_macruby.m -o hello_macruby -framework Foundation -framework MacRuby -fobjc-gc
 $ ./hello_macruby 
 hello MacRuby
-</pre></code>
+</pre>
 
 It should be helpful if you are working on an Objective-C Cocoa application and are considering using MacRuby to either implement new functionalities or to provide a scripting interface to your native objects.
 

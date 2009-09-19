@@ -29,7 +29,7 @@ We did not work on any performance improvements for MacRuby 0.2 (we will address
 
 Inserting elements in an array is faster in MacRuby than the original 1.9 implementation, for example, mostly because CFArray switches on the fly its data structure to an implementation that performs well according to the current number of elements.
 
-<code><pre class="commands">
+<pre class="commands">
 a=[]; 100_000.times { |i| a.insert(0, i) }
 MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
     0.326057
@@ -43,11 +43,11 @@ ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
     4.608796
     4.595334
     4.581045
-</pre></code>
+</pre>
 
-Regarding hashes, searching for a specific value (which isn't something that is typically done) is shown to be faster.
+Regarding hashes, searching for a specific value (which isn't something that is typically done) is shown to be faster. k
 
-<code><pre class="commands">
+<pre class="commands">
 h = Hash[*(1..10000).to_a]; 10000.times { |i| h.has_value?(i) }
 MacRuby version 0.2 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
     0.965304
@@ -61,11 +61,11 @@ ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
     4.225632
     4.225457
     4.239244
-</pre></code>
+</pre>
 
 And to finish with strings, it turns out that manipulations on multi-byte strings are faster in MacRuby than 1.9.
 
-<code><pre class="commands">
+<pre class="commands">
 $ cat t3.rb 
 # -*- coding: utf-8 -*-
 s = "わたしはロランです。" * 2000
@@ -79,11 +79,11 @@ ruby 1.9.0 (2008-06-03 revision 16762) [i686-darwin9.0.0]
     1.624943
     1.633502
     1.62767
-</pre></code>
+</pre>
 
 Speaking of strings, since every of them is now a CFString, they get for free features that weren't present in the original 1.9 implementation, such as ICU transformations for example:
 
-<code><pre class="commands">
+<pre class="commands">
 $ cat t3.rb
 puts "watashiha".transform('Latin-Hiragana') +
      "lauren".transform('Latin-Katakana') +
@@ -91,7 +91,7 @@ puts "watashiha".transform('Latin-Hiragana') +
 $ macruby -v t3.rb
 MacRuby version 0.2 (ruby 1.9.0 2008-05-17) [universal-darwin9.0]
 わたしはラウレンです。
-</pre></code>
+</pre>
 
 MacRuby is still slower in many cases, including very important ones such as objects allocation and methods dispatch. There are also too many areas in String, Array and Hash where we perform much less well than we should.
 

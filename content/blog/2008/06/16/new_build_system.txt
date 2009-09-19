@@ -15,16 +15,16 @@ MacRuby trunk got a new build system, entirely written with "Rake":http://rake.r
 
 Building and installing MacRuby is now very simple:
 
-<code><pre class="commands">
+<pre class="commands">
 $ rake
 $ sudo rake install
-</pre></code>
+</pre>
 
 This will build and install MacRuby in /Library/Frameworks/MacRuby.framework, executable symbolic links in /usr/local/bin (with a "mac" prefix, for example "macruby"), Xcode templates and sample code.
 
 To see the list of all tasks;
 
-<code><pre class="commands">
+<pre class="commands">
 $ rake -T
 (in /Volumes/Data/src/MacRuby)
 rake all                   # Build MacRuby and extensions
@@ -46,13 +46,13 @@ rake objects               # Build known objects
 rake rbconfig              # Create config file
 rake sample_test           # Run the sample tests
 rake test                  # Same as sample_test
-</pre></code>
+</pre>
 
 Also, MacRuby trunk has a faster Objective-C dispatcher. Around 4 times faster that MacRuby 0.2 (and way faster than RubyCocoa). This was possible by fixing bugs in the dispatcher and also cache some of the runtime information.
 
 Let's consider the following Objective-C class.
 
-<code><pre class="commands">
+<pre class="commands">
 $ cat dummy.m
 #import <Foundation/Foundation.h>
 
@@ -74,17 +74,17 @@ $ cat dummy.m
 @end
 
 void Init_dummy (void) {}
-</pre></code>
+</pre>
 
 We can build it as a Ruby extension.
 
-<code><pre class="commands">
+<pre class="commands">
 $ gcc dummy.m -o dummy.bundle -framework Foundation -dynamiclib -fobjc-gc"
-</pre></code>
+</pre>
 
 Then, test calling the methods. First, the doSomething method, which is a very simple case.
 
-<code><pre class="commands">
+<pre class="commands">
 $ ruby start.rb ruby -v -r osx/foundation -I. -r dummy -e "include OSX; o = Dummy.new; 1_000_000.times { o.doSomething }"
 ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
     5.295735
@@ -100,11 +100,11 @@ MacRuby version 0.3 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
     0.639648
     0.65196
     0.644522
-</pre></code>
+</pre>
 
 Then, the doSomethingWith: method, a bit more complicated because one argument is passed, so both RubyCocoa and MacRuby are using libffi to call it.
 
-<code><pre class="commands">
+<pre class="commands">
 $ ruby -v -r osx/foundation -I. -r dummy -e "include OSX; o = Dummy.new; o2 = 'foo'; 1_000_000.times { o.doSomethingWith(o2) }"
 ruby 1.8.6 (2008-03-03 patchlevel 114) [universal-darwin9.0]
     13.981403
@@ -120,7 +120,7 @@ MacRuby version 0.3 (ruby 1.9.0 2008-06-03) [universal-darwin9.0]
     1.239323
     1.259157
     1.246987
-</pre></code>
+</pre>
 
 These are very premature results, we expect to continue reducing the time spent in the dispatcher, in the near future, and hopefully to make it twice faster.
 
