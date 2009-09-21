@@ -80,24 +80,19 @@ div#step1 p a:link,
 div#step1 p a:hover,
 div#step1 p a:visited {color: #fff; font-weight: bold;}
 
+
 div#step2 {
   background-image: url(../images/step2.png);
-  width: 285px;
-  height: 94px;
-}
-
-div#step3 {
-  background-image: url(../images/step3.png);
   width: 220px;
   height: 63px;
   padding: 30px 50px 0 15px;
 }
 
-div#step3 p {color: #fff;}
-div#step3 p a,
-div#step3 p a:link,
-div#step3 p a:hover,
-div#step3 p a:visited {color: #fff; font-weight: bold;}
+div#step2 p {color: #fff;}
+div#step2 p a,
+div#step2 p a:link,
+div#step2 p a:hover,
+div#step2 p a:visited {color: #fff; font-weight: bold;}
 
 div#leftcol {
   width: 595px;

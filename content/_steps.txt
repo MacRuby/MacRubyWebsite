@@ -6,11 +6,9 @@ filter: erb
   <p>or <a href="/source.html">checkout the source</a>
    </p>
   
-</div><!-- // end step1 -->
-<!-- <div id="step2">
-</div> --><!-- // end step2 -->
-<div id="step3">
+</div>
+<div id="step2">
   <p>Check out the <a href="/documentation/tutorial.html">tutorial</a>, <a href="/documentation.html">resources</a> 
  &nbsp; &nbsp; and <a href="http://svn.macosforge.org/repository/ruby/MacRuby/trunk/sample-macruby/">examples</a> that are available for MacRuby.</p>
-</div><!-- // end step3 -->
+</div>
 
