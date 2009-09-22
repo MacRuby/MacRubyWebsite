@@ -25,7 +25,7 @@ You can download one of MacRuby's development branch <a href="http://macruby.ico
 h2. Source
 
 <p>
-  You can always get the latest sources from our <a href='/source'>SVN or GIT repository</a>. Building is trivial:
+  You can always get the latest sources from our <a href='/source.html'>SVN or GIT repository</a>. Building is trivial:
 
 <pre class="commands">
   $ rake
