@@ -47,7 +47,6 @@ h3. Accessing Classes
 
 It is very easy to use an Objective-C class from MacRuby. You just have to refer to it as if it was a Ruby class. For example, to access the NSSound class:
 
-<code>
 <pre class="commands">
 $ /usr/local/bin/macirb --simple-prompt
 >> framework 'Cocoa'
@@ -55,7 +54,6 @@ $ /usr/local/bin/macirb --simple-prompt
 >> NSSound.ancestors
 => [NSSound, Object, NSObject, Kernel]
 </pre>
-</code>
 
 In MacRuby, all classes, including Ruby core classes, always inherit from NSObject, the root class of most Objective-C classes.
 
@@ -178,7 +176,7 @@ window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(
     NSBorderlessWindowMask,
     NSBackingStoreBuffered,
     false)
-<% end -%> 
+<% end -%>
 
 To call setter methods on Objective-C objects, you normally call a method like setName, using the name as the argument. MacRuby provides a facility which allows the use of standard attribute writer methods:
 
