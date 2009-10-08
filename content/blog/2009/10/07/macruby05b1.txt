@@ -15,7 +15,7 @@ After several months of development we are very glad to announce the first beta 
 
 You can download it from "here":http://www.macruby.org/files/MacRuby%200.5%20beta%201.zip. Please note that this package is for Intel machines running Mac OS X v10.6 or higher.
 
-Remember that this is a development version of MacRuby provided for testing and experimentation purposes only. Even if a few things are quite stable, others are still under development. Please give it a try and "report us":contact-us.html any problem you find, to make sure the final release will be great.
+Remember that this is a development version of MacRuby provided for testing and experimentation purposes only. Even if a few things are quite stable, others are still under development. Please give it a try and "report us":http://www.macruby.org/contact-us.html any problem you find, to make sure the final release will be great.
 
 A lot of progress has been made in this version.  Here is a summary of what's new.
 
