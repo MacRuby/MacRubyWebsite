@@ -1,0 +1,88 @@
+--- 
+title:      MacRuby 0.5 beta 1
+created_at: 2009-10-07 18:35:52.876215 -07:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+---
+<% @page[:excerpt] = capture_erb do %>
+After several months of development we are very glad to announce the first beta release of MacRuby 0.5. As this release has very ambitious goals we will go through a few intermediate releases before shipping the final 0.5.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.5%20beta%201.zip. Please note that this package is for Intel machines running Mac OS X v10.6 or higher.
+
+Remember that this is a development version of MacRuby provided for testing and experimentation purposes only. Even if a few things are quite stable, others are still under development. Please give it a try and "report us":contact-us.html any problem you find, to make sure the final release will be great.
+
+A lot of progress has been made in this version.  Here is a summary of what's new.
+
+h3. Compilation
+
+MacRuby was based on YARV, the original Ruby 1.9 virtual machine. Two things worried us about YARV: the lack of machine code compilation and the "global interpreter lock":http://en.wikipedia.org/wiki/Global_Interpreter_Lock (GIL) preventing true concurrency. Since concurrency and machine code compilation are so critical to performance, we decided to write a replacement, a very ambitious target.
+
+The new MacRuby 0.5 runtime is built upon "LLVM":http://llvm.org, a compiler infrastructure also sponsored by Apple. Thanks to LLVM, MacRuby is able to transform the Ruby abstract syntax tree (AST) from the parser directly into highly optimized machine code. MacRuby supports both "Just in Time":http://en.wikipedia.org/wiki/Just-in-time_compilation (JIT) and "Ahead of Time":http://en.wikipedia.org/wiki/AOT_compiler (AOT) compilation. The JIT mode will compile down the code at runtime, and the AOT mode will allow you to save on disk the compilation result. AOT compilation makes MacRuby a true Ruby compiler.
+
+MacRuby ships with the macrubyc command line utility, which is an interface to the AOT compiler. It can produce a Mach-O compatible object file (.o) out of a given Ruby source file. You can also assemble multiple files to get a standalone executable binary ready for deployment. This can be used to compile a MacRuby Cocoa application, dramatically improving its startup time while making sure the original Ruby source code is not readable.
+
+<pre class="commands">
+$ echo "p ARGV.map { |x| x.to_i }.inject(0) { |x, y| x + y }" > t.rb
+$ macrubyc t.rb -o t
+$ file t
+t: Mach-O 64-bit executable x86_64
+$ ./t 1 2 3 4 5
+15
+</pre>
+
+We also introduced a mode that generates a dynamic shared library out of a Ruby source file, using the new .rbo extension. MacRuby at runtime will #require these .rbo files in priority. We pre-compiled parts of the standard library using this technique.
+
+h3. Concurrency
+
+The new MacRuby 0.5 runtime is designed to support concurrent execution, allowing a MacRuby program to use more than one CPU core at a time and multiple threads to call into MacRuby at the same time. This new design is critical as we enter the multicore age.
+
+MacRuby uses native POSIX threads to represent the Thread class. Every native thread has its own VM instance, which allows multiple threads to dispatch code without interrupting others. The MacRuby garbage collector is now able to finalize objects on separate threads, preventing pauses in execution during GC.
+
+MacRuby ships with an API for "Grand Central Dispatch":http://libdispatch.macosforge.org/ (GCD), a multicore computing functionality present in Mac OS 10.6, Snow Leopard. The significant advantage of GCD is not having to deal with threading directly. With our new GCD API you set up queues and dispatch Ruby blocks to them. GCD will handle executing those blocks on system threads, ensuring all your CPU cores are used.
+
+<pre class="commands">
+waiting_chairs = Dispatch::Queue.new('com.apple.waiting_chairs')
+semaphore = Dispatch::Semaphore.new(3)
+index = -1
+while true
+  index += 1
+  if semaphore.wait(Dispatch::TIME_NOW) != 0
+    puts "Customer turned away #{index}"
+    next
+  end
+  waiting_chairs.dispatch do
+    semaphore.signal
+    puts "Shave and a haircut #{index}"
+  end
+end
+</pre>
+
+h3. Optimizations
+
+MacRuby 0.5 includes significant runtime-level optimizations, such as a much faster method dispatcher, cheap local variables, fast instance variable access, zero-cost DWARF exceptions, immediate floating point types, and many more. 
+
+At the core classes level, we introduced a ByteString class to properly handle raw data, rewrote the IO layer for better stability and performance, and introduced a new implementation of Array, optimized for handling Ruby immediate types.
+
+Most of these optimizations were implemented after profiling a large MacRuby application.
+
+h3. Cocoa Development
+
+We re-implemented the C and Objective-C support of 0.4 in this new release. An application written for 0.4 should continue to work on 0.5, but you should see it execute faster.
+
+In 0.4 we used to use the "libffi":http://sourceware.org/libffi/ library to call C and Objective-C functions and to create closures. RubyCocoa is also based on libffi. While libffi is a great library to use for external dispatch, it has definite performance limitations. In 0.5 MacRuby generates stubs using LLVM at runtime, enabling much better performance (from 3 to 4 times faster).
+
+h3. Compatibility
+
+We want MacRuby to be as compatible as possible with existing Ruby programs. We have been working hard on MacRuby to make sure it behaves like MRI 1.9.x.
+
+Like most other Ruby implementations, we are now using the "RubySpec":http://rubyspec.org project to check our compatibility. RubySpec is a set of executable specifications about the Ruby language and is maintained by the community.
+
+At the time of this writing, MacRuby passes about 91% of the language specs, 80% of the core specs and 72% of the library specs. Our objective is to pass as many RubySpecs as possible.
+
+Thanks to a better compatibility, MacRuby is able to run complex Ruby programs like irb, rake, rubygems, and more. Full compatibility is still a work in progress, but we expect MacRuby to run many more Ruby programs in the near future as we fix bugs and implement missing features.
