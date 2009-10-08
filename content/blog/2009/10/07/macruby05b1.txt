@@ -25,7 +25,7 @@ MacRuby was based on YARV, the original Ruby 1.9 virtual machine. Two things wor
 
 The new MacRuby 0.5 runtime is built upon "LLVM":http://llvm.org, a compiler infrastructure also sponsored by Apple. Thanks to LLVM, MacRuby is able to transform the Ruby abstract syntax tree (AST) from the parser directly into highly optimized machine code. MacRuby supports both "Just in Time":http://en.wikipedia.org/wiki/Just-in-time_compilation (JIT) and "Ahead of Time":http://en.wikipedia.org/wiki/AOT_compiler (AOT) compilation. The JIT mode will compile down the code at runtime, and the AOT mode will allow you to save on disk the compilation result. AOT compilation makes MacRuby a true Ruby compiler.
 
-MacRuby ships with the macrubyc command line utility, which is an interface to the AOT compiler. It can produce a Mach-O compatible object file (.o) out of a given Ruby source file. You can also assemble multiple files to get a standalone executable binary ready for deployment. This can be used to compile a MacRuby Cocoa application, dramatically improving its startup time while making sure the original Ruby source code is not readable.
+MacRuby ships with the macrubyc command line utility, which is an interface to the AOT compiler. It can produce a "Mach-O":http://en.wikipedia.org/wiki/Mach-O compatible object file (.o) out of a given Ruby source file. You can also assemble multiple files to get a standalone executable binary ready for deployment. This can be used to compile a MacRuby Cocoa application, dramatically improving its startup time while making sure the original Ruby source code is not readable.
 
 <pre class="commands">
 $ echo "p ARGV.map { |x| x.to_i }.inject(0) { |x, y| x + y }" > t.rb
@@ -42,7 +42,7 @@ h3. Concurrency
 
 The new MacRuby 0.5 runtime is designed to support concurrent execution, allowing a MacRuby program to use more than one CPU core at a time and multiple threads to call into MacRuby at the same time. This new design is critical as we enter the multicore age.
 
-MacRuby uses native POSIX threads to represent the Thread class. Every native thread has its own VM instance, which allows multiple threads to dispatch code without interrupting others. The MacRuby garbage collector is now able to finalize objects on separate threads, preventing pauses in execution during GC.
+MacRuby uses native POSIX threads to represent the Thread class. Every native thread has its own VM instance, which allows multiple threads to dispatch code without interrupting others. The "MacRuby garbage collector":http://www.opensource.apple.com/source/autozone/autozone-77.1/README.html?f=text is now able to finalize objects on separate threads, preventing pauses in execution during GC.
 
 MacRuby ships with an API for "Grand Central Dispatch":http://libdispatch.macosforge.org/ (GCD), a multicore computing functionality present in Mac OS 10.6, Snow Leopard. The significant advantage of GCD is not having to deal with threading directly. With our new GCD API you set up queues and dispatch Ruby blocks to them. GCD will handle executing those blocks on system threads, ensuring all your CPU cores are used.
 
