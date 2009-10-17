@@ -1,0 +1,318 @@
+--- 
+title:      Test Driven Development in Objective-C with MacRuby
+created_at: 2009-10-08 00:02:37.144647 -07:00
+recipe:     true
+author:     Joshua Ballanco
+filter:
+  - erb
+  - textile
+--- 
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='recipe'>
+
+h2. Testing Envy
+
+Test::Unit, RSpec, Shoulda, Minitest, Bacon, Cucumber... If there's one thing that the Ruby community has no shortage of, it's testing frameworks. Ever wish you could take advantage of these tools to do Test Driven Development in Cocoa? Well, wish no longer! With MacRuby, any Ruby testing framework instantly becomes an Objective-C testing framework. Let's see how...
+
+h2. Getting Started
+
+In this recipe, we're going to do test driven development of a Pig Latin Translator framework. That means the first step is to open up Xcode and start an empty Cocoa Framework project.
+
+!/images/tdd-macruby/project-type.png!
+
+Name the project "PigLatinTranslator" and save it. Now we need something to go into this framework. From the File menu, select "New File...". Choose the Objective-C class template, name the class "PLTranslator", and add it to the "PigLatinTranslator" target.
+
+!/images/tdd-macruby/file-type.png!
+
+In order to do TDD with MacRuby, we'll have to adjust a few build settings for the framework target. From the main Xcode project page, open the "Targets" group, highlight the "PigLatinTranslator" target, and click the Inspector button. Then, under the "Build" tab we need to turn off "Build Active Architecture Only" and adjust the "Valid Architectures".
+
+!/images/tdd-macruby/architecture-setting.png!
+
+The reason for this is that, in the interest of speed, Xcode prefers to only build the "i386" architecture by default. If you're on a 64-bit system, though, MacRuby will run in 64-bit mode by default and it will look for the "x86_64" architecture in your framework (and complain if it doesn't find it).
+
+We'll also need to make sure that our framework builds with support for garbage collection since MacRuby can only load frameworks compatible with the Objective-C Garbage Collector.
+
+!/images/tdd-macruby/gc-setting.png!
+
+At this point we have an empty Cocoa Framework project just waiting for some fresh code. But, since we're good TDD practitioners, before we write any framework code we need write a test. We'll put these tests together in a new Xcode build target. From the Project menu, choose "New Target...", select a "Unit Test Bundle", and name it "TestPigLatinTranslator".
+
+!/images/tdd-macruby/target-type.png!
+
+Xcode will then open the inspector for this new target. Under the "General" tab, click the plus button at the bottom of the "Direct Dependencies" section and add the PigLatinTranslator target as a dependency.
+
+!/images/tdd-macruby/dependency-select.png!
+
+This will ensure that each time we build the test target, Xcode will first rebuild the framework target.
+
+Now, if you've been paying attention, you might be wondering why we've chosen a "Unit Test Bundle" target. After all, the description of claims this target is for testing with OCUnit, which is decidely *not* a Ruby testing framework. That's quite alright. If we click on the disclosure triangle next to our new testing target, we find that it's nothing more than a series of copy, compile, and link steps followed up with a simple shell script.
+
+!/images/tdd-macruby/test-steps.png!
+
+If you double-click on the "Run Script" step, you'll find that the test target is calling out to a "RunUnitTests" script. We'll modify that to fit our needs in just a moment.
+
+First, we need a MacRuby file for our specs. We're going to be using Bacon in this recipe, so if you don't already have it installed, you'll first need to run "sudo macgem install bacon". Once that's done we can add another new file to our project, this time picking a "Ruby File" from the "User Templates" section. Name the new file "pltranslator_spec.rb", and make sure to add it to the TestPigLatinTranslator target and not the framework target.
+
+Now we need to modify that script that our test target will run. Double-click on the "Run Script" entry under the test target to bring up the build step inspector. The first thing we need to do is tell Xcode to run the test script with MacRuby. Change the "/bin/sh" entry for shell to "/usr/local/bin/macruby" (or wherever you have MacRuby installed; you can get this info by typing "which macruby" in terminal).
+
+Then, we need to replace the default test runner script with a script that will run our Bacon specs:
+
+<% coderay :lang => 'ruby' do -%>
+# Include the Bacon libraries
+require "rubygems"
+require "bacon"
+
+# Tell MacRuby where to find our framework
+ENV['DYLD_FRAMEWORK_PATH'] = ENV['BUILT_PRODUCTS_DIR']
+
+# Setup Bacon to report on tests at the end
+Bacon.summary_on_exit
+
+# Load all of the *_spec test files in the test bundle
+Dir.glob('./*_spec.rb').each do |test_file|
+  require test_file
+end
+<% end %>
+
+This script will go through all of the Ruby *_spec* files in the test bundle and call them with MacRuby. We also need to set the DYLD_FRAMEWORK_PATH so that MacRuby knows where to look for our PigLatinTranslator framework.
+
+Once you've made this change, set the Xcode target to "TestPigLatinTranslator" and build! Don't worry if you don't see anything. Xcode normally won't show the build results unless something goes wrong. If you want to double-check and see what Xcode did, choose "Build Results" from the Build menu.
+
+!/images/tdd-macruby/build-zero.png!
+
+h2. The First Iteration
+
+Now that we have everything set-up, it's time to get to work. Since this is the first time doing TDD of Objective-C with Ruby, we'll take it slow. Our first spec will simply test instantiation of a translator object. Go back to the Xcode editor, and add the following to your pltranslator_spec.rb file:
+
+<% coderay :lang => 'ruby' do -%>
+# pltranslator_spec.rb
+# PigLatinTranslator
+
+framework "PigLatinTranslator"
+
+describe "Generating a new translator" do
+  it "should return an object of class PLTranslator" do
+    t = PLTranslator.new
+    t.class.should.equal PLTranslator
+  end
+end
+<% end %>
+
+This will load up the framework and attempt to instantiate a PLTranslator object (Note: if you're having trouble with loading the framework, make sure that you set the DYLD_FRAMEWORK_PATH in the runner script). A quick CMD-B to build and... nothing. Wait, this isn't how TDD is supposed to work. We wrote a test before writing any code, so the test should fail right? Maybe there is an issue with the runner script? Let's check the build results:
+
+!/images/tdd-macruby/build-one-pass.png!
+
+Huh? So the test passed without us doing anything? If you're an old hand at Xcode, this should be no surprise. Go back and look at the PLTranslator.m file we added to our project at the beginning. You'll see that Xcode has already created an empty interface and implementation for the PLTranslator class.
+
+This means we can skip straight to testing some properties and methods of the PLTranslator class. Our design calls for instances of the PLTranslator class to have two string properties representing the English and Pig Latin forms of a word. Our object also needs methosds to convert the English to Pig Latin and vice versa. Let's start by testing the getting and setting of the properties, English first:
+
+<% coderay :lang => 'ruby' do -%>
+# pltranslator_spec.rb
+# PigLatinTranslator
+
+framework "PigLatinTranslator"
+
+describe "Generating a new translator" do
+  before do
+    @t = PLTranslator.new
+  end
+
+  it "should return an object of class PLTranslator" do
+    @t.class.should.equal PLTranslator
+  end
+
+  it "should have an 'English' string property" do
+    @t.english = "Hello"
+    @t.english.should == "Hello"
+  end
+end
+<% end %>
+
+We've refactored the spec to add a "before" block, and added a requirement regarding the English string property. Save these changes and build, and we'll get:
+
+!/images/tdd-macruby/build-two-fail.png!
+
+Ah, that's more like it. Our spec failed, so now we can write some code to make it pass. Opening up PLTranslator.h we'll add the property declaration:
+
+<% coderay :lang => 'c' do -%>
+//  PLTranslator.h
+//  PigLatinTranslator
+
+#import <Cocoa/Cocoa.h>
+
+@interface PLTranslator : NSObject {
+  NSString *english;
+}
+
+@property(copy) NSString *english;
+
+@end
+<% end %>
+
+...and in PLTranslator.m we'll tell the compiler to synthesize the property for us:
+
+<% coderay :lang => 'c' do -%>
+//  PLTranslator.m
+//  PigLatinTranslator
+
+#import "PLTranslator.h"
+
+@implementation PLTranslator
+
+@synthesize english;
+
+@end
+<% end %>
+
+Now we can build, and opening up the build results window we see:
+
+!/images/tdd-macruby/build-two-pass.png!
+
+Good! All green. Now go back and complete the first specification with the Pig Latin string property:
+
+<% coderay :lang => 'ruby' do -%>
+it "should have a 'Pig Latin' string property" do
+  @t.pigLatin = "ello-hay"
+  @t.pigLatin.should == "ello-hay"
+end
+<% end %>
+
+(Note that for an Objective-C object, we use the Cocoa camelCase naming convention, not the Ruby under_case stlye.) Build, and this one will fail. Add property defining code to PLTranslator same as we did with the English string property, build, and we're back in the green:
+
+!/images/tdd-macruby/build-three-pass.png!
+
+
+h2. You're Doing TDD Now!
+
+OK, now we're ready to make things a bit more interesting. We can now set the value of the English or Pig Latin strings, but how to we get a translation from one to the other? We could put some of that logic in the setters, but to keep things simple for the time being, let's spec out a method that will take the English string, and populate the Pig Latin string with the proper translation. To test translation from English to Pig Latin we'll use a few sample words lifted from the "Pig Latin Wikipedia Page":http://en.wikipedia.org/wiki/Pig_latin
+
+<%coderay :lang => 'ruby' do -%>
+describe "Translating from English to Pig Latin" do
+  before do
+    @t = PLTranslator.new
+  end
+
+  it "should correctly generate some reference Pig Latin words" do
+    { "beast" => "east-bay",
+      "dough" => "ough-day",
+      "happy" => "appy-hay",
+      "question" => "estion-quay",
+      "star" => "ar-stay",
+      "three" => "ee-thray" }.each do |eng, pl|
+        @t.english = eng
+        @t.englishToPigLatin
+
+        @t.pigLatin.should.equal pl
+    end
+  end
+end
+<% end %>
+
+Building our project now, we get the expected spate of failures:
+
+!/images/tdd-macruby/build-four-fail.png!
+
+To get our spec passing again, we'll need to implement the "englishToPigLatin" method. First, let's add the function prototype to PLTranslator.h:
+
+<% coderay :lang => 'c' do -%>
+- (void)englishToPigLatin;
+<% end %>
+
+Then we'll implement the method in PLTranslator.m:
+
+<% coderay :lang => 'c' do -%>
+- (void)englishToPigLatin
+{
+  // Decompose the English string
+  NSString *leader, *rest;
+  int firstVowel = [english rangeOfCharacterFromSet:
+                    [NSCharacterSet characterSetWithCharactersInString:@"aeiou"]
+                   ].location;
+  leader = [english substringToIndex:firstVowel];
+  rest = [english substringFromIndex:firstVowel];
+
+  // ...and recompose as Pig Latin
+  self.pigLatin = [rest stringByAppendingString:
+                   [@"-" stringByAppendingString:
+                    [leader stringByAppendingString:@"ay"]]];
+  return;
+}
+<% end %>
+
+Lookin' good! Let's take this baby for a spin...
+
+!/images/tdd-macruby/build-four-fail-again.png!
+
+Drat! We were so close. Apparently "Q" needs some special casing. Let's go back and modify the translation method slightly:
+
+<% coderay :lang => 'c' do -%>
+// Decompose the English string
+NSString *leader, *rest;
+int firstVowel = [english rangeOfCharacterFromSet:
+                  [NSCharacterSet characterSetWithCharactersInString:@"aeiou"]
+                 ].location;
+if (firstVowel > 0 &&
+    ('q' == [english characterAtIndex:(firstVowel - 1)] ||
+     'Q' == [english characterAtIndex:(firstVowel - 1)])) {
+  if ('u' == [english characterAtIndex:firstVowel]) {
+    firstVowel++;
+  }
+}
+leader = [english substringToIndex:firstVowel];
+rest = [english substringFromIndex:firstVowel];
+<% end %>
+
+Now when we build and open the build results window...
+
+!/images/tdd-macruby/build-four-pass.png!
+
+Ah-HA! Success!
+
+h2. Going further...
+
+Hopefully, by now you're starting to see just how useful testing Objective-C with MacRuby can be. As an exercise to improve your skills, try implementing the reverse translation. You can start by reversing the keys and values we used in the tests above. What other corner cases can you think of? Can your write some specs to flush out the behavior of our framework class?
+
+Be creative! Now that you can access Objective-C objects from MacRuby, it's not only possible to use Cocoa to improve your Ruby, but it's also possible to use Ruby to improve your Objective-C. For example, once you've got a pretty good set of specs covering the PLTranslator.rb class, throw it away and rewrite it in Ruby! Try this for another Cocoa class, or even take a Ruby library with extensive test coverage, and use those tests as a scaffold to rewrite the library in Objective-C.
+
+Also, don't forget that, while Ruby requires that a framework be compatible with the Objective-C garbage collector, the framework does not have to be strictly garbage collected. So, you could even use Bacon to spec out an Objective-C framework running with the GC turned on, then add in "retain"s and "release"s and use that same framework on the iPhone.
+
+h2. Bonus Credit
+
+I've never been a huge fan of the throw-away demo, so just to prove that this exercise isn't completely pointless, let's go ahead and make an application using our framework. First, we need a new "Application" target for our project. If you make the "TestPigLatinTranslator" target a direct dependency of your application, then not only will you rebuild your framework every time you build the app, but you'll also be re-running the tests. Don't forget to add the PigLatinTranslator.framework as a Linked Library.
+
+We need a "main.m" for the application, so from the new file window choose an "Objective-C Class" and add it to the application target. We only need the *.m file, so you can skip creation of the corresponding *.h header. Fill in "main.m" with the standard Cocoa start-up code:
+
+<% coderay :lang => 'c' do -%>
+#import <Cocoa/Cocoa.h>
+
+int main(int argc, const char **argv)
+{
+  return NSApplicationMain(argc, argv);
+}
+<% end %>
+
+Now we need an interface for the app, so add another new file, this time from the new file window choose an "Application XIB" from the "User Interface" section. Name this file "MainMenu.xib" and double-click on it in Xcode to open up Interface Builder. Go ahead and drag in some labels and text fields (you can uncheck the "Editable" option on the Pig Latin text field for now to hide the fact that PigLatin to English isn't implemented yet), and a button to trigger the translation.
+
+Then take an NSObject from the library, add it to your project, and set its Class Identity to "PLTranslator". Before you can hook everything up, there's a change you need to make to the framework we just wrote. We'd like our "englishToPigLatin" function to be available directly to the interface, but in order for that to be the case, we need to alter its method signature slightly:
+
+<% coderay :lang => 'c' do -%>
+- (IBAction)englishToPigLatin:(id)sender;
+<% end %>
+
+Notice that this will break our tests (you'd find this out as soon as you attempted a build), so we will also need to tweak our test:
+
+<% coderay :lang => 'ruby' do -%>
+@t.englishToPigLatin(self)
+<% end %>
+
+Then, we can go back to Interface Builder, right-click on the button and drag a connection to the Translator object to connect that button to "englishToPigLatin:". Then, for the text fields we'll take advantage of Cocoa's bindings. In the info panel, set the binding of the English text field to the Translate object's "english" key. Also make sure to check the "Continuously Updates Value" and "Validates Immediately" boxes. Set the Pig Latin text field's binding likewise, but this time using the key "pigLatin".
+
+...and that's it! Save everything, go back to Xcode, and do a "Build and Run" and enjoy the fun!
+
+!/images/tdd-macruby/finished.png!
+
+</div>
