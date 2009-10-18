@@ -86,7 +86,7 @@ Once you've made this change, set the Xcode target to "TestPigLatinTranslator" a
 
 h2. The First Iteration
 
-Now that we have everything set-up, it's time to get to work. Since this is the first time doing TDD of Objective-C with Ruby, we'll take it slow. Our first spec will simply test instantiation of a translator object. Go back to the Xcode editor, and add the following to your pltranslator_spec.rb file:
+Now that we have everything set-up, it's time to get to work. Since this is our first time doing TDD of Objective-C with MacRuby, we'll take it slow. Our first spec will simply test instantiation of a translator object. Go back to the Xcode editor, and add the following to your pltranslator_spec.rb file:
 
 <% coderay :lang => 'ruby' do -%>
 # pltranslator_spec.rb
@@ -274,9 +274,9 @@ Ah-HA! Success!
 
 h2. Going further...
 
-Hopefully, by now you're starting to see just how useful testing Objective-C with MacRuby can be. As an exercise to improve your skills, try implementing the reverse translation. You can start by reversing the keys and values we used in the tests above. What other corner cases can you think of? Can your write some specs to flush out the behavior of our framework class?
+Hopefully, by now you're starting to see just how useful testing Objective-C with MacRuby can be. As an exercise to improve your skills, try implementing the reverse translation. You can start by reversing the keys and values we used in the test above. What other corner cases can you think of? Can you write some specs to flush out the behavior of our framework class?
 
-Be creative! Now that you can access Objective-C objects from MacRuby, it's not only possible to use Cocoa to improve your Ruby, but it's also possible to use Ruby to improve your Objective-C. For example, once you've got a pretty good set of specs covering the PLTranslator.rb class, throw it away and rewrite it in Ruby! Try this for another Cocoa class, or even take a Ruby library with extensive test coverage, and use those tests as a scaffold to rewrite the library in Objective-C.
+Be creative! Now that you can access Objective-C objects from MacRuby, it's not only possible to use Cocoa to improve your Ruby, but it's also possible to use Ruby to improve your Objective-C. For example, once you've got a pretty good set of specs covering the PLTranslator class, throw it away and rewrite it in Ruby! Try this for another Cocoa class, or even take a Ruby library with extensive test coverage, and use those tests as a scaffold to rewrite the library in Objective-C.
 
 Also, don't forget that, while Ruby requires that a framework be compatible with the Objective-C garbage collector, the framework does not have to be strictly garbage collected. So, you could even use Bacon to spec out an Objective-C framework running with the GC turned on, then add in "retain"s and "release"s and use that same framework on the iPhone.
 
