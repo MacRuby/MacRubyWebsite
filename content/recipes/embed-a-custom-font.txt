@@ -1,0 +1,41 @@
+--- 
+title:      Embed a custom font
+created_at: 2009-10-06 18:51:36.516659 -07:00
+recipe:     true
+author:     Matt Aimonetti
+filter:
+  - erb
+  - textile
+--- 
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='recipe'>
+
+Let say you want to release your MacRuby app and use a custom embedded font?
+You probably don't want to force your users to install the font.
+Well, don't worry, just put the font file in your resources folder and use the following code:
+
+<% coderay :lang => 'ruby' do -%>
+font_location = NSBundle.mainBundle.pathForResource('MyCustomFont', ofType: 'ttf')
+font_url = NSURL.fileURLWithPath(font_location)
+# in MacRuby, always make sure that cocoa constants start by an uppercase
+CTFontManagerRegisterFontsForURL(font_url, KCTFontManagerScopeProcess, nil)
+<% end %>
+
+That’s it, now your custom font is available and you can change your textfield instance’s font like that:
+
+<% coderay :lang => 'ruby' do -%>
+text_field.font = NSFont.fontWithName('MyCustomFont', size:24)
+<% end %>
+
+The only tricky things here were to know the Cocoa API call and to know that even if the Cocoa API references the constant to use as kCTFontManagerScopeProcess, because in Ruby, constants start by an uppercase, you need to convert it to: KCTFontManagerScopeProcess.
+
+</div>
+
+<span>
+  "Original post":http://merbist.com/2009/10/06/macruby-tips-embed-a-custom-font/
+</span>

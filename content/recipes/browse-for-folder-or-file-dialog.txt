@@ -1,0 +1,70 @@
+--- 
+title:      Browse for folder or file dialog
+created_at: 2009-10-25 18:51:36.516659 -07:00
+recipe:     true
+author:     Matt Aimonetti
+filter:
+  - erb
+  - textile
+--- 
+h1(title). <%= h(@page.title) %>
+
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='recipe'>
+
+  This is yet another pretty simple tip. 
+  Use case: let say you want your applications users to choose one or multiple files or folder on their file system. A good example would be that you want the user to choose a file to process or a folder where to save some data.
+
+  <p>
+    <br/>
+  <img class="aligncenter" title="MacRuby, file browser dialog" src="http://img.skitch.com/20091025-nc89xd2ywqutqqddnwm2met3x4.jpg" alt="" width="389" height="43" />
+  </p>
+  
+  In the example above, I added a browse button and a text field.
+
+  I would like my users to click on the browse button, locate a folder and display it in the text field.
+
+  In your MacRuby controller, use a simple action method as well as an accessor to the text field:
+
+<% coderay :lang => 'ruby' do -%>
+attr_accessor :destination_path
+
+def browse(sender)
+end
+<% end %>
+
+  Now, in Interface builder bind the destination_path outlet to the text field you want to use to display the path and bind the button to the browse action.
+
+  Let's go back to our action method and let's create a dialog panel, set some options and handle the user selection:
+
+<% coderay :lang => 'ruby' do -%>
+def browse(sender)
+  # Create the File Open Dialog class.
+  dialog = NSOpenPanel.openPanel
+  # Disable the selection of files in the dialog.
+  dialog.canChooseFiles = false
+  # Enable the selection of directories in the dialog.
+  dialog.canChooseDirectories = true
+  # Disable the selection of multiple items in the dialog.
+  dialog.allowsMultipleSelection = false
+
+  # Display the dialog and process the selected folder
+  if dialog.runModalForDirectory(nil, file:nil) == NSOKButton
+  # if we had a allowed for the selection of multiple items
+  # we would have want to loop through the selection
+    destination_path.stringValue = dialog.filenames.first
+  end
+end
+<% end %>
+
+  That's it, your user can now browse for a folder and the selection will be displayed in the text field. Look at the <a href="http://developer.apple.com/mac/library/documentation/Cocoa/Reference/ApplicationKit/Classes/NSOpenPanel_Class/Reference/Reference.html" target="_blank">NSOpenPanel documentation</a> for more details on the Cocoa API.
+  
+</div>
+
+<span>
+  "Original post":http://merbist.com/2009/10/25/macruby-browse-for-folder-or-file-dialog/
+</span>
+
