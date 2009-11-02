@@ -14,6 +14,7 @@ If you are wondering why in the world MacRuby exists you can read that in the "W
 
 Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
 
+
 h2. Screencasts
 
 <ul class="screencast_list">
@@ -39,19 +40,6 @@ h2. Tutorials
 <% end -%>
 </ul>
 
-h2. Talks
-
-<ul class="screencast_list">
-  <% macruby_talks.each do |talk| -%>
-    <li>
-       <span class="date"><%= talk.date %></span>
-       <span class="name"><a href="<%= talk.href %>"><%= talk.name %></a> <%= "<a href='#{talk.slides_href}'>(slides)</a>" if talk.slides_href %></span>
-       <span class="author"><%= talk.author%> <%= "(#{talk.location})" if talk.location %></span>
-     </li>
-  <% end -%>
-</ul>
-
-
 h2. Recipes
 
 <ul class="recipe_list">
@@ -69,3 +57,16 @@ h2. Recipes
 <% end -%>
 <% end -%>
 </ul>
+
+h2. Talks
+
+<ul class="screencast_list">
+  <% macruby_talks.each do |talk| -%>
+    <li>
+       <span class="date"><%= talk.date %></span>
+       <span class="name"><a href="<%= talk.href %>"><%= talk.name %></a> <%= "<a href='#{talk.slides_href}'>(slides)</a>" if talk.slides_href %></span>
+       <span class="author"><%= talk.author%> <%= "(#{talk.location})" if talk.location %></span>
+     </li>
+  <% end -%>
+</ul>
+
