@@ -7,7 +7,7 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
-HotCocoa is a thin, idiomatic Ruby layer that sits above Cocoa and other frameworks. HotCocoa will be included with MacRuby when it ships in future versions of OS X and is currently included in the MacRuby distributions. 
+HotCocoa is a thin, idiomatic Ruby layer that sits above Cocoa and other frameworks. HotCocoa is currently included in the MacRuby distributions. 
 
 Cocoa classes have extremely large method and constant names. A substantial amount of code is written to just instantiate and configure instances of these classes. Interface Builder is used by most developers because it hides the complexity of manually configuring controls, but at the expense have having to use a GUI builder and the obscuring those configuration options inside the IB user interface. One of HotCocoa's chief goals is to allow Interface Builder simplicity, but in Ruby code. 
 
