@@ -10,15 +10,8 @@ h1(title). <%= h(@page.title) %>
 h2. Latest Stable Release
 
 <p>
-You can download <a href="http://www.macruby.org/files/MacRuby%200.4.zip">MacRuby 0.4</a> as a standalone binary installer.
-<em>Note: this release will not work on Snow Leopard or higher.</em>
-</p>
-
-h2. Latest Beta Release
-
-<p>
-You can download <a href="http://www.macruby.org/files/MacRuby%200.5%20beta%201.zip">MacRuby 0.5 beta 1</a> as a standalone binary installer.
-<em>Note: this release is intended for testing purposes and will only work on Intel machines running on Snow Leopard or higher.</em>
+You can download <a href="http://www.macruby.org/files/MacRuby%200.5.zip">MacRuby 0.5</a> as a standalone binary installer.
+<em>Note: this release will only work on Intel machines running Mac OS v10.6 or higher. Users on Mac OS v10.5 can build the sources.</em>
 </p>
 
 h2. Nightly builds

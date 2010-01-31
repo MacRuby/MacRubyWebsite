@@ -2,7 +2,7 @@
 filter: erb
 ---
 <div id="current_version">
-  Current Version 0.4
+  Current Version 0.5
 </div>
 <div id="logo">
   <a href="/"><img src="/images/macruby_logo.png" alt="MacRuby" id="logo" /></a>
