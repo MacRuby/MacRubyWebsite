@@ -1,0 +1,88 @@
+--- 
+title:      MacRuby 0.5 beta 2
+created_at: 2009-11-17 13:13:23.794802 -08:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+--- 
+<% @page[:excerpt] = capture_erb do %>
+After a month of hard work we are pleased to offer the second beta of MacRuby 0.5. We are expecting one more beta before shipping the final 0.5.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.5%20beta%202.zip. Please note that this package only runs on Snow Leopard and above. Users on Leopard can also use MacRuby by building the sources from our repository.
+
+Remember that this is a development version of MacRuby provided for testing and experimentation purposes only.  Even though many features are already quite stable at the time of this writing, some of them are still a work in progress.
+
+Please feel encouraged to give it a try and be sure to "report":http://www.macruby.org/contact-us.html any problems you encounter to us. This will help us to ensure that the final release is of the highest  possible quality.
+
+You can read about all the changes since the first beta in this "status report":http://lists.macosforge.org/pipermail/macruby-devel/2009-November/003286.html e-mail on the mailing-list, but here are the most visible changes:
+
+h3. Better Compatibility
+
+We fixed many compatibility bugs, allowing MacRuby to run rdoc, ri, "Rack":http://rack.rubyforge.org/ and "Sinatra":http://www.sinatrarb.com/. 
+
+RI files are now generated as part of the project build and readable from the macri command-line tool. 
+
+We are also able to run simple Rack and Sinatra web applications on MacRuby, using a simple GCD-based web-server that will be covered in an upcoming blog article.
+
+Additionally, MacRuby 0.5 beta 2 ships with experimental support for the BigDecimal, OpenSSL and JSON extensions.
+
+h3. Better Ahead-of-Time Compiler
+
+Many compiler bugs have been fixed and the macrubyc utility is now able to generate fat binaries, via the --arch argument.
+
+<pre class="commands">
+$ macrubyc hello.rb -o hello --arch i386 --arch x86_64
+</pre>
+
+Also, macrubyc will generate by default executables linking against MacRuby.framework dynamically, which greatly reduces the executable size. In order to build a full standalone executable, the --static argument must be passed.
+
+A new utility, called macruby_deploy, is now available to help you deploy your MacRuby applications. It provides options to compile ahead-of-time your application's Ruby source code as well as relocating the MacRuby framework inside the application bundle. This way your application is ready for deployment, with its source code hidden because it is pre-compiled. 
+
+<pre class="commands">
+$ macruby_deploy 
+Usage: macruby_deploy [options] application-bundle
+        --compile                    Compile the bundle source code
+        --embed                      Embed MacRuby inside the bundle
+        --no-stdlib                  Do not embed the standard library
+    -v, --version                    Display the version
+</pre>
+
+These functionalities are also available as Xcode targets, a few mouse clicks away.
+
+h3. DTrace Probes
+
+DTrace static probes have been added to the VM, providing the exact same support as MacRuby 0.4. 
+
+"DTrace":http://en.wikipedia.org/wiki/DTrace is a powerful tracing facility available since Leopard which allows you to trace the MacRuby runtime of any running application, in development or production.
+
+MacRuby ships with a few DTrace example scripts. Here is one which prints some information regarding objects collected by the GC at a given time.
+
+<pre class="commands">
+$ sudo dtrace -qs sample-macruby/DTrace/collected_objects64.d -p 72593
+Target pid: 72593
+
+^C
+
+                                             CLASS       COUNT     
+--------------------------------------------------------------------------------
+                     __NSFastEnumerationEnumerator       100       
+                                            Method       101       
+                                      CommonLogger       102       
+                                        NSCFNumber       200       
+                                              Proc       202       
+                                        ByteString       203       
+                                          CTParser       204       
+                                              Time       204       
+                                  NSCFCharacterSet       400       
+                              NSCheapMutableString       404       
+                                      NSPathStore2       606       
+                                          NSCFData       612       
+                                    NSCFDictionary       1204      
+                                         RubyArray       2434      
+                                        NSCFString       21240     
+</pre> 
