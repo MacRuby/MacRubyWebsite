@@ -10,6 +10,12 @@ filter:
 ---
 h1(title). <%= h(@page.title) %>
 
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
 h3. Introduction
 
 Historically, the Ruby language has been firmly founded in the single-processor paradigm. Mainline Ruby uses "green threads":http://en.wikipedia.org/wiki/Green_threads to simulate multiprocessing in Ruby; unfortunately, it’s difficult to properly harness the power of multicore processors with green threads. In late 2009, MacRuby bridged Ruby threads to native threads and removed the Global Interpreter Lock. Recently, however, MacRuby took a step forward that no other Ruby implementation - indeed, no other dynamic language - has offered: support for Apple’s "Grand Central Dispatch":http://en.wikipedia.org/wiki/Grand_Central_Dispatch library.
@@ -132,3 +138,5 @@ This example uses the queue accessed through @Dispatch::Queue.concurrent@ to spe
 h3. The Future
 
 There’s much more to find in MacRuby’s support for Grand Central Dispatch - @Dispatch::Semaphore@ is a powerful tool for inter-thread communication and resource management, and the @Dispatch::Source@ class provides an elegant yet low-level foundation for event-based programming. Soon to come is the release of ControlTower, a web server built entirely in MacRuby with GCD. Additionally, the MacRuby team is planning a library to provide high-level, Ruby-esque abstractions on top of the GCD primitives. All in all, it’s a tremendously exciting time to be a Ruby programmer on Mac OS X!
+
+</div>
