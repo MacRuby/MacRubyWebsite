@@ -41,7 +41,7 @@ application do |app|
 end
 </pre>
 
-If you're interested in HotCocoa, make sure to "fork the project":http://github.com/richkilmer/hotcocoa and start hacking!
+If you're interested in HotCocoa, make sure to "clone the project":http://github.com/richkilmer/hotcocoa and start hacking!
 
 h3. More Elegant Ahead-of-Time Compilation
 
