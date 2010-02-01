@@ -1,0 +1,76 @@
+--- 
+title:      MacRuby 0.5 final release
+created_at: 2010-01-31 15:33:21.513758 -08:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+--- 
+<% @page[:excerpt] = capture_erb do %>
+We are glad to announce the final release of MacRuby 0.5. After months of hard work and two successful beta releases, we believe 0.5 is good enough to replace the previous stable release, 0.4.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.5.zip. Please note that this package only runs on Snow Leopard and above. Users on Leopard can also use MacRuby by building the sources from our repository.
+
+Remember that while MacRuby is progressing fast, it is still not recommended for mainstream development yet. We believe that MacRuby is stable in a lot of areas but others are still a work in progress.
+
+As usual, please give it a try and be sure to "report":http://www.macruby.org/contact-us.html any problems you encounter to us.
+
+If you're just getting started with MacRuby 0.5, make sure to check out our previous articles on the previous beta releases: "0.5 beta 1":http://macruby.org/blog/2009/10/07/macruby05b1.html and "0.5 beta 2":http://macruby.org/blog/2009/11/17/macruby05b2.html.
+
+You can read about all the changes since the last beta in this "status report":http://lists.macosforge.org/pipermail/macruby-devel/2010-January/004064.html e-mail on the mailing-list, but here are the most visible changes:
+
+h3. HotCocoa Support
+
+HotCocoa is a thin & idiomatic Ruby layer that sits above Cocoa and other frameworks, developed by Rich Kilmer. MacRuby 0.5 now supports HotCocoa.
+
+HotCocoa used to be developed inside the MacRuby project, but we decided that it would have a better life on GitHub, where it is far easier for developers to submit contributions. HotCocoa also has been transformed as a gem and is included in the 0.5 package installer. Be sure to require rubygems before using it.
+
+<pre class="commands">
+require 'rubygems'
+require 'hotcocoa'
+include HotCocoa
+application do |app|
+  win = window :size => [100,50]
+  b = button :title => 'Hello'
+  b.on_action { puts 'World!' }
+  win << b
+end
+</pre>
+
+If you're interested in HotCocoa, make sure to "fork the project":http://github.com/richkilmer/hotcocoa and start hacking!
+
+h3. More Elegant Ahead-of-Time Compilation
+
+The macrubyc command-line tool has been improved to support the compilation of multiple Ruby source file into dynamic libraries. This is useful when you have several executable sharing the same Ruby code.
+
+<pre class="commands">
+$ cd /tmp
+$ echo "def hello(n); puts 'hello ' + n; end" > t1.rb
+$ echo "def hello_world; hello 'world'; end" > t2.rb
+$ echo "require 't1'; require 't2'; hello_world" > test.rb
+$ macrubyc t1.rb t2.rb -o code.dylib --dylib
+$ file code.dylib 
+code.dylib: Mach-O 64-bit dynamically linked shared library x86_64
+$ macrubyc test.rb code.dylib -o test
+$ rm t1.rb t2.rb test.rb 
+$ ./test
+hello world
+</pre>
+
+Also, macrubyc now comes with a manpage which provides more information on how to use it. Check it out!
+
+<pre class="commands">
+$ man macrubyc
+</pre>
+
+h3. Grand Central Dispatch Support
+
+In this release, we completed our GCD support. Every C API of Grand Central Dispatch is now available from MacRuby. We also completed documentation (as rdoc comments), covered everything with specs and we now intend to support this API in further releases.
+
+To get you started with GCD, we wrote a separate tutorial. Check it out!
+
+We are considering providing a higher level layer of APIs in the future.
