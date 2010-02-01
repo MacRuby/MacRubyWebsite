@@ -1,5 +1,5 @@
 --- 
-title:      MacRuby 0.5 final release
+title:      MacRuby 0.5
 created_at: 2010-01-31 15:33:21.513758 -08:00
 blog_post:  true
 layout:     blog_entry
@@ -13,11 +13,11 @@ We are glad to announce the final release of MacRuby 0.5. After months of hard w
 <% end %>
 <%= RedCloth.new(@page.excerpt).to_html %>
 
-You can download it from "here":http://www.macruby.org/files/MacRuby%200.5.zip. Please note that this package only runs on Snow Leopard and above. Users on Leopard can also use MacRuby by building the sources from our repository.
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.5.zip. Please note that this package only runs on Snow Leopard and above. Users on Leopard can also use MacRuby by "building the sources":/source.html from our repository.
 
 Remember that while MacRuby is progressing fast, it is still not recommended for mainstream development yet. We believe that MacRuby is stable in a lot of areas but others are still a work in progress.
 
-As usual, please give it a try and be sure to "report":http://www.macruby.org/contact-us.html any problems you encounter to us.
+As usual, please give it a try and be sure to "report":/contact-us.html any problems you encounter to us.
 
 If you're just getting started with MacRuby 0.5, make sure to check out our previous articles on the previous beta releases: "0.5 beta 1":http://macruby.org/blog/2009/10/07/macruby05b1.html and "0.5 beta 2":http://macruby.org/blog/2009/11/17/macruby05b2.html.
 
@@ -71,6 +71,6 @@ h3. Grand Central Dispatch Support
 
 In this release, we completed our GCD support. Every C API of Grand Central Dispatch is now available from MacRuby. We also completed documentation (as rdoc comments), covered everything with specs and we now intend to support this API in further releases.
 
-To get you started with GCD, we wrote a separate tutorial. Check it out!
+To get you started with GCD, we wrote a "separate tutorial":/documentation/gcd.html. Check it out!
 
 We are considering providing a higher level layer of APIs in the future.
