@@ -16,11 +16,12 @@ module MacRubyTeamHelper
       Member.new("rich", "Rich Kilmer", "InfoEther, Inc.", "http://www.infoether.com", "rich@infoether.com"),
       Member.new("ben", "Ben Stiglitz", "Apple, Inc.", nil, "stig@apple.com"),
       Member.new("patrick", "Patrick Thomson", "Apple, Inc.", nil, "pthomson@apple.com"),
-      Member.new("eloy", "Eloy Duran", nil, nil, "eloy.de.enige@gmail.com"),
+      Member.new("eloy", "Eloy Duran", nil, "http://superalloy.nl/", "eloy.de.enige@gmail.com"),
       Member.new("vincent", "Vincent Isambart"),
       Member.new("matt", "Matt Aimonetti", "m|a agile consulting", "http://merbist.com", "mattaimonetti@gmail.com"),
       Member.new("ernie", "Ernest N. Prabhakar", "Apple, Inc", nil, "prabhaka@apple.com"),
-      Member.new("thibault", "Thibault Martin-Lagardette", "Apple, Inc", nil, "martinlagardette@apple.com")
+      Member.new("thibault", "Thibault Martin-Lagardette", "Apple, Inc", nil, "martinlagardette@apple.com"),
+      Member.new("claudio", "Claudio Poli", nil, "http://www.icoretech.org/", "claudio@icoretech.org")
     ]
   end
   
