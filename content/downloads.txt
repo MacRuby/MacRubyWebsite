@@ -17,7 +17,7 @@ You can download <a href="http://www.macruby.org/files/MacRuby%200.5.zip">MacRub
 h2. Nightly builds
 
 <p>
-You can download one of MacRuby's development branch <a href="http://macruby.icoretech.org/">nightly builds</a>, which also come as standalone binaries. Please note that these builds are development versions of MacRuby and might perhaps be unstable.
+You can download one of MacRuby's development branch <a href="http://www.macruby.org/files/nightlies">nightly builds</a>, which also come as standalone binaries. Please note that these builds are development versions of MacRuby and might perhaps be unstable.
 <em>Note: these builds only work on Intel machines running on Snow Leopard or higher.</em>
 </p>
 
