@@ -26,7 +26,7 @@ filter:
 </div><!-- //end newsbox -->
 
 <h2>HotCocoa Is For Me!</h2>
-<p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <a href="/hotcocoa.html">Read more...</a></p>
+<p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <br/> <a href="/hotcocoa.html">Read more...</a></p>
 <% coderay :lang => 'ruby' do -%>
 require 'rubygems'
 require 'hotcocoa'
@@ -41,5 +41,5 @@ end
 <hr size="0" noshade class="doublerule" />
 
 <h2>Why MacRuby?</h2>
-<p>MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in the original implementation of Ruby. Consequently, there are a number of reasons (e.g. convenience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href="/documentation/why-macruby.html"><br><i>Read more...</i></a></p>
+<p>MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in the original implementation of Ruby. Consequently, there are a number of reasons (e.g. convenience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href="/documentation/why-macruby.html"><br/><i>Read more...</i></a></p>
 <hr size="0" noshade class="doublerule" />

@@ -9,7 +9,7 @@ filter:
   - textile
 --- 
 <% @page[:excerpt] = capture_erb do %>
-We are pleased to announce the availability of MacRuby 0.6. This release closes a very successful development cycle of 3 months since the last release.
+We are pleased to announce the immediate availability of MacRuby 0.6. In the 3 months since the previous release, a number of new features have been added and the overall stability of MacRuby has been substantially improved.
 <% end %>
 <%= RedCloth.new(@page.excerpt).to_html %>
 
@@ -23,9 +23,9 @@ h3. Stable for Cocoa Development
 
 In this release, we believe that MacRuby is now stable enough to consider using it to develop Cocoa applications.
 
-We fixed a lot of bugs, ironed out many details and worked very closely with developers already using MacRuby for product development. MacRuby is able to use pretty much all the Cocoa APIs at this point.
+Since 0.5's release, we have worked closely with a number of early-adopter developers in finding and fixing a great number of bugs, as well as improving the overall process of creating Cocoa apps in MacRuby, and we believe that MacRuby is now stable enough to permit the creation of complete and functional Cocoa applications that have access to the full suite of Cocoa APIs.
 
-The "Compile" target in Xcode allows an application to be ahead-of-time compiled to machine code, making sure the original Ruby code no longer ships with it.
+The "Compile" target in Xcode allows an application to be ahead-of-time compiled to machine code, allowing the developer to avoid shipping Ruby code in a shipping application.
 
 h3. Debugging
 
@@ -81,7 +81,7 @@ t.rb:2> bt
 2	  bar(n)
 </pre>
 
-Then, we can define the missing method on the fly and resuming the execution of the program after disabling the breakpoint.
+Then, we can define the missing method on the fly and resume the execution of the program after disabling the breakpoint.
 
 <pre class="commands">
 t.rb:2> p def bar(x); puts "-> #{x}"; end
@@ -132,7 +132,7 @@ There are much more convenience APIs in the "dispatch" library, such as the Prox
 
 h3. Solid Foundations
 
-One of our intentions for this release was to change and rewrite the foundation layers of MacRuby in order to be much more solid for current and future uses. 
+We have rewritten much of the foundation layer of MacRuby in this release, with the goal of increasing the overall robustness of the system and providing a better platform for future enhancements.
 
 The Hash class which used to be an alias to NSMutableDictionary is now a new class that inherits from the latter. It can handle more efficiently immediate types (such as fixnums and floats) and honors insertion ordering.
 
@@ -152,8 +152,6 @@ This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able t
 
 There are still several problems to address in order to provide a full-fidelity replacement for all the Ruby semantics. We intend to continue working on this, by focusing on RubySpecs and Rails.
 
-h3. Conclusions
+We hope you enjoy the many improvements in this release!
 
-We hope that you will enjoy this release.
-
-Development on the next release, 0.7, just started. In there we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance within multicore environments. Stay tuned for more updates!
+Development on the next release, 0.7 just started. In that release we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance within multicore environments. Stay tuned for more updates!
