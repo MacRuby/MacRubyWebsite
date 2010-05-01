@@ -47,4 +47,6 @@ h3. In HotCocoa, Mappings provide the following:
 
 h3. Want to learn more about HotCocoa?
 
-Now that you understand the basics of what HotCocoa is and why we are building it, please look at the "HotCocoa Tutorial":# (coming soon) for examples of how to build OS X applications with it. For a more detailed understanding of how to read, create, edit or contribute mapping files, see "HotCocoa Mappings Tutorial":/hotcocoa/mappings.html. For the current status of the project, see "HotCocoa Mapping Status":/hotcocoa/status.html.
+Now that you understand the basics of what HotCocoa is and why we are building it, please look at the "tutorials":/documentation.html for examples of how to build OS X applications with it. 
+
+HotCocoa is a project developed on "GitHub":http://github.com/richkilmer/hotcocoa. Make sure to connect there to get the latest bits.

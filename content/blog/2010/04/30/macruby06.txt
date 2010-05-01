@@ -118,7 +118,7 @@ The Hash class which used to be an alias to NSMutableDictionary is now a new cla
 
 The String class has also been changed. It is now a fresh new implementation that can handle both character and byte strings. It also uses the "ICU framework":http://site.icu-project.org/ to perform encoding conversions on the fly. This new class inherits from NSMutableString. Symbol was also rewritten in order to handle multibyte (Unicode) characters.
 
-Finally, the Regexp class has also been totally rewritten in this release. It is now using the ICU framework instead of Oniguruma for regular expressions compilation and pattern matching. Since ICU is thread-safe, MacRuby 0.6 allows the use regular expressions from multiple threads in a very efficient way, which was not possible previously.
+Finally, the Regexp class has also been totally rewritten in this release. It is now using the ICU framework instead of Oniguruma for regular expressions compilation and pattern matching. Since ICU is thread-safe, MacRuby 0.6 allows multiple threads to utilize regular expressions in a very efficient way, which was not possible previously.
 
 All these changes were designed and implemented to honor compatibility with previous releases of MacRuby. They should not be directly visible.
 
