@@ -5,7 +5,7 @@ dirty:       true
 filter:
   - erb
 ---
-<p class="callout"><strong>MacRuby</strong> is an implementation of Ruby 1.9 directly on top of Mac OS X core technologies such as the Objective-C runtime and garbage collector, the Foundation framework and the LLVM compiler infrastructure. It is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby. <a href="/documentation/overview.html"><i>Read more...</i></a></p>
+<p class="callout"><strong>MacRuby</strong> is an implementation of Ruby 1.9 directly on top of Mac OS X core technologies such as the Objective-C runtime and garbage collector, the LLVM compiler infrastructure and the Foundation and ICU frameworks. It is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby. <a href="/documentation/overview.html"><i>Read more...</i></a></p>
 <hr size="0" noshade class="harvardrule" />
 
 <div id="newsbox">
