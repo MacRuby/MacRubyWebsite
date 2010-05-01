@@ -108,7 +108,32 @@ An interesting fact about the debugger is that it has been abstracted into a sim
 
 h3. Higher-Level APIs for Grand Central Dispatch 
 
-TODO
+GCD is a revolutionary approach to multicore computing that is woven throughout the fabric of Mac OS X version 10.6 Snow Leopard. It is supported in MacRuby since version 0.5, through the Dispatch module.
+
+In MacRuby 0.6, we improved the existing native bindings with additional, higher-level abstractions and convenience APIs in the "dispatch" library. We believe these features will help reduce the learning curve for GCD.
+
+The new "dispatch" library exposes the Job class, which is likely the easiest way to perform concurrent work. Say you have a complex, long-running calculation you want to happen in the background. Create a job by passing Dispatch::Job's initializer the block you want to execute:
+
+<pre class="commands">
+$ /usr/local/bin/macirb --simple-prompt
+>> require 'dispatch'
+=> true
+>> job = Dispatch::Job.new { Math.sqrt(10**100) }
+=> #<Dispatch::Job:0x40075d1e0 @queue=com.apple.root.default-priority @group=#<Dispatch::Group:0x40073c2c0> @values=[1.0e+50]>
+</pre>
+
+This atomically adds the block to GCD's default concurrent queue, then returns immediately, so you don't stall the main thread.
+
+The downside is that you don't know exactly when your job will execute. The #value method can be used in order to obtain the result of executing that block.
+
+<pre class="commands">
+>> value = job.value
+=> 1.0e+50
+</pre>
+
+This will wait until the value has been calculated, allowing it to be used as an "explicit Future":http://en.wikipedia.org/wiki/Futures_and_promises. However, this may stall the main thread indefinitely, which reduces the benefits of concurrency.
+
+There are much more convenience APIs in the "dispatch" library, such as the Proxy class or concurrent extensions to the builtin Enumerable module. Check out the "tutorial":http://svn.macosforge.org/repository/ruby/MacRuby/trunk/lib/dispatch/README.rdoc for more information.
 
 h3. Solid Foundations
 
@@ -128,9 +153,9 @@ The Ruby compatibility is still progressing, being much better than 0.5.
 
 MacRuby 0.6 provides support for C extensions written for the genuine implementation of ruby. We were able to successfully use the Nokogiri, SQLite3 and PostgreSQL extensions from MacRuby.
 
-This release also passes about 85% of RubySpecs, is able to run a modified version of Rails 3 and implements better support for Ruby 1.9 encodings.
+This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able to run a modified version of Rails 3 and implements better support for Ruby 1.9 encodings.
 
-There are still several problems to address in order to provide a full-fidelity replacement of all the Ruby semantics. We intend to continue working on this, by looking at RubySpecs and Rails.
+There are still several problems to address in order to provide a full-fidelity replacement of all the Ruby semantics. We intend to continue working on this, by focusing on RubySpecs and Rails.
 
 h3. Conclusions
 
