@@ -15,10 +15,6 @@ h2. Twitter
 
 You can follow us on Twitter by following the "@macruby":http://twitter.com/macruby account.
 
-h2. Internet Relay Chat
-
-You can also join the #ruby-osx IRC channel on freenode to discuss with developers.
-
 h2. Mailing Lists
 
 "MacRuby-devel":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel is the developer mailing-list. Please subscribe to it, if you are interested in following the MacRuby development process or would like to start a discussion. All activity in the tracker generates notifications in this list.

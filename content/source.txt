@@ -9,16 +9,16 @@ h1(title). <%= h(@page.title) %>
 
 h2. MacRuby Development
 
-MacRuby development happens in the trunk SVN branch. However, be careful, because trunk may not work (or even compile) all of the time.
+MacRuby development happens in the trunk Subversion branch. However, be careful, because trunk may not work (or even compile) all of the time.
 
 <pre class="commands">
 $ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
 </pre>
 
-If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the 0.5 release:
+If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the 0.6 release:
 
 <pre class="commands">
-$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.5 MacRuby-0.5
+$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.6 MacRuby-0.6
 </pre>
 
 For building instructions, please refer to README.rdoc file, but the basic build instructions are:
@@ -37,8 +37,3 @@ Git aficionados will be glad to learn that there is an official mirror of the SV
 <pre class="commands">
 $ git clone git://git.macruby.org/macruby/MacRuby.git
 </pre>
-
-h2. Roadmap
-
-Check out the "MacRuby Roadmap":/roadmap.html
-

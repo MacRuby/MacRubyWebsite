@@ -9,6 +9,6 @@ filter: erb
 </div>
 <div id="step2">
   <p>Check out the <a href="/documentation/tutorial.html">tutorial</a>, <a href="/documentation.html">resources</a> 
- &nbsp; &nbsp; and <a href="http://svn.macosforge.org/repository/ruby/MacRuby/trunk/sample-macruby/">examples</a> that are available for MacRuby.</p>
+ &nbsp; &nbsp; and <a href="file:///Developer/Examples/Ruby/MacRuby">examples</a> that are available.</p
 </div>
 
