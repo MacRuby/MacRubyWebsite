@@ -42,7 +42,7 @@ $ cat t.rb
 def foo(n)
   bar(n)
 end
-10.times do |i|
+5.times do |i|
   foo(i)
 end
 </pre>
@@ -66,7 +66,7 @@ We immediately get an exception at line 2. We can restart the debugger, break at
 > r
 Starting program.
 1	def foo(n)
-t.rb:1> break t.rb:2
+t.rb:1> b t.rb:2
 Added breakpoint 1.
 1	def foo(n)
 t.rb:1> c
@@ -96,11 +96,6 @@ t.rb:2> c
 -> 2
 -> 3
 -> 4
--> 5
--> 6
--> 7
--> 8
--> 9
 Program exited.
 </pre>
 
@@ -124,7 +119,7 @@ $ /usr/local/bin/macirb --simple-prompt
 
 This atomically adds the block to GCD's default concurrent queue, then returns immediately, so you don't stall the main thread.
 
-The downside is that you don't know exactly when your job will execute. The #value method can be used in order to obtain the result of executing that block.
+The downside is that you don't know exactly when your job will execute. The #value method can be used to obtain the result of executing that block.
 
 <pre class="commands">
 >> value = job.value
@@ -141,7 +136,7 @@ One of our intentions for this release was to change and rewrite the foundation 
 
 The Hash class which used to be an alias to NSMutableDictionary is now a new class that inherits from the latter. It can handle more efficiently immediate types (such as fixnums and floats) and honors insertion ordering.
 
-The String class has also been changed. It is now a fresh new implementation that can handle both character and byte strings. It also uses the "ICU framework":http://site.icu-project.org/ to perform encoding conversions on the fly. This new class inherits from NSMutableString. Symbol was also rewritten in order to handle multibyte (Unicode) characters.
+The String class has also been changed. It is now a fresh new implementation that can handle both character and byte strings. It also uses the "ICU framework":http://site.icu-project.org/ to perform encoding conversions on the fly. This new class inherits from NSMutableString. Symbol was also rewritten to handle multibyte (Unicode) characters.
 
 Finally, the Regexp class has also been totally rewritten in this release. It is now using the ICU framework instead of Oniguruma for regular expressions compilation and pattern matching. Since ICU is thread-safe, MacRuby 0.6 allows multiple threads to utilize regular expressions in a very efficient way, which was not possible previously.
 
@@ -155,12 +150,10 @@ MacRuby 0.6 provides support for C extensions written for the genuine implementa
 
 This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able to run a modified version of Rails 3 and implements better support for Ruby 1.9 encodings.
 
-There are still several problems to address in order to provide a full-fidelity replacement of all the Ruby semantics. We intend to continue working on this, by focusing on RubySpecs and Rails.
+There are still several problems to address in order to provide a full-fidelity replacement for all the Ruby semantics. We intend to continue working on this, by focusing on RubySpecs and Rails.
 
 h3. Conclusions
 
 We hope that you will enjoy this release.
 
-Development on the next release, 0.7, just started. In there we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance within multicore environments. 
-
-Stay tuned for more information!
+Development on the next release, 0.7, just started. In there we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance within multicore environments. Stay tuned for more updates!
