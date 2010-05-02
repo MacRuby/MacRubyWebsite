@@ -25,13 +25,13 @@ In this release, we believe that MacRuby is now stable enough to consider using 
 
 Since 0.5's release, we have worked closely with a number of early-adopter developers in finding and fixing a great number of bugs, as well as improving the overall process of creating Cocoa apps in MacRuby, and we believe that MacRuby is now stable enough to permit the creation of complete and functional Cocoa applications that have access to the full suite of Cocoa APIs.
 
-The "Compile" target in Xcode allows an application to be ahead-of-time compiled to machine code, allowing the developer to avoid shipping Ruby code in a shipping application.
+The "Compile" target in Xcode allows an application to be ahead-of-time compiled to machine code, allowing the developer to avoid including the Ruby source in a shipping application.
 
 h3. Debugging
 
 Experimental support for debugging landed in this release.
 
-The compiler, under debug mode, is now generating special traps inside the code. The debugger connects to these traps and allows basic debugging operations but also code evaluation.
+The compiler, under debug mode, is now generating special traps inside the code. The debugger connects to these traps and allows not only basic debugging operations but also code evaluation. 
 
 The macrubyd command-line executable pilots the debugger. It provides a gdb-like experience. Please note that it is not entirely finished and it also has not been exhaustively tested.
 
@@ -99,7 +99,7 @@ t.rb:2> c
 Program exited.
 </pre>
 
-An interesting fact about the debugger is that it has been abstracted into a simple Objective-C API. macrubyd is just a client of it, in the future we might see other clients.
+An interesting feature of the debugger is that it has been abstracted into a simple Objective-C API, of which macrubyd is just one client. In the future we might see other clients.
 
 h3. Higher-Level APIs for Grand Central Dispatch 
 
@@ -134,11 +134,11 @@ h3. Solid Foundations
 
 We have rewritten much of the foundation layer of MacRuby in this release, with the goal of increasing the overall robustness of the system and providing a better platform for future enhancements.
 
-The Hash class which used to be an alias to NSMutableDictionary is now a new class that inherits from the latter. It can handle more efficiently immediate types (such as fixnums and floats) and honors insertion ordering.
+The Hash class, which used to be an alias to NSMutableDictionary, is now a new class that inherits from the latter. It can more efficiently handle immediate types (such as fixnums and floats) and honors insertion ordering.
 
 The String class has also been changed. It is now a fresh new implementation that can handle both character and byte strings. It also uses the "ICU framework":http://site.icu-project.org/ to perform encoding conversions on the fly. This new class inherits from NSMutableString. Symbol was also rewritten to handle multibyte (Unicode) characters.
 
-Finally, the Regexp class has also been totally rewritten in this release. It is now using the ICU framework instead of Oniguruma for regular expressions compilation and pattern matching. Since ICU is thread-safe, MacRuby 0.6 allows multiple threads to utilize regular expressions in a very efficient way, which was not possible previously.
+Finally, the Regexp class has been totally rewritten in this release. It is now using the ICU framework instead of Oniguruma for regular expression compilation and pattern matching. Since ICU is thread-safe, MacRuby 0.6 allows multiple threads to utilize regular expressions in a very efficient way, which was not possible previously.
 
 All these changes were designed and implemented to honor compatibility with previous releases of MacRuby. They should not be directly visible.
 
