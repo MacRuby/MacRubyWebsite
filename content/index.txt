@@ -14,7 +14,7 @@ filter:
   <%
     articles = @pages.find(:all, :in_directory => File.join(@page.dir, 'blog'), :recursive => true,
         :sort_by => "created_at", :reverse => true, :blog_post => true)
-    articles[0,3].each do |page|
+    articles[0,2].each do |page|
   -%>
   <h4><%= page.title %></h4>
   <%= blog_excerpt(page) %>
@@ -25,6 +25,7 @@ filter:
   
 </div><!-- //end newsbox -->
 
+<!--
 <h2>HotCocoa Is For Me!</h2>
 <p>If you've done any amount of programming on OS X, you know that the API can be quite verbose. HotCocoa simplifies this down to very elegant and simple methods that then return super sexy UI elements. <br/> <a href="/hotcocoa.html">Read more...</a></p>
 <% coderay :lang => 'ruby' do -%>
@@ -38,6 +39,10 @@ application do |app|
   win << b
 end
 <% end -%>
+-->
+<h2>The Definitive Guide</h2>
+<p>Matt Aimonetti is currently working on a MacRuby book for O'Reilly. It is under development and the book is being published as it is being written. The work is released under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons</a> license, with the idea of getting early feedback from the community. 
+<br/><a href="http://macruby.labs.oreilly.com/">Check it out!</a></p>
 <hr size="0" noshade class="doublerule" />
 
 <h2>Why MacRuby?</h2>
