@@ -13,7 +13,7 @@ We are pleased to announce the immediate availability of MacRuby 0.6. In the 3 m
 <% end %>
 <%= RedCloth.new(@page.excerpt).to_html %>
 
-You can download it from "here":http://www.macruby.org/files/MacRuby%200.6.zip. Please note that this package only runs on Snow Leopard. Users on Leopard can also use MacRuby by "building the sources":/source.html from our repository.
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.6.zip. Please note that this package only runs on Snow Leopard (10.6). Users on Leopard (10.5) can also use MacRuby by "building the sources":/source.html from our repository.
 
 Please give it a try and "let us know":/contact-us.html of any problems you find.
 
@@ -23,7 +23,7 @@ h3. Stable for Cocoa Development
 
 In this release, we believe that MacRuby is now stable enough to consider using it to develop Cocoa applications.
 
-Since 0.5's release, we have worked closely with a number of early-adopter developers in finding and fixing a great number of bugs, as well as improving the overall process of creating Cocoa apps in MacRuby, and we believe that MacRuby is now stable enough to permit the creation of complete and functional Cocoa applications that have access to the full suite of Cocoa APIs.
+Since 0.5's release, we have worked closely with a number of early-adopter developers in finding and fixing a great number of bugs, as well as improving the overall process of creating Cocoa apps in MacRuby. We believe that MacRuby is now stable enough to permit the creation of complete and functional Cocoa applications that have access to the full suite of Cocoa APIs.
 
 The "Compile" target in Xcode allows an application to be ahead-of-time compiled to machine code, allowing the developer to avoid including the Ruby source in a shipping application.
 
@@ -103,7 +103,7 @@ An interesting feature of the debugger is that it has been abstracted into a sim
 
 h3. Higher-Level APIs for Grand Central Dispatch 
 
-GCD is a revolutionary approach to multicore computing that is woven throughout the fabric of Mac OS X version 10.6 Snow Leopard. It is supported in MacRuby since version 0.5, through the Dispatch module.
+<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch">GCD</a> is a revolutionary approach to multicore computing that is woven throughout the fabric of Mac OS X version 10.6 Snow Leopard. It is supported in MacRuby since version 0.5, through the Dispatch module.
 
 In MacRuby 0.6, we improved the existing native bindings with additional, higher-level abstractions and convenience APIs in the "dispatch" library. We believe these features will help reduce the learning curve for GCD.
 
@@ -144,14 +144,14 @@ All these changes were designed and implemented to honor compatibility with prev
 
 h3. Better Ruby Compatibility
 
-The Ruby compatibility is still progressing, being much better than 0.5.
+Ruby compatibility is still progressing but is now much better than in 0.5.
 
-MacRuby 0.6 provides support for C extensions written for the genuine implementation of ruby. We were able to successfully use the Nokogiri, SQLite3 and PostgreSQL extensions from MacRuby.
+MacRuby 0.6 provides support for C extensions written for the original implementation of ruby. We were able to successfully use the Nokogiri, SQLite3 and PostgreSQL extensions from MacRuby.
 
-This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able to run a modified version of Rails 3 and implements better support for Ruby 1.9 encodings.
+This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able to run a modified version of Rails 3, and implements better support for Ruby 1.9 encodings.
 
-There are still several problems to address in order to provide a full-fidelity replacement for all the Ruby semantics. We intend to continue working on this, by focusing on RubySpecs and Rails.
+There are still several problems to address in order to provide a full-fidelity replacement for all Ruby feature. We intend to continue working on this by focusing on RubySpecs and Rails.
 
 We hope you enjoy the many improvements in this release!
 
-Development on the next release, 0.7 just started. In that release we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance within multicore environments. Stay tuned for more updates!
+Development on the next release, 0.7 just started. In that release, we intend to deliver a next generation compiler and virtual machine that provides very good runtime performance for multicore environments. Stay tuned for more updates!
