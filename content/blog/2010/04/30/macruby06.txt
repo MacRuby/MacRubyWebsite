@@ -150,7 +150,7 @@ MacRuby 0.6 provides support for C extensions written for the original implement
 
 This release also passes about 85% of "RubySpecs":http://rubyspec.org, is able to run a modified version of Rails 3, and implements better support for Ruby 1.9 encodings.
 
-There are still several problems to address in order to provide a full-fidelity replacement for all Ruby feature. We intend to continue working on this by focusing on RubySpecs and Rails.
+There are still several problems to address in order to provide a full-fidelity replacement for all Ruby features. We intend to continue working on this by focusing on RubySpecs and Rails.
 
 We hope you enjoy the many improvements in this release!
 
