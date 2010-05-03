@@ -11,14 +11,14 @@ h2. Latest Stable Release
 
 <p>
 You can download <a href="http://www.macruby.org/files/MacRuby%200.6.zip">MacRuby 0.6</a> as a standalone binary installer.
-<em>Note: this release will only work on Intel machines running Snow Leopard or higher. Users on Leopard can build the sources.</em>
+<em>Note: this release will only work on Intel machines running Snow Leopard (10.6) or higher. Users on Leopard (10.5) can build the sources.</em>
 </p>
 
 h2. Nightly builds
 
 <p>
 You can download one of MacRuby's development branch <a href="http://www.macruby.org/files/nightlies">nightly builds</a>, which also come as standalone binaries. Please note that these builds are development versions of MacRuby and might perhaps be unstable.
-<em>Note: these builds only work on Intel machines running on Snow Leopard or higher.</em>
+<em>Note: these builds only work on Intel machines running on Snow Leopard (10.6) or higher.</em>
 </p>
 
 h2. Source
