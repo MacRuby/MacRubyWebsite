@@ -1,40 +1,62 @@
-h1. Essential Differences between RubyCocoa and MacRuby
+---
+title:      Essential Differences between RubyCocoa and MacRuby
+created_at: 2010-06-23 12:00:00 -04:00
+updated_at: 2010-06-23 12:00:00 -04:00
+author:     patrick
+tutorial:   true
+filter:
+  - erb
+  - textile
+---
+h1(title). <%= h(@page.title) %>
 
-h2. Importing Frameworks
+<div class="author">
+  By <%= member_name(@page.author) %>
+</div>
+
+<div class='tutorial'>
+
+h3. Importing Frameworks
 
 To import a framework in RubyCocoa, you use a combination of Ruby's @require@ method and RubyCocoa's @require_framework@ addition:
+
 <pre class="commands">
-	# RubyCocoa code
-	require 'osx/cocoa'
-	OSX.require_framework('CoreData')
-</pre>
-MacRuby unifies these methods with the @framework@ method added to the @Kernel@ module:
-<pre class="commands">
-	# MacRuby code
-	framework 'Cocoa'
-	framework 'CoreData'
+# RubyCocoa code
+require 'osx/cocoa'
+OSX.require_framework('CoreData')
 </pre>
 
-h2. Namespaces
+MacRuby unifies these methods with the @framework@ method added to the @Kernel@ module:
+
+<pre class="commands">
+# MacRuby code
+framework 'Cocoa'
+framework 'CoreData'
+</pre>
+
+h3. Namespaces
 
 In RubyCocoa, all imported Objective-C classes are located inside the @OSX@ module. In MacRuby, Objective-C classes are imported into the main namespace.
 
-h2. Inheritance
+h3. Inheritance
 
 Because RubyCocoa is not implemented on top of Objective-C, it requires objects passed to Objective-C APIs to inherit from @NSObject@:
+
 <pre class="commands">
-	# RubyCocoa code
-	class MyClass < NSObject
-	end
-</pre>
-In MacRuby, the Objective-C @NSObject@ and Ruby @Object@ classes are identical; therefore, because Ruby classes implicitly inherit from @Object@, all objects in MacRuby are valid @NSObjects@. Explicit inheritance is therefore no longer required:
-<pre class="commands">
-	# MacRuby code
-	class MyClass
-	end
+# RubyCocoa code
+class MyClass < NSObject
+end
 </pre>
 
-h2. Class Compatibility
+In MacRuby, the Objective-C @NSObject@ and Ruby @Object@ classes are identical; therefore, because Ruby classes implicitly inherit from @Object@, all objects in MacRuby are valid @NSObjects@. Explicit inheritance is therefore no longer required:
+
+<pre class="commands">
+# MacRuby code
+class MyClass
+end
+</pre>
+
+h3. Class Compatibility
 
 Many of MacRuby's built-in data structures are toll-free bridged to corresponding Cocoa or CoreFoundation equivalents:
 
@@ -46,140 +68,170 @@ Many of MacRuby's built-in data structures are toll-free bridged to correspondin
 Because these classes are toll-free bridged, the @#to_ns@ and @#to_ruby@ converters present in RubyCocoa code are no longer necessary and have been removed.
 
 Certain Cocoa data types, such as @NSRect@, @NSSize@, and @NSPoint@ are C-style structs, not Objective-C objects. Functions that return structures of these types will return them wrapped in corresponding @NSRect@, @NSSize@, and @NSPoint@ classes:
+
 <pre class="commands">
-	$ macirb --simple-prompt
-	>> framework 'Foundation'
-	=> true
-	>> rng = NSMakeRange(0, 10)
-	=> #<NSRange location=0 length=10>
-	>> rng.class
-	=> NSRange 
+$ macirb --simple-prompt
+>> framework 'Foundation'
+=> true
+>> rng = NSMakeRange(0, 10)
+=> #<NSRange location=0 length=10>
+>> rng.class
+=> NSRange 
 </pre>
+
 Because Cocoa code often requires working with C struct types, MacRuby allows you to pass in an @Array@ containing the required data where a C struct would normally be expected. Some examples follow: 
+
 <pre class="commands">
-	# MacRuby code
-	window.frame = NSMakeRect(0, 0, 100, 200) # Using the NSMakeRect function
-	window.frame = NSRect.new(NSPoint.new(0, 0), NSSize.new(100, 200)) # Using the MacRuby NSRect class
-	window.frame = [0, 0, 100, 200]			  # Using a array in flat style 
-	window.frame = [[0, 0], [100, 200]]		  # Using an array [point, size] style
+# MacRuby code
+window.frame = NSMakeRect(0, 0, 100, 200) 	# Using the NSMakeRect function
+window.frame = NSRect.new(NSPoint.new(0, 0),	# Using the MacRuby NSRect class
+                          NSSize.new(100, 200))
+window.frame = [0, 0, 100, 200]			# Using a array in flat style 
+window.frame = [[0, 0], [100, 200]]		# Using an array [point, size] style
 </pre>
+
 Please note that MacRuby's @Range@, @Set@, and @Enumerator@ classes are *not* bridged to their Cocoa or CoreFoundation equivalents.
 
-h2. Keyword Arguments
+h3. Keyword Arguments
 
 Objective-C's interleaved-keyword syntax is not compatible with traditional Ruby syntax. To be able to call Cocoa API's from RubyCocoa, you use the "underscore hack", which translates Ruby-style function calls into ObjC calls by joining the selector's components together with underscores:
+
 <pre class="commands">
-	# RubyCocoa code
-	NSFileManager.defaultManager.createFileAtPath_contents_attributes(p, c, a)
+# RubyCocoa code
+NSFileManager.defaultManager.createFileAtPath_contents_attributes(p, c, a)
 </pre>
+
 In order to make the use of Objective-C methods from MacRuby as natural as possible, the MacRuby team extended standard Ruby syntax to support Objective-C style interleaved arguments:
+
 <pre class="commands">
-	# MacRuby code
-	NSFileManager.defaultManager.createFileAtPath(p, contents:c, attributes:a)
+# MacRuby code
+NSFileManager.defaultManager.createFileAtPath(p, contents:c, attributes:a)
 </pre>
+
 This is the best way to call Objective-C methods; code written using the underscore hack or RubyCocoa's @objc_send@ function will fail to run under MacRuby.
 MacRuby allows you to use this syntax in your own method declarations, too:
+
 <pre class="commands">
-	# MacRuby code
-	def saveWorld(planet, fromVillain: badguy, withHero:superhero)
-		superhero.fight(badguy)
-		planet.thank(superhero)
-	end
+# MacRuby code
+def saveWorld(planet, fromVillain: badguy, withHero:superhero)
+	superhero.fight(badguy)
+	planet.thank(superhero)
+end
 </pre>
+
 However, it's important to note that this syntax is unique to MacRuby; code written in that uses this syntax will fail to run on any other implementation of Ruby.
 
-h2. Interface Builder
+h3. Interface Builder
 
 MacRuby's integration with Interface Builder is significantly cleaner than RubyCocoa's. Previously, declaring an instance variable that also functioned as an Interface Builder outlet required two declarations, one to declare Ruby-style accessors and another to declare a key-value compliant accessor:
+
 <pre class="commands">
-	# RubyCocoa code
-	class MyView < NSView
-		attr_accessor :pdfView
-		ib_outlet :pdfView
-	end
-</pre>
-MacRuby extends the semantics of @attr_accessor@ and @attr_writer@ to provide a key-value compliant setter method that Interface Builder will recognize. As such, all references to the @ib_outlet@ method can be removed:
-<pre class="commands">
-	# MacRuby code
-	class MyView < NSView
-		attr_accessor :pdfView
-	end
-</pre>
-Another significant improvement comes in the form of transparent support for Interface Builder actions. RubyCocoa required that IB actions be declared with the @ib_action@ helper method:
-<pre class="commands">
-	# RubyCocoa code
-	class MyController < NSObject
-		ib_action(:firstPage) do |sender|
-			currentPDFView.setPageNumber(1)
-		end
-	end
-</pre>
-Because of MacRuby's tight integration with the Objective-C runtime, there is no special syntax required to declare an IB action: any Ruby method can serve as an IB action, though it must have a @sender@ parameter like in Objective-C:
-<pre class="commands">
-	# MacRuby code
-	class MyController
-		def firstPage(sender)
-			currentPDFView.pageNumber = 1
-		end
-	end
+# RubyCocoa code
+class MyView < NSView
+  attr_accessor :pdfView
+  ib_outlet :pdfView
+end
 </pre>
 
-h2. super()
+MacRuby extends the semantics of @attr_accessor@ and @attr_writer@ to provide a key-value compliant setter method that Interface Builder will recognize. As such, all references to the @ib_outlet@ method can be removed:
+
+<pre class="commands">
+# MacRuby code
+class MyView < NSView
+  attr_accessor :pdfView
+end
+</pre>
+
+Another significant improvement comes in the form of transparent support for Interface Builder actions. RubyCocoa required that IB actions be declared with the @ib_action@ helper method:
+
+<pre class="commands">
+# RubyCocoa code
+class MyController < NSObject
+  ib_action(:firstPage) do |sender|
+    currentPDFView.setPageNumber(1)
+  end
+end
+</pre>
+
+Because of MacRuby's tight integration with the Objective-C runtime, there is no special syntax required to declare an IB action: any Ruby method can serve as an IB action, though it must have a @sender@ parameter like in Objective-C:
+
+<pre class="commands">
+# MacRuby code
+class MyController
+  def firstPage(sender)
+    currentPDFView.pageNumber = 1
+  end
+end
+</pre>
+
+h3. super()
 
 In RubyCocoa, the @super()@ function did not work correctly if the superclass method being called was implemented in Objective-C. A further extension to the underscore hack became necessary:
+
 <pre class="commands">
-	# RubyCocoa code
-	class MyClass < NSObject
-		def init
-			super_init() # Calls [NSObject init]
-			p 'Initializing!'
-			self		# Always return self from init!
-		end
-	end
-</pre>
-MacRuby rectifies this inconsistency, allowing the @super()@ function to call both Ruby and Objective-C methods:
-<pre class="commands">
-	# MacRuby code
-	class MyClass
-		def init
-			super() # Also calls [NSObject init]
-			p 'Initializing!'
-			self	# Always return self from init!
-		end
-	end
+# RubyCocoa code
+class MyClass < NSObject
+  def init
+    super_init()	# Calls -[NSObject init]
+    p 'Initializing!'
+    self		# Always return self from init!
+  end
+end
 </pre>
 
-h2. Exception Handling
+MacRuby rectifies this inconsistency, allowing the @super()@ function to call both Ruby and Objective-C methods:
+
+<pre class="commands">
+# MacRuby code
+class MyClass
+  def init
+    super 		# Also calls -[NSObject init]
+    p 'Initializing!'
+    self		# Always return self from init!
+  end
+end
+</pre>
+
+h3. Exception Handling
 
 Though Ruby's @Exception@ class and Objective-C's @NSException@ class are not technically bridged classes, @begin...rescue@ blocks in MacRuby can catch both Ruby @Exceptions@ and Cocoa @NSExceptions@. Conversely, you can catch MacRuby @Exceptions@ with Objective-C's @try@@/@catch@.
 
-h2. Other Syntactic Extensions
+h3. Other Syntactic Extensions
 
 The MacRuby team has ported the syntactic extensions present in RubyCocoa for cases when Objective-C idioms differ with Ruby idioms, such as in the case of mutator methods and boolean accessor methods:
+
 <pre class="commands">
-	layer.setPosition = [100, 100]	# Objective-C style
-	layer.position = [100, 100]		# Ruby style; calls the same method the Objective-C one does
-	layer.isHidden					# Objective-C style
-	layer.hidden?					# Ruby allows the '?' character in method names
+layer.setPosition = [100, 100]	# Objective-C style
+layer.position = [100, 100]	# Ruby style; calls the same method the Objective-C one does
+layer.isHidden			# Objective-C style
+layer.hidden?			# Ruby allows the '?' character in method names
 </pre>
+
 MacRuby provides additional syntax for the commonly-used @objectForKey:@ and @setObject:forKey:@ methods:
+
 <pre class="commands">
-	obj.objectForKey('data')	# Objective-C style
-	obj['data']					# Ruby style
-	obj.setObject('mystery', forKey: 'data') # Objective-C style
-	obj['data'] = 'mystery'		# Ruby style
+obj.objectForKey('data')			# Objective-C style
+obj['data']					# Ruby style
+obj.setObject('mystery', forKey: 'data') 	# Objective-C style
+obj['data'] = 'mystery'				# Ruby style
 </pre>
-h2. Property Lists
+
+h3. Property Lists
 
 RubyCocoa added extensions for easy manipulation of property lists:
+
 <pre class="commands">
-	# RubyCocoa code
-	array_data = ['a', 'b', 'c'].to_plist
-	OSX.load_plist(array_data)
+# RubyCocoa code
+array_data = ['a', 'b', 'c'].to_plist
+OSX.load_plist(array_data)
 </pre>
+
 MacRuby ports these extensions, adding @load_plist@ to the @Kernel@ module and @to_plist@ to @Object@:
+
 <pre class="commands">
-	# MacRuby code
-	array_data = ['a', 'b', 'c'].to_plist
-	load_plist(array_data)
+# MacRuby code
+array_data = ['a', 'b', 'c'].to_plist
+load_plist(array_data)
 </pre>
+
+</div>
