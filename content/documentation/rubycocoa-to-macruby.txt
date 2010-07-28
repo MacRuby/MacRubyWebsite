@@ -114,8 +114,8 @@ MacRuby allows you to use this syntax in your own method declarations, too:
 <pre class="commands">
 # MacRuby code
 def saveWorld(planet, fromVillain: badguy, withHero:superhero)
-	superhero.fight(badguy)
-	planet.thank(superhero)
+  superhero.fight(badguy)
+  planet.thank(superhero)
 end
 </pre>
 
@@ -194,14 +194,14 @@ end
 
 h3. Exception Handling
 
-Though Ruby's @Exception@ class and Objective-C's @NSException@ class are not technically bridged classes, @begin...rescue@ blocks in MacRuby can catch both Ruby @Exceptions@ and Cocoa @NSExceptions@. Conversely, you can catch MacRuby @Exceptions@ with Objective-C's @try@@/@catch@.
+Though Ruby's @Exception@ class and Objective-C's @NSException@ class are not technically bridged classes, @begin...rescue@ blocks in MacRuby can catch both Ruby @Exceptions@ and Cocoa @NSExceptions@. Conversely, you can catch MacRuby @Exceptions@ with Objective-C's @@try@/@@catch@.
 
 h3. Other Syntactic Extensions
 
 The MacRuby team has ported the syntactic extensions present in RubyCocoa for cases when Objective-C idioms differ with Ruby idioms, such as in the case of mutator methods and boolean accessor methods:
 
 <pre class="commands">
-layer.setPosition = [100, 100]	# Objective-C style
+layer.setPosition([100, 100])	# Objective-C style
 layer.position = [100, 100]	# Ruby style; calls the same method the Objective-C one does
 layer.isHidden			# Objective-C style
 layer.hidden?			# Ruby allows the '?' character in method names
