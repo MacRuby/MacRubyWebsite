@@ -31,93 +31,87 @@ Conveniently, a user on GitHub has already done some of the work for us in makin
 <pre class="commands">
 git clone http://github.com/rahvin/TagLib.framework.git
 cd TagLib.framework
-wget http://developer.kde.org/~wheeler/files/src/taglib-1.6.3.tar.gz
+curl -O http://developer.kde.org/~wheeler/files/src/taglib-1.6.3.tar.gz
 tar zxvf taglib-1.6.3.tar.gz
 mv taglib-1.6.3 taglib-src
 </pre>
 
 You can use the latest revision of TagLib, but this example will reference the 1.6.3 release.
 
-The last thing we need to do to the existing Framework target is add in the C wrapper functionality, which is an optional part of TagLib. We will utilise these C bindings later on, as they simplify the amount of code we need to write, and handle much of the UTF-8 string conversion for us.
+At this stage, you can test that everything is set up correctly by opening the project up in XCode and building it.
+
+Now we need to make a small modification to the existing <code>TagLib</code> target. We need to add in the C wrapper functionality, as we use these bindings later on. They simplify the amount of code we need to write, and handle the UTF-8 string conversion for us.
 
 Select "Add to Project..." from the Project menu, and navigate to "taglib-src/bindings/c/", and add both "tag_c.cpp" and "tag_c.h". If you build the project at this stage, there should be no errors. So far, so good.
 
 h3. Adding our Bundle target
 
-The first thing we need to do is add a new Target to our project. Select "New Target..." from the Project menu, and select "Loadable Bundle". Call this <code>TagLibBundle</code>. 
+The first thing we need to do is add a new Target to our project. Select "New Target..." from the Project menu, and select a Mac OS X Cocoa Loadable Bundle. Call this <code>TagLibBundle</code>. Find the new target icon, and select the project. Now from the Project menu, add a new 
 
-Open up the "Compile Sources" folder inside the "TagLib" Framework target. Shift-select every file in this folder, and open "Get Info" in the File menu. Open up the Targets tab at the top, and check the tickbox next to <code>TagLibBundle</code>. This ensures that every file used to compile the framework is also used to compile our new bundle target. This also reveals certain configuration options within the project build settings.
+Now we need to copy over the details of which files are used. Open up the "Copy Headers" folder inside the <code>TagLib</code> target. Shift-select every file in this folder, and drag it into the equivalent, empty folder in our new <code>TagLibBundle</code> Target. Repeat this step with the "Compile Sources" folder. 
 
 Open the <code>TagLibBundle</code> target info pane, and search for "Preprocessor Macros". Add <code>HAVE_CONFIG_H</code> to this entry. This is related to the way the project has been ported from the Autoconf setup of the original source code, and is required to build properly.
 
-
 !{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/preprocessor_macros.png!
-
 
 While this view is open, we also need to remove the entries under "Prefix Header"
 
-
 !{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_prefix_header.png!
-
 
 and "Other Linker Flags". These are set up by default, and are not required for our bundle.
 
-
 !{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_other_linker_flags.png!
+
+Next we need to set the Executable extension to '.bundle' so MacRuby recognises this as a loadable bundle.
+
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/executable_extension.png!
 
 Lastly, we enable garbage collection support.
 
 !{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/enable_gc.png!
 
-Now swap to the "General" tab and ensure that we are linking the project against the "Foundation" framework and "libz" shared library. Check that the project builds without errors at this stage.
+Now we need to swap to the "General" tab and ensure that we are linking the project against the correct frameworks. Hit the plus button in the bottom left, and search in the list for the <code>Foundation</code> framework and <code>libz"</code> shared library, and add them in as required dependencies. <code>libz</code> is a requirement of <code>TagLib</code>, and <code>Foundation</code> will be used later by our Objective-C wrapper class. It should look like this:
 
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/added_dependencies.png!
+
+Check that the project builds without errors at this stage.
 
 h3. Adding our Objective-C wrapper class
 
 Now comes the fun part. We write a very simple Objective-C class to wrap the C functionality of the <code>TagLib</code> code.
 
-We will take a very simplistic approach in building the wrapper, as this ensures easy memory management. Our class will have an <code>initWithFileAtPath:</code> method, which we will use to initialise our class, and perform the scan of the file for tags. The tags themselves will be placed inside an <code>NSDictionary</code> to be read at a later point. Lastly the <code>dealloc</code> method will release the <code>NSDictionary</code>. All of the potentially tricky memory management is contained only within the <code>initWithFileAtPath:</code> method, and occurs within a single method invocation.
+We will take a very simplistic approach in building the wrapper, as this ensures easy memory management. Our class will have an <code>initWithFileAtPath:</code> method, which we will use to initialise our class, and perform the scan of the file for tags. The tags themselves will be placed in instance variables to be read at a later point. Since we're using garbage collection, we don't need to worry about releasing the instance variable contents, so it removes the need for a custom <code>dealloc</code> method. Nice!
 
-Now we need to add an Objective-C class which will perform our wrapping duties. Add a new Objective-C file named "TagLib.m" to the project, subclassed from <code>NSObject</code>. Ensure that is is only part of the TagLibBundle target.
-
+Now we need to add an Objective-C class which will perform our wrapping duties. Add a new Objective-C file named "TagLib.m" to the project, subclassed from <code>NSObject</code>. Ensure that is is only part of the TagLibBundle target, and not the original TagLib target.
 
 !{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/new_wrapper_class.png!
 
-
-Add a new Objective-C file to the <code>TagLibBundle</code> target called <code>TagLib.m</code>. Once we synthesize a simple <code>NSDictionary</code> to contain our tag, our header looks like:
+Edit it to look like this:
 
 <% coderay :lang => 'c' do -%>
+#import <Foundation/Foundation.h>
+
 @interface TagLib : NSObject {
-    NSDictionary *tags;
+  NSString *title;
 }
 
-@property (nonatomic, retain) NSDictionary *tags;
+@property (nonatomic, copy) NSString *title;
 
 @end
 <% end %>
 
-and our <code>TagLib.m</code> file:
+We replace Cocoa with Foundation, as we're not going to use anything beyond Foundation functionality in our project. We've added an <code>NSString</code> instance variable (ivar) which will store the title tag of any files we will later scan. Our <code>TagLib.m</code> file should look like the following:
 
 <% coderay :lang => 'c' do -%>
+
+#import "TagLib.h"
+#include "tag_c.h"
 
 void Init_TagLibBundle(void) { }
 
 @implementation TagLib
 
-@synthesize tags;
-
-- (id)init {
-    if (self = [super init]) {
-        self.tags = [NSDictionary dictionary];
-    }
-
-    return self;
-}
-
-- (void)dealloc {
-    [tags release]; tags = nil;
-    [super dealloc];
-}
+@synthesize title;
 
 @end
 
@@ -125,19 +119,19 @@ void Init_TagLibBundle(void) { }
 
 The <code>Init_TagLibBundle</code> c method declaration is required to identify this as a MacRuby bundle. When loading a bundle with <code>require</code> from within MacRuby, it will automatically look for a method with the signature <code>Init_XXX</code> where XXX is the Product Name taken from the Target settings.
 
-Now most of the code for our <code>initWithFileAtPath:</code> has already been implemented in "taglib-src/examples/tagreader_c.c".  We start off by opening the file, and initializing taglib:
+To make the usage of this bundle easy from the Ruby side, we shall implement an <code>init...</code> method which takes the MP3 file path as an argument, and performs the tag scanning as part of the instance creation. This idiom is commonly used throughout Foundation and Cocoa.
+
+Now most of the code for our <code>initWithFileAtPath:</code> method has already been implemented in "taglib-src/examples/tagreader_c.c". In this example, we will simplify things, and only extract the 'title' tag. Once the template has been described, this can easily be extended to the other tags that TagLib is capable of reading. Add this method underneath the <code>@synthesize title</code> line:
 
 <% coderay :lang => 'c' do -%>
 
 - (id)initWithFileAtPath:(NSString *)filePath {
   if (self = [super init]) {
 
-    // Our mutable dictionary in which we add the tags
-    NSMutableDictionary *tempDictionary = [NSMutableDictionary dictionary];
-
+    // Initialisation as per the TagLib example C code
     TagLib_File *file;
     TagLib_Tag *tag;
-    
+  
     // We want UTF8 strings out of TagLib
     taglib_set_strings_unicode(TRUE);
 
@@ -145,46 +139,35 @@ Now most of the code for our <code>initWithFileAtPath:</code> has already been i
 
     if (file != NULL) {
       tag = taglib_file_tag(file);
-      ...
-<% end %>
-
-After initialisation, we can try reading a single tag from the opened file with the following:
-
-<% coderay :lang => 'c' do -%>
-      ...
-      if (taglib_tag_title(tag) != NULL &&
-        strlen(taglib_tag_title(tag)) > 0) {
-        NSString *title = [NSString stringWithCString:taglib_tag_title(tag)
-                                             encoding:NSUTF8StringEncoding];
-        [tempDictionary setObject:title forKey:@"title"];
+    
+      if (tag != NULL) {
+        // If we have a valid 'title' tag, assign it to our 'title' ivar
+        if (taglib_tag_title(tag) != NULL &&
+          strlen(taglib_tag_title(tag)) > 0) {
+          self.title = [NSString stringWithCString:taglib_tag_title(tag)
+                                          encoding:NSUTF8StringEncoding];
+        }
       }
-      ...
-<% end %>
-
-Lastly, we clean up the allocated memory, close the file, and convert the NSMutableDictionary into an NSDictionary:
-
-<% coderay :lang => 'c' do -%>
-      ...
+  
+      // Free up the allocated memory from TagLib
       taglib_tag_free_strings();
       taglib_file_free(file);
-      
     }
-
-    self.tags = [NSDictionary dictionaryWithDictionary:tempDictionary];
-    [tempDictionary release];
   }
-  
+    
   return self;
 }
 
 <% end %>
 
-So now we have a simple class which should place the title tag of the file into the <code>tags</code> dictionary. The last thing we need to set up with XCode is a small build script to copy the Mach-O binary out of the standard Mac OS X bundle structure. We need direct access to the Mach-O binary bundle, as it is this we use from within MacRuby.
+h3. Wrapping up
+
+So now we have a simple class which should place the title tag of the file into the <code>title</code> instance variable. The last thing we need to set up with XCode is a small build script to copy the Mach-O binary out of the standard Mac OS X bundle structure. We need direct access to the Mach-O binary bundle file, as it is this we use from within MacRuby.
 
 We accomplish this with a small "Run Script Build Phase" added to the bundle target:
 
 <% coderay :lang => 'sh' do -%>
-  cp -v "${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}"
+  cp -v "${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}" \
         "${SOURCE_ROOT}/${FULL_PRODUCT_NAME}"
 <% end %>
 
@@ -192,15 +175,16 @@ Now we can build the target, and a file called "TagLib.bundle" should appear in 
 
 <% coderay :lang => 'ruby' do -%>
 $ macirb
-irb(main):001:0> require 'TagLibBundle'
+irb(main):001:0> require 'TagLibBundle.bundle'
 => true
-irb(main):002:0> test = TagLib.alloc.initWithFileAtPath("test.mp3")
+irb(main):002:0> tag_test = TagLib.alloc.initWithFileAtPath("/path/to/test.mp3")
 => #<TagLib:0x200090880>
-irb(main):003:0> test.tags[:title]
-=> "Mmm Skyscraper I Love You"
+irb(main):003:0> tag_test.title
+=> "This is the test MP3 title tag"
 irb(main):004:0> 
 <% end %>
 
-The code for this example is available on GitHub: <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
+Now that this is working, the rest of the tags can be added in a similar fashion. 
+The final code for this example is available on GitHub from <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
 
 </div>
