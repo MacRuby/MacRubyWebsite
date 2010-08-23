@@ -46,32 +46,42 @@ h3. Adding our Bundle target
 
 The first thing we need to do is add a new Target to our project. Select "New Target..." from the Project menu, and select "Loadable Bundle". Call this <code>TagLibBundle</code>. 
 
-Open up the "Compile Sources" folder inside the "TagLib" Framework target. Shift-select every file in this folder, and open "Get Info" in the File menu. Open up the Targets tab at the top, and check the tickbox next to <code>TagLibBundle</code>. This ensures that every file used to compile the framework is also used to compile our new bundle target.
+Open up the "Compile Sources" folder inside the "TagLib" Framework target. Shift-select every file in this folder, and open "Get Info" in the File menu. Open up the Targets tab at the top, and check the tickbox next to <code>TagLibBundle</code>. This ensures that every file used to compile the framework is also used to compile our new bundle target. This also reveals certain configuration options within the project build settings.
 
-Now open the <code>TagLibBundle</code> target info pane, and search for "Preprocessor Macros". Add <code>HAVE_CONFIG_H</code> to this entry. This is related to the way the project has been ported from the Autoconf setup of the original source code.
+Open the <code>TagLibBundle</code> target info pane, and search for "Preprocessor Macros". Add <code>HAVE_CONFIG_H</code> to this entry. This is related to the way the project has been ported from the Autoconf setup of the original source code, and is required to build properly.
 
-!/images/realworld-dynamic-bundles/preprocessor_macros.png!
 
-While this info view is open, we also need to remove the entries under "Prefix Header"
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/preprocessor_macros.png!
 
-!/images/realworld-dynamic-bundles/remove_prefix_header.png!
+
+While this view is open, we also need to remove the entries under "Prefix Header"
+
+
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_prefix_header.png!
+
 
 and "Other Linker Flags". These are set up by default, and are not required for our bundle.
 
-!/images/realworld-dynamic-bundles/remove_other_linker_flags.png!
 
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_other_linker_flags.png!
 
-Now swap to the "General" tab and ensure that we are linking the project against the "Foundation" framework and "libz" shared library. Check that the project builds OK at this stage.
+Lastly, we enable garbage collection support.
+
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/enable_gc.png!
+
+Now swap to the "General" tab and ensure that we are linking the project against the "Foundation" framework and "libz" shared library. Check that the project builds without errors at this stage.
+
 
 h3. Adding our Objective-C wrapper class
 
 Now comes the fun part. We write a very simple Objective-C class to wrap the C functionality of the <code>TagLib</code> code.
 
-We will take a very simplistic approach in buidling the wrapper, as this ensures easy memory management. Our class will have an <code>initWithFileAtPath:</code> method, which we will use to initialise our class, and perform the scan of the file for tags. The tags themselves will be placed inside an <code>NSDictionary</code> to be read at a later point. Lastly the <code>dealloc</code> method will release the <code>NSDictionary</code>. All of the potentially tricky memory management is contained only within the <code>initWithFileAtPath:</code> method, and occurs within a single method invocation.
+We will take a very simplistic approach in building the wrapper, as this ensures easy memory management. Our class will have an <code>initWithFileAtPath:</code> method, which we will use to initialise our class, and perform the scan of the file for tags. The tags themselves will be placed inside an <code>NSDictionary</code> to be read at a later point. Lastly the <code>dealloc</code> method will release the <code>NSDictionary</code>. All of the potentially tricky memory management is contained only within the <code>initWithFileAtPath:</code> method, and occurs within a single method invocation.
 
 Now we need to add an Objective-C class which will perform our wrapping duties. Add a new Objective-C file named "TagLib.m" to the project, subclassed from <code>NSObject</code>. Ensure that is is only part of the TagLibBundle target.
 
-!/images/realworld-dynamic-bundles/new_wrapper_class.png!
+
+!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/new_wrapper_class.png!
 
 
 Add a new Objective-C file to the <code>TagLibBundle</code> target called <code>TagLib.m</code>. Once we synthesize a simple <code>NSDictionary</code> to contain our tag, our header looks like:
@@ -89,6 +99,9 @@ Add a new Objective-C file to the <code>TagLibBundle</code> target called <code>
 and our <code>TagLib.m</code> file:
 
 <% coderay :lang => 'c' do -%>
+
+void Init_TagLibBundle(void) { }
+
 @implementation TagLib
 
 @synthesize tags;
@@ -107,17 +120,21 @@ and our <code>TagLib.m</code> file:
 }
 
 @end
+
 <% end %>
+
+The <code>Init_TagLibBundle</code> c method declaration is required to identify this as a MacRuby bundle. When loading a bundle with <code>require</code> from within MacRuby, it will automatically look for a method with the signature <code>Init_XXX</code> where XXX is the Product Name taken from the Target settings.
+
+Now most of the code for our <code>initWithFileAtPath:</code> has already been implemented in "taglib-src/examples/tagreader_c.c".  We start off by opening the file, and initializing taglib:
 
 <% coderay :lang => 'c' do -%>
 
 - (id)initWithFileAtPath:(NSString *)filePath {
   if (self = [super init]) {
 
-    // Our mutable dictionary for accumulation
+    // Our mutable dictionary in which we add the tags
     NSMutableDictionary *tempDictionary = [NSMutableDictionary dictionary];
 
-    // Initialisation as per the TagLib example C code
     TagLib_File *file;
     TagLib_Tag *tag;
     
@@ -128,68 +145,62 @@ and our <code>TagLib.m</code> file:
 
     if (file != NULL) {
       tag = taglib_file_tag(file);
+      ...
+<% end %>
 
-      // Collect title, artist, album, comment, genre, track and year in turn.
-      // Sanity check them for presence, and length
+After initialisation, we can try reading a single tag from the opened file with the following:
+
+<% coderay :lang => 'c' do -%>
+      ...
       if (taglib_tag_title(tag) != NULL &&
         strlen(taglib_tag_title(tag)) > 0) {
         NSString *title = [NSString stringWithCString:taglib_tag_title(tag)
                                              encoding:NSUTF8StringEncoding];
         [tempDictionary setObject:title forKey:@"title"];
       }
-      
-      if (taglib_tag_artist(tag) != NULL &&
-        strlen(taglib_tag_artist(tag)) > 0) {
-        NSString *artist = [NSString stringWithCString:taglib_tag_artist(tag)
-                                             encoding:NSUTF8StringEncoding];
-        [tempDictionary setObject:artist forKey:@"artist"];
-      }
-      
-      if (taglib_tag_album(tag) != NULL &&
-        strlen(taglib_tag_album(tag)) > 0) {
-        NSString *album = [NSString stringWithCString:taglib_tag_album(tag)
-                                             encoding:NSUTF8StringEncoding];
-        [tempDictionary setObject:album forKey:@"album"];
-      }
-      
-      if (taglib_tag_comment(tag) != NULL &&
-        strlen(taglib_tag_comment(tag)) > 0) {
-        NSString *comment = [NSString stringWithCString:taglib_tag_comment(tag)
-                                               encoding:NSUTF8StringEncoding];
-        [tempDictionary setObject:comment forKey:@"comment"];
-      }
-      
-      if (taglib_tag_genre(tag) != NULL &&
-        strlen(taglib_tag_genre(tag)) > 0) {
-        NSString *genre = [NSString stringWithCString:taglib_tag_genre(tag)
-                                             encoding:NSUTF8StringEncoding];
-        [tempDictionary setObject:genre forKey:@"genre"];
-      }
-      
-      // Year and track are uints
-      if (taglib_tag_year(tag) > 0) {
-        NSNumber *year = [NSNumber numberWithUnsignedInt:taglib_tag_year(tag)];
-        [tempDictionary setObject:year forKey:@"year"];
-      }
-      
-      if (taglib_tag_track(tag) > 0) {
-      NSNumber *track = [NSNumber numberWithUnsignedInt:taglib_tag_track(tag)];
-      [tempDictionary setObject:track forKey:@"track"];
-      }
-      
-      // Free up our used memory so far
+      ...
+<% end %>
+
+Lastly, we clean up the allocated memory, close the file, and convert the NSMutableDictionary into an NSDictionary:
+
+<% coderay :lang => 'c' do -%>
+      ...
       taglib_tag_free_strings();
       taglib_file_free(file);
       
     }
 
-    // Make immutable
     self.tags = [NSDictionary dictionaryWithDictionary:tempDictionary];
     [tempDictionary release];
   }
   
   return self;
 }
+
 <% end %>
+
+So now we have a simple class which should place the title tag of the file into the <code>tags</code> dictionary. The last thing we need to set up with XCode is a small build script to copy the Mach-O binary out of the standard Mac OS X bundle structure. We need direct access to the Mach-O binary bundle, as it is this we use from within MacRuby.
+
+We accomplish this with a small "Run Script Build Phase" added to the bundle target:
+
+<% coderay :lang => 'sh' do -%>
+  cp -v "${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}"
+        "${SOURCE_ROOT}/${FULL_PRODUCT_NAME}"
+<% end %>
+
+Now we can build the target, and a file called "TagLib.bundle" should appear in the project root. Now from a terminal, we can quickly test out the newly built bundle using the "macirb" command-line ruby interpreter:
+
+<% coderay :lang => 'ruby' do -%>
+$ macirb
+irb(main):001:0> require 'TagLibBundle'
+=> true
+irb(main):002:0> test = TagLib.alloc.initWithFileAtPath("test.mp3")
+=> #<TagLib:0x200090880>
+irb(main):003:0> test.tags[:title]
+=> "Mmm Skyscraper I Love You"
+irb(main):004:0> 
+<% end %>
+
+The code for this example is available on GitHub: <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
 
 </div>
