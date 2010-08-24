@@ -175,14 +175,14 @@ We accomplish this with a small "Run Script" build phase added to the bundle tar
 Now we can build the target, and a file called "TagLib.bundle" should appear in the project root. Now from a terminal, we can quickly test out the end result using the "macirb" command-line Ruby interpreter run from inside the project directory:
 
 <% coderay :lang => 'ruby' do -%>
-$ macirb
-irb(main):001:0> require 'TagLibBundle'
+$ macirb --simple-prompt
+>> require 'TagLibBundle'
 => true
-irb(main):002:0> tag_test = TagLib.alloc.initWithFileAtPath("/path/to/test.mp3")
+>> tag_test = TagLib.alloc.initWithFileAtPath("/path/to/test.mp3")
 => #<TagLib:0x200090880>
-irb(main):003:0> tag_test.title
+>> tag_test.title
 => "This is the test MP3 title tag"
-irb(main):004:0> 
+>> 
 <% end %>
 
 Now that this is working, the rest of the tags can be added in a similar fashion. The final code for this example is available on GitHub from <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
