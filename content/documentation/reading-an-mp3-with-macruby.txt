@@ -1,7 +1,7 @@
 --- 
 title:      Reading an mp3 with a MacRuby bundle
-created_at: 2010-08-08 23:41:08.125402 +01:00
-updated_at: 2010-08-08 23:41:08.125777 +01:00
+created_at: 2010-08-23 13:18:00.125777 +01:00
+updated_at: 2010-08-23 13:18:00.125777 +01:00
 tutorial:   true
 author:     Nick Ludlam
 filter:
