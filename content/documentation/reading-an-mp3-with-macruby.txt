@@ -52,27 +52,27 @@ Now we need to copy over the details of which files are used. Open up the "Copy 
 
 Open the <code>TagLibBundle</code> target info pane, and search for "Preprocessor Macros". Add <code>HAVE_CONFIG_H</code> to this entry. This is related to the way the project has been ported from the Autoconf setup of the original source code, and is required to build properly.
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/preprocessor_macros.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/preprocessor_macros.png!
 
 While this view is open, we also need to remove the entries under "Prefix Header"
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_prefix_header.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/remove_prefix_header.png!
 
 and "Other Linker Flags". These are set up by default, and are not required for our bundle.
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/remove_other_linker_flags.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/remove_other_linker_flags.png!
 
 Next we need to set the Executable extension to '.bundle' so MacRuby recognises this as a loadable bundle.
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/executable_extension.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/executable_extension.png!
 
 Lastly, we enable garbage collection support.
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/enable_gc.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/enable_gc.png!
 
 Now we need to swap to the "General" tab and ensure that we are linking the project against the correct frameworks. Hit the plus button in the bottom left, and search in the list for the <code>Foundation</code> framework and <code>libz"</code> shared library, and add them in as required dependencies. <code>libz</code> is a requirement of <code>TagLib</code>, and <code>Foundation</code> will be used later by our Objective-C wrapper class. It should look like this:
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/added_dependencies.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/added_dependencies.png!
 
 Check that the project builds without errors at this stage.
 
@@ -84,7 +84,7 @@ We will take a very simplistic approach in building the wrapper, as this ensures
 
 Now we need to add an Objective-C class which will perform our wrapping duties. Add a new Objective-C file named "TagLib.m" to the project, subclassed from <code>NSObject</code>. Ensure that is is only part of the TagLibBundle target, and not the original TagLib target.
 
-!{width:600px;padding:20px 0px}/images/realworld-dynamic-bundles/new_wrapper_class.png!
+!{width:600px;padding:20px 0px}/images/reading-an-mp3-with-macruby/new_wrapper_class.png!
 
 Edit it to look like this:
 
@@ -185,7 +185,6 @@ irb(main):003:0> tag_test.title
 irb(main):004:0> 
 <% end %>
 
-Now that this is working, the rest of the tags can be added in a similar fashion. 
-The final code for this example is available on GitHub from <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
+Now that this is working, the rest of the tags can be added in a similar fashion. The final code for this example is available on GitHub from <a href="http://github.com/nickludlam/TagLib.framework">http://github.com/nickludlam/TagLib.framework</a>.
 
 </div>
