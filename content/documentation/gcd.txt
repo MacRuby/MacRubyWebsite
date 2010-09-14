@@ -26,7 +26,7 @@ h3. Queues: The What and the Why
 Queues, represented in MacRuby by the @Dispatch::Queue@ class, are data structures that execute tasks. Under the hood, GCD maintains a pool of POSIX threads to which queues dispatch their tasks; GCD will grow and shrink this pool dynamically and distribute its threads evenly among available processors.  
 Queues can execute their tasks either concurrently or sequentially. All queues begin executing tasks in the order in which they were received, but concurrent queues can run many tasks at once, whereas serial queues wait for one to complete before starting the next. GCD provides three singleton concurrent queues and allows the creation any number of serial queues. Performing work on a queue is extremely easy:
 
-<pre class="commands">
+<%- coderay :language => 'ruby' do -%>
 # Create a new serial queue.
 queue = Dispatch::Queue.new('org.macruby.examples.gcd')
 # Synchronously dispatch some work to it.
@@ -41,7 +41,7 @@ queue.async do
   sleep 1.0
   puts 'Done!'
 end
-</pre>
+<%- end -%>
 
 If you paste this code into a running @macirb@ prompt, you’ll see that the queue blocks until the task specified in the @#sync@ block is finished, while task we specified in the block we passed to the @#async@ method is executed asynchronously in the background.
 
@@ -51,7 +51,7 @@ h3. A Real-Life Use Case: Synchronization
 
 Ensuring that methods and data are accessed by one and only one thread at a time is a common problem in software development today. However, unlike languages such as Java and Objective-C, Ruby has no built-in language support for synchronization, relying instead on the Mutex and Monitor classes. However, GCD introduces another elegant idiom for synchronization that is higher-level than Mutex and significantly simpler than Monitor:
 
-<pre class="commands">
+<%- coderay :language => 'ruby' do -%>
 class MissileLauncher
   def initialize
     @queue = Dispatch::Queue.new('org.macruby.synchronizer')
@@ -65,7 +65,7 @@ class MissileLauncher
     end
   end
 end
-</pre>
+<%- end -%>
 
 h3. Synchronization with Groups
 
@@ -75,7 +75,7 @@ h3. Groups in Action: Futures
 
 Languages like "Io":http://www.iolanguage.com/ and "Oz":http://www.mozart-oz.org/ provide the notion of "futures":http://en.wikipedia.org/wiki/Futures_and_promises: proxy objects that perform expensive computations in the background. By using GCD queues to execute the tasks and groups to synchronize the tasks’ execution, we have a simple, concise and reliable implementation of futures in MacRuby:
 
-<pre class="commands">
+<%- coderay :laungage => 'ruby' do -%>
 include Dispatch
 class Future
   def initialize(&block)
@@ -93,16 +93,17 @@ class Future
     @value
   end
 end
-</pre>
+<%- end -%>
+
 Now it’s easy to schedule long-running tasks in the background:
 
-<pre class="commands">
+<%- coderay :language => 'ruby' do -%>
 some_result = Future.new do
   p 'Engaging delayed computation!'
   sleep 2.5
   :done # Your result would go here.
 end
-</pre>
+<%- end -%>
 
 Accessing the value is as easy as calling @some_result.value@.
 
@@ -110,7 +111,7 @@ h3. Parallelization and Synchronization
 
 Now let’s see an example of how easy it is to parallelize your code with the GCD’s groups and concurrent queues:
 
-<pre class="commands">
+<%- coderay :language => 'ruby' do -%>
 class Array
   def parallel_map(&block)
     result = []
@@ -131,7 +132,7 @@ class Array
     result
   end
 end
-</pre>
+<%- end -%>
 
 This example uses the queue accessed through @Dispatch::Queue.concurrent@ to speed up @Array#map@ by spreading out the total work across the system’s available processors. From a two-core Macbook Air to a 16-core Mac Pro, GCD executes the tasks dispatched on the concurrent queue across all available processors. With fewer than a dozen lines of code, we’ve parallelized @#map@ and avoided race conditions by using groups to synchronize.
 

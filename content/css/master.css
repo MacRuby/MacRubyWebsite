@@ -5,6 +5,16 @@ body {
   color: #333;
 }
 
+em {
+	font-style: italic;
+}
+
+li {
+	list-style-position: outside;
+	list-style-type: disc;
+	margin-left: 32px;
+}
+
 #logo {
   width=300px;
 }
