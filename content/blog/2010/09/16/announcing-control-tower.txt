@@ -12,37 +12,44 @@ filter:
 We are pleased to announce the first stable version of ControlTower, a Rack-based web application server for MacRuby. ControlTower can already run basic rack and Sinatra apps, but there are still a lot of features to add.
 <% end %>
 
-h3. "It's called ControlTower!":http://www.youtube.com/watch?v=QbdXt2K27NU
-
 Way back in the announcement for MacRuby 0.5, we cryptically mentioned that we had gotten a web server to run a basic Sinatra app. While that statement was true, the server we had wasn't even really alpha worthy. At that point, it was more about proof of concept. If you have been watching the subversion repository you might have noticed that a new top-level project appeared about 4 months ago. If you're subscribed to the "mailing list":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel, you probably have even seen a bit of discussion take place about this project, and yet we still weren't quite ready to announce it to the world. Well, that changes today!
 
-Today we are officially announcing version 1.0 of ControlTower, a web server specially designed for MacRuby.
+Today we are officially announcing version 1.0 of ControlTower, a web server specifically designed for MacRuby.
 
 If you're a casual follower of MacRuby, here is what you need to know in a nut-shell:
 
 <p>
 * ControlTower is a web application server based on "Rack":http://rack.rubyforge.org/, written from the ground for MacRuby.
-* It takes advantage of MacRuby's ability to mix-n-match Cocoa APIs with Ruby, so it will (for the forseable future) _only_ run on MacRuby.
+* It takes advantage of MacRuby's concurrency facilities and ability to mix-n-match Cocoa APIs with Ruby, so it _only_ runs on MacRuby.
 * It can be used on its own or with a reverse proxy to serve any Rack-based web app whose libraries are supported by MacRuby (i.e. "Sinatra":http://www.sinatrarb.com/, but not Rails...yet).
 * We are also interested in other non-traditional ways an embeddable Ruby web app server might be useful for native app development.
-* It's small, it's light weight, and it's reasonably fast.
+* It's small, it's light weight, and it's reasonably "fast":http://www.youtube.com/watch?v=mk7VWcuVOf0.
 </p>
 
 ControlTower 1.0 works on MacRuby 0.7, which is to be released soon, but can still be installed from "nightly builds":http://www.macruby.org/files/nightlies/.
 
 h3. How do I use it?
 
-To get ControlTower, you can checkout the source using subversion at @http://svn.macosforge.org/repository/ruby/ControlTower/tags/1.0@. Once you have the source you can use rake to build the gem (requires developer tools) and macgem to install like so:
+The easiest way to grab the latest version of ControlTower is to use @macgem@:
 
 <pre class="commands">
-$ rake gem
-$ sudo macgem install pkg/control_tower-1.0-universal-darwin-10.gem
+$ sudo macgem install control_tower
 </pre>
+
+The source code of the project is also available on our "repository":http://svn.macosforge.org/repository/ruby/ControlTower/ and ControlTower can also be installed from there.
 
 There are two basic ways to interact with a Rack-based web server: create a rack-up file, or use a Rack::Handler in your code. Currently, both of these mechanisms work with ControlTower. Using a rack-up file is probably the simplest and most straight forward way to get up and running, and we've included a number of sample rack-up files in the "sample" directory of the repository. Once you have built and installed the ControlTower gem, you can use the @control_tower@ command to run any rack-up config:
 
 <pre class="commands">
-$ control_tower -R sample/simple_hello.ru
+$ cat hello.ru
+class Hello
+  def call(env)
+    [200, { 'Content-Type' => 'text/plain' }, "Hello, world! Your environment is #{env}"]
+  end
+end
+run Hello.new
+
+$ control_tower -R hello.ru
 You are cleared for take-off!
 Listening on 0.0.0.0:3000
 </pre>
