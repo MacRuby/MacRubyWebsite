@@ -1,5 +1,5 @@
 ---
-title:      ControlTower
+title:      ControlTower 1.0
 created_at: 2010-09-16 11:57:25.075413 -04:00
 blog_post:  true
 layout:     blog_entry
@@ -9,33 +9,34 @@ filter:
   - textile
 ---
 <% @page[:excerpt] = capture_erb do %>
-We are pleased to announce the first version of ControlTower, a Rack-based web application server for Ruby. ControlTower can already run basic rack and Sinatra apps, but there are still a lot of features to add.
+We are pleased to announce the first stable version of ControlTower, a Rack-based web application server for MacRuby. ControlTower can already run basic rack and Sinatra apps, but there are still a lot of features to add.
 <% end %>
 
 h3. "It's called ControlTower!":http://www.youtube.com/watch?v=QbdXt2K27NU
 
-Way back in the announcement for MacRuby 0.5, we cryptically mentioned that we had gotten a web server to run a basic Sinatra app. While that statement was true, the server we had wasn't even really alpha worthy. At that point, it was more about proof of concept. If you have been watching the subversion repository you might have noticed that a new top-level project appeared about 4 months ago. If you're subscribed to the mailing list, you probably have even seen a bit of discussion take place about this project, and yet we still weren't quite ready to announce it to the world. Well, that changes today!
+Way back in the announcement for MacRuby 0.5, we cryptically mentioned that we had gotten a web server to run a basic Sinatra app. While that statement was true, the server we had wasn't even really alpha worthy. At that point, it was more about proof of concept. If you have been watching the subversion repository you might have noticed that a new top-level project appeared about 4 months ago. If you're subscribed to the "mailing list":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel, you probably have even seen a bit of discussion take place about this project, and yet we still weren't quite ready to announce it to the world. Well, that changes today!
 
-Today we are officially announcing version 0.1 of ControlTower, the Rack-based web app server for MacRuby.
+Today we are officially announcing version 1.0 of ControlTower, a web server specially designed for MacRuby.
 
 If you're a casual follower of MacRuby, here is what you need to know in a nut-shell:
 
-<div class="control-tower">
-* ControlTower is a Rack-based web application server, written from the ground for MacRuby
-* It takes advantage of MacRuby's ability to mix-n-match Cocoa APIs with Ruby, so it will (for the forseable future) _only_ run on MacRuby
-* It can be used on its own or with a reverse proxy to serve any Rack-based web app whose libraries are supported by MacRuby (i.e. Sinatra, but not Rails...yet)
-* We are also interested in other non-traditional ways an embeddable Ruby web app server might be useful for native app development
-* It's small, it's light weight, and it's reasonably fast
-<div>
-<br />
+<p>
+* ControlTower is a web application server based on "Rack":http://rack.rubyforge.org/, written from the ground for MacRuby.
+* It takes advantage of MacRuby's ability to mix-n-match Cocoa APIs with Ruby, so it will (for the forseable future) _only_ run on MacRuby.
+* It can be used on its own or with a reverse proxy to serve any Rack-based web app whose libraries are supported by MacRuby (i.e. "Sinatra":http://www.sinatrarb.com/, but not Rails...yet).
+* We are also interested in other non-traditional ways an embeddable Ruby web app server might be useful for native app development.
+* It's small, it's light weight, and it's reasonably fast.
+</p>
+
+ControlTower 1.0 works on MacRuby 0.7, which is to be released soon, but can still be installed from "nightly builds":http://www.macruby.org/files/nightlies/.
 
 h3. How do I use it?
 
-To get ControlTower, you can checkout the source using subversion at @http://svn.macosforge.org/repository/ruby/ControlTower/tags/0.1@. Once you have the source you can use rake to build the gem (requires developer tools) and macgem to install like so:
+To get ControlTower, you can checkout the source using subversion at @http://svn.macosforge.org/repository/ruby/ControlTower/tags/1.0@. Once you have the source you can use rake to build the gem (requires developer tools) and macgem to install like so:
 
 <pre class="commands">
 $ rake gem
-$ sudo macgem install pkg/control_tower-0.1-universal-darwin-10.gem
+$ sudo macgem install pkg/control_tower-1.0-universal-darwin-10.gem
 </pre>
 
 There are two basic ways to interact with a Rack-based web server: create a rack-up file, or use a Rack::Handler in your code. Currently, both of these mechanisms work with ControlTower. Using a rack-up file is probably the simplest and most straight forward way to get up and running, and we've included a number of sample rack-up files in the "sample" directory of the repository. Once you have built and installed the ControlTower gem, you can use the @control_tower@ command to run any rack-up config:
@@ -62,7 +63,7 @@ h3. What's in a Web Server?
 
 In general, all Ruby web app servers consist of the same three components: a socket manager, a header parser, and a request handler. Incoming requests initially encounter the socket manager which begins receiving data from the incoming connection. This data is then fed to the header parser until all of the headers have been received. These headers, along with any request body data (e.g. a form being POSTed), are then passed on to the request handler. The request handler makes any necessary changes on the server, gathers any data needed for a reply, and then sends that reply back to the socket manager which will send the reply back to the client.
 
-Ever since Mongrel, just about every Ruby web app server has used Zed Shaw's Ragel-based HTTP parser to parse headers on incoming requests, and ControlTower does too. Since the appearance of Rack, servers can count on an "app" object provided by a web app framework to handle the requests, in accordance with the Rack spec, and being a Rack-based server ControlTower relies on this as well. That leaves the socket manager as the only one of the three components that will differ considerably between servers. In the case of Thin the socket manager is an EventMachine event loop. In the case of Unicorn sockets are managed using a prefork mechanism. In ControlTower, we do our socket management with Grand Central Dispatch.
+Ever since Mongrel, just about every Ruby web app server has used Zed Shaw's Ragel-based HTTP parser to parse headers on incoming requests, and ControlTower does too. Since the appearance of Rack, servers can count on an "app" object provided by a web app framework to handle the requests, in accordance with the Rack spec, and being a Rack-based server ControlTower relies on this as well. That leaves the socket manager as the only one of the three components that will differ considerably between servers. In the case of Thin the socket manager is an EventMachine event loop. In the case of Unicorn sockets are managed using a prefork mechanism. In ControlTower, we do our socket management with "Grand Central Dispatch":/documentation/gcd.html.
 
 The way this works is that each new incoming request is asynchronously dispatched to a GCD queue to be parsed and handled. In the default case, this queue is a serial queue, so requests are handled first-in first-out. By placing incoming requests onto a queue immediately, the server is quickly able to accept the next incoming request. If the @-c@ switch is used with the control_tower command or the @:concurrent@ key is set to true in the handler's options hash, ControlTower will use a concurrent GCD queue in place of the serial one. This means that ControlTower can handle multiple requests concurrently inside a single process; up to 75 at once on an 8-core MacPro (compared to 20 simultaneous requests per Thin process in threaded mode). If you want to give concurrent mode a try, just make sure that your web app and database layer are truly thread-safe, and not just green-thread-safe.
 <br />
@@ -71,4 +72,6 @@ h3. How can I help?
 
 Glad you asked! ControlTower is still a relatively young project, so there is still lots to do. Right now, it is a small, robust server capable of handling moderate loads, but it doesn't have as many features as other Rack-based servers like Thin or Unicorn. Most notably, we do not yet support keep-alive. Other wish-list items include the addition of Rack adapters for the various common Ruby web app frameworks, support for unix domain sockets, and the ability to do Web Sockets.
 
-Of course, you don't have to be heavy into server development to lend a hand. We could use a lot of help just with testing and documentation (both of which are lacking currently). Perhaps the simplest and most important thing you can do to help is to try it out and send in your bug reports and feature requests. We started building ControlTower for our own purposes, but now we're ready to share it with the community and see where you take it.
+Of course, you don't have to be heavy into server development to lend a hand. We could use a lot of help just with testing and documentation (both of which are lacking currently). Perhaps the simplest and most important thing you can do to help is to try it out and "send in your bug reports and feature requests":https://www.macruby.org/trac/newticket. We started building ControlTower for our own purposes, but now we're ready to share it with the community and see where you take it.
+
+Feel also free to open new discussions about ControlTower on our "mailing-list":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel.
