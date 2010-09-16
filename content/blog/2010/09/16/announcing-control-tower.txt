@@ -20,6 +20,7 @@ If you're a casual follower of MacRuby, here is what you need to know in a nut-s
 
 <p>
 * ControlTower is a web application server based on "Rack":http://rack.rubyforge.org/, written from the ground for MacRuby.
+* It is released under the Ruby license.
 * It takes advantage of MacRuby's concurrency facilities and ability to mix-n-match Cocoa APIs with Ruby, so it _only_ runs on MacRuby.
 * It can be used on its own or with a reverse proxy to serve any Rack-based web app whose libraries are supported by MacRuby (i.e. "Sinatra":http://www.sinatrarb.com/, but not Rails...yet).
 * We are also interested in other non-traditional ways an embeddable Ruby web app server might be useful for native app development.
