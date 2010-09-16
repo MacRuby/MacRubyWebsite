@@ -19,9 +19,11 @@ filter:
     <div class="date"><%= page.created_at.strftime('%Y-%m-%d') %></div>
     <div class="title"><%= link_to_page(page) %></div>
   </div>
+<!--
   <div class="author">
     By <%= member_name(page.author) %>
   </div>
+-->
   <div class="body">
     <%= render(page) %>
   </div>
