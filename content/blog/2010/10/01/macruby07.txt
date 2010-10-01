@@ -41,7 +41,7 @@ $ macruby t.rb
 3
 </pre>
 
-The "sandbox(7)":http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man7/sandbox.7.html facility is now exposed in MacRuby via the Sandbox class, and can now be used to filter certain functionalities in the current process and therefore limit potential damage that can happen if a vulnerability is exploited. It is a good companion to the Ruby standard $SAFE functionality, also supported in MacRuby, because it can enforce rules on all system services used by the process, including by C extensions or Cocoa APIs, and not necessarily those from pure-Ruby APIs.
+The "sandbox(7)":http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man7/sandbox.7.html facility is now exposed in MacRuby via the Sandbox class, and can now be used to filter certain functionalities in the current process and therefore limit potential damage that can happen if a vulnerability is exploited. It is a good companion to the Ruby standard $SAFE functionality, also supported in MacRuby, because it can constrain access to all system services used by the process, including by C extensions or Cocoa APIs, not just from pure-Ruby APIs.
 
 <pre class="commands">
 Sandbox.no_internet          # TCP/IP networking is prohibited.
