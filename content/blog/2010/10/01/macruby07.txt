@@ -19,13 +19,13 @@ You can download it from "here":http://www.macruby.org/files/MacRuby%200.7.zip. 
 
 Please give it a try and "let us know":/contact-us.html of any problems you find!
 
-You can check out the "complete release notes":todo of this release, or continue with most visible changes here.
+You can check out the "complete release notes":http://lists.macosforge.org/pipermail/macruby-devel/2010-October/006091.html of this release, or continue with most visible changes here.
 
 h3. Cocoa Support
 
 MacRuby's previous release, 0.6, announced that support for Cocoa development was now stable. As a matter of fact, the Cocoa layer of MacRuby hasn't changed much in this release, which confirms us that it is indeed stable.
 
-A long-awaited enhancement to MacRuby's Cocoa layer, support for "C blocks":http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/Blocks/Articles/bxUsing.html, has been implemented in this release. You can now pass a Ruby Proc object to an API that expects a C block, similarly if this API expected a C function pointer. However, this new change requires additional BridgeSupport metadata which can be installed from our new "BridgeSupport Preview release":todo, available <here>.
+A long-awaited enhancement to MacRuby's Cocoa layer, support for "C blocks":http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/Blocks/Articles/bxUsing.html, has been implemented in this release. You can now pass a Ruby Proc object to an API that expects a C block, similarly if this API expected a C function pointer. However, this new change requires additional BridgeSupport metadata which will be installed from our new, upcoming "BridgeSupport":http://bridgesupport.macosforge.org/ release.
 
 <pre class="commands">
 $ cat t.rb 
