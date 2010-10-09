@@ -15,10 +15,10 @@ MacRuby development happens in the trunk Subversion branch. However, be careful,
 $ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
 </pre>
 
-If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the 0.6 release:
+If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the 0.7 release:
 
 <pre class="commands">
-$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.6 MacRuby-0.6
+$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.7 MacRuby-0.7
 </pre>
 
 For building instructions, please refer to README.rdoc file, but the basic build instructions are:

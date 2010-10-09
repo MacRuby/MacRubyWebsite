@@ -10,7 +10,7 @@ h1(title). <%= h(@page.title) %>
 h2. Latest Stable Release
 
 <p>
-You can download <a href="http://www.macruby.org/files/MacRuby%200.6.zip">MacRuby 0.6</a> as a standalone binary installer.
+You can download <a href="http://www.macruby.org/files/MacRuby%200.7.zip">MacRuby 0.7</a> as a standalone binary installer.
 <em>Note: this release will only work on Intel machines running Snow Leopard (10.6) or higher.</em>
 </p>
 
