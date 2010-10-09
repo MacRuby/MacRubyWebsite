@@ -47,15 +47,15 @@ Every profile returns an instance of the Sandbox class.
 * Sandbox.no_internet  
   Access by the current process to the internet is restricted.
 
-* Sandbox.no_networking  
+* Sandbox.no_network 
   Access by the current process to any kind of networking is restricted.
 
 * Sandbox.temporary_writes    
-  Access by the current process to anywhere *but* /var/tmp and the directory specified by the 
-  configuration variable _CS_DARWIN_USER_TEMP_DIR.
+  Access by the current process to write to anywhere *but* /var/tmp and the directory specified by 
+  the configuration variable _CS_DARWIN_USER_TEMP_DIR.
 
-* Sandbox.no_filesystem_write   
-  Access by the current process to anywhere on the filesystem is restricted.
+* Sandbox.no_writes   
+  Access by the current process to write to anywhere on the filesystem is restricted.
 
 h3. Initiating a sandbox
 
@@ -64,7 +64,7 @@ Sandbox class.The sandbox class defines a single instance method(excluding those
 and that is *Sandbox#apply!*. The #apply! method will initiate the sandbox for the current
 MacRuby process. 
 
-For example, to apply the <b>Sandbox.pure_computation</b> profile, and create a sandbox for the 
+For example, to apply the *Sandbox.pure_computation* profile, and create a sandbox for the 
 current MacRuby process, you would do the following:
 
 <% coderay :lang => 'ruby' do %>
@@ -116,15 +116,13 @@ a SecurityError exception. This can be handled easily:
 begin
   Sandbox.pure_computation.apply!
   Sandbox.pure_computation.apply! 
-  rescue SecurityError => e
+rescue SecurityError => e
   puts "I couldn't initialize a sandbox!"
 end
 <% end %>
 
 The second call to Sandbox.pure_computation.apply! will raise a SecurityError because of restrictions
 imposed by the first call to Sandbox.pure_computation.apply!
-
-
 
 h3. Notes
 
@@ -143,4 +141,5 @@ h3. See also
   to their MacRuby representation.
 
 </div>
+
 
