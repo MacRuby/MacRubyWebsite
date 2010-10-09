@@ -1,0 +1,42 @@
+--- 
+title:      BridgeSupport Preview 1 and MacRuby 0.7.1
+created_at: 2010-10-08 16:46:45.111448 -07:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+---
+<% @page[:excerpt] = capture_erb do %>
+A new development version of the "BridgeSupport":http://bridgesupport.macosforge.org/trac/wiki project, now based on the clang/LLVM compiler framework, is available for testing!
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+You can grab it from "here":http://www.macruby.org/files/BridgeSupport%20Preview%201.zip. 
+
+If you intend to use it from MacRuby, you will have to install MacRuby 0.7.1, a minor release containing support for this new BridgeSupport, which can be found "here":http://www.macruby.org/files/MacRuby%200.7.1.zip.
+
+h3. What is BridgeSupport?
+
+BridgeSupport files are XML files that describe the API symbols of frameworks or libraries that cannot be introspected at runtime. These are generally ANSI C symbols that are non-object-oriented items such as constants, enumerations, structures, and functions but can also include some additional information about classes, methods, and informal protocols.
+
+BridgeSupport files are a major component of the Objective-C bridges (RubyCocoa, PyObjC) and languages (MacRuby) which permit Cocoa development.
+
+BridgeSupport also comes with a command-line utility, called gen_bridge_metadata, which allows you to generate BridgeSupport files for 3rd party frameworks or libraries.
+
+BridgeSupport is a technology included in Mac OS X since version 10.5, Leopard.
+
+h3. What is new?
+
+In this preview release, the BridgeSupport metadata generator has been rewritten on top of the "clang/LLVM":http://clang.llvm.org/ compiler framework. It now generates more accurate metadata from header files, and it performs significantly faster and is more stable.
+
+It also annotates new API constructs such as "C-level blocks":http://clang.llvm.org/docs/BlockLanguageSpec.txt.
+
+Additionally, all system frameworks are now covered by BridgeSupport. Prior to this release, only selected public frameworks were covered.
+
+h3. Help!
+
+Please help us identifying possible problems by installing this preview release and resuming the development of your MacRuby application. You can also now access APIs dealing with C-level blocks, which wasn't possible before.
+
+Give it a try and "let us know":/contact-us.html if you find any problem.
