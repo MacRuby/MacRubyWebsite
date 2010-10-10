@@ -42,7 +42,7 @@ Default profiles are mapped as class methods on the Sandbox class.
 Every profile returns an instance of the Sandbox class.
 
 * Sandbox.pure_computation  
-  Access by the current process to operating system resources is severly restricted  
+  Access by the current process to operating system resources is severly restricted. 
 
 * Sandbox.no_internet  
   Access by the current process to the internet is restricted.
@@ -51,8 +51,8 @@ Every profile returns an instance of the Sandbox class.
   Access by the current process to any kind of networking is restricted.
 
 * Sandbox.temporary_writes    
-  Access by the current process to write to anywhere *but* /var/tmp and the directory specified by 
-  the configuration variable _CS_DARWIN_USER_TEMP_DIR.
+  Access by the current process to write to directories outside /var/tmp and 
+  the directory specified by the configuration variable _CS_DARWIN_USER_TEMP_DIR is restricted.
 
 * Sandbox.no_writes   
   Access by the current process to write to anywhere on the filesystem is restricted.
