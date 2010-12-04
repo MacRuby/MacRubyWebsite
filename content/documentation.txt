@@ -14,6 +14,7 @@ If you are wondering why in the world MacRuby exists you can read that in the "W
 
 Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
 
+In addition to the documentation available here, MacRuby team member, "Matt Aimonetti":http://merbist.com keeps a HTML version of the manuscript of his "O'Reilly book":http://ofps.oreilly.com/titles/9781449380373/ online and available for free at "this url":http://ofps.oreilly.com/titles/9781449380373/.
 
 h2. Screencasts
 

@@ -15,7 +15,7 @@ Ruby classes in MacRuby are in fact Objective-C classes. Because it is not yet p
 
 Every method defined on a class from Ruby is registered with the Objective-C runtime. On a similar note, all Objective-C methods are lazily available from Ruby too. The [Libffi] library is used to create closures at runtime and inject them, either in the Objective-C runtime or YARV, but also to perform C or Objective-C calls.
 
-All Ruby classes inherit from NSObject, the root class of most Objective-C objects in the Cocoa world. This means that by default, all Ruby objects respond to a bunch of handful methods defined in NSObject, including some that are required by the GC.
+All Ruby classes inherit from NSObject, the root class of most Objective-C objects in the Cocoa world. This means that by default, all Ruby objects respond to a bunch of helpful methods defined in NSObject, including some that are required by the GC.
 
 Objective-C classes are imported in the Ruby runtime on demand, along with their full hierarchy.
 

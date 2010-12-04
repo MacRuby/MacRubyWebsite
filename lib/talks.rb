@@ -4,6 +4,8 @@ module MacRubyTalksHelper
   
   def macruby_talks
     [
+      Talk.new("2010-11-12", "RubyConf 2012", "MacRuby - Why and How (slides only for now)", "http://www.slideshare.net/mattetti/macruby-rubyconf-presentation-2010", "Matt Aimonetti", nil),
+      Talk.new("2009-11-20", "RubyConf 2009", "Simple 2D Video Game in MacRuby", "http://confreaks.net/videos/192-rubyconf2009-writing-2d-games-for-the-osx-platform-in-ruby", "Matt Aimonetti", "http://www.slideshare.net/mattetti/2d-video-games-with-macruby"),
       Talk.new("2009-10-30", "RubyEnRails", "MacRuby & RubyCocoa (slides only)",          "http://tr.im/DCW0", "Eloy Duran", nil),
       Talk.new("2009-10-14", "RailsSummit", "MacRuby", "http://agaelebe.blip.tv/file/2730084/", "Rich Kilmer", nil),
       Talk.new("2009-10-03", "OSDC.fr", "Intro to MacRuby (slides only)", "http://www.slideshare.net/olg/macruby-an-introduction", "Olivier Gutknecht", nil),
