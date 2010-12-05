@@ -18,7 +18,7 @@ h1(title). <%= h(@page.title) %>
 
 h3. Abstract
 
-The Mac OSX operating system, since Mac OSX 10.6.4, has exposed features in the C header 
+The Mac OSX operating system, since Mac OSX 10.5, has exposed features in the C header 
 "sandbox.h", and the dynamic library "system.dylib" that make creating a sandbox environment 
 for a given process extremely easy. MacRuby exposes these features through a Ruby class 
 called "Sandbox". The Sandbox class was introduced in MacRuby 0.7.
