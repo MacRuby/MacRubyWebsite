@@ -21,6 +21,10 @@ h2. Mailing Lists
 
 "MacRuby-changes":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-changes is the SVN changes mailing-list. This is a read-only list, but you might want to subscribe to it if you are interested in tracking all of the changes in the project's source code.
 
+h2. IRC
+
+Some contributors of the project are connected on the #macruby channel within the freenode IRC network. Feel free to stop by if you have a quick question. We also organize periodical bug smashes over there.
+
 h2. Contributions
 
 Please "file a ticket":https://www.macruby.org/trac/newticket on the "MacRuby Trac":https://www.macruby.org/trac/report component, if you want to contribute an enhancement request or a bug report. Patches with test cases are welcome.
