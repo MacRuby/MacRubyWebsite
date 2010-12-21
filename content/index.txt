@@ -40,11 +40,12 @@ application do |app|
 end
 <% end -%>
 -->
+
 <h2>The Definitive Guide</h2>
 <p>
-<img src="http://covers.oreilly.com/images/0636920000723/rc_s.gif" alt="MacRuby Book by Matt Aimonetti" style="float:left; padding:0.5em 1em 0 0">
+<!-- <img src="http://covers.oreilly.com/images/0636920000723/rc_s.gif" alt="MacRuby Book by Matt Aimonetti" style="float:left; padding:0.5em 1em 0 0"> -->
 <a href="http://merbist.com">Matt Aimonetti</a> is currently working on a <a href="http://oreilly.com/catalog/0636920000723/">MacRuby book for O'Reilly</a>. It is under development and the book is being published as it is being written. The work is released under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons</a> license, with the idea of getting early feedback from the community. 
-<br/><a href="http://oreilly.com/catalog/0636920000723/">Check it out!</a></p>
+<a href="http://oreilly.com/catalog/0636920000723/">Check it out!</a></p>
 <hr size="0" noshade class="doublerule" />
 
 <h2>Why MacRuby?</h2>

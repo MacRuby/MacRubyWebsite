@@ -12,3 +12,4 @@ filter: erb
  &nbsp; &nbsp; and <a href="http://svn.macosforge.org/repository/ruby/MacRuby/trunk/sample-macruby">examples</a> that are available.</p>
 </div>
 
+<hr size="0" noshade class="harvardrule" />
