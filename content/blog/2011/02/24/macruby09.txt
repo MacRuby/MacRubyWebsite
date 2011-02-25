@@ -19,7 +19,7 @@ You can download it from "here":http://www.macruby.org/files/MacRuby%200.9.zip. 
 
 Please give it a try and "let us know":/contact-us.html of any problems you find!
 
-The "complete release notes":http://todo are available.
+The "complete release notes":http://lists.macosforge.org/pipermail/macruby-devel/2011-February/007227.html are available.
 
 h3. Converging for 1.0
 
