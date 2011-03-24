@@ -18,7 +18,7 @@ $ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
 If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the latest release:
 
 <pre class="commands">
-$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.9 MacRuby-0.9
+$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.10 MacRuby-0.10
 </pre>
 
 For building instructions, please refer to README.rdoc file, but the basic build instructions are:

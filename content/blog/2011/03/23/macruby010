@@ -1,0 +1,29 @@
+--- 
+title:      MacRuby 0.10
+created_at: 2011-03-23 16:38:43.236240 -07:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+--- 
+<% @page[:excerpt] = capture_erb do %>
+We are glad to announce the release of MacRuby 0.10, after just a few weeks of development since the last release.
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+This release brings support for new MacBook Pro hardware (Sandy Bridge processors), App Store submission fixes, and Xcode4 integration. Users of MacRuby are encouraged to upgrade.
+
+You can download it from "here":http://www.macruby.org/files/MacRuby%200.10.zip. Please note that this package only works on Intel 64-bit machines running Snow Leopard (10.6) or later. Older Mac OS X versions are no longer supported. Intel 32-bit machines can be supported by manually building MacRuby from the sources.
+
+Please give it a try and "let us know":/contact-us.html of any problems you find!
+
+The "release notes":http://lists.macosforge.org/pipermail/macruby-devel/2011-March/007390.html are available.
+
+h3. Converging for 1.0
+
+We are currently converting towards a first stable release of MacRuby, 1.0. We intend to deliver frequent releases until we reach that goal.
+
+We do not expect further releases to include significant features, as we are now focusing on stability and compatibility issues.
+
