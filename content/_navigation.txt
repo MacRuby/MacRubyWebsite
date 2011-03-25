@@ -1,12 +1,11 @@
 ---
 filter: erb
 ---
-<ul id="nav">
-  <li><a href="/" title="Home"><img src="/images/nav_home.png" alt="Home" /></a></li>
-  <li><a href="/blog/index.html" title="Blog"><img src="/images/nav_blog.png" alt="Blog" /></a></li>
-  <li><a href="/source.html" title="Source"><img src="/images/nav_source.png" alt="Source" /></a></li>
-  <li><a href="/documentation.html" title="Documentation"><img src="/images/nav_documentation.png" alt="Home" /></a></li>
-  <li><a href="/contact-us.html" title="Contact"><img src="/images/nav_contact.png" alt="Contact Us" /></a></li>
-  <li class="last"><img src="/images/two_easy_steps.png" alt="" id="2steps" /></li>
+<ul>
+  <li><a href="/" title="Home">Home</a></li>
+  <li><a href="/news/index.html" title="News">News</a></li>
+  <li><a href="/source.html" title="Source">Source</a></li>
+  <li><a href="/documentation.html" title="Documentation">Documentation</a></li>
+  <li><a href="/contact-us.html" title="Contact">Contact</a></li>
 </ul><!-- // end nav -->
 
