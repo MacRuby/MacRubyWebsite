@@ -9,16 +9,16 @@ h1(title). <%= h(@page.title) %>
 
 h2. MacRuby Development
 
-MacRuby development happens in the trunk Subversion branch. However, be careful, because trunk may not work (or even compile) all of the time.
+MacRuby development happens in the master branch of our "GitHub":https://github.com/MacRuby/MacRuby repository. However, be careful, because it may not work (or even compile) all of the time.
 
 <pre class="commands">
-$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/trunk MacRuby-trunk
+$ git clone git://github.com/MacRuby/MacRuby.git macruby
 </pre>
 
-If you want to grab the sources of a specific release, look into the tags directory. For example, to grab the sources of the latest release:
+If you want to grab the sources of a specific release, look for the specific branch. For example, to grab the sources of the latest release:
 
 <pre class="commands">
-$ svn co http://svn.macosforge.org/repository/ruby/MacRuby/tags/0.10 MacRuby-0.10
+$ git clone -b 0.10 git://github.com/MacRuby/MacRuby.git macruby-0.10
 </pre>
 
 For building instructions, please refer to README.rdoc file, but the basic build instructions are:
@@ -28,12 +28,4 @@ $ rake
 $ sudo rake install
 </pre>
 
-You can also "browse the repository":http://svn.macosforge.org/repository/ruby/MacRuby/trunk online.
-
-h2. Git
-
-Git aficionados will be glad to learn that there is an official mirror of the SVN trunk repository available:
-
-<pre class="commands">
-$ git clone git://git.macruby.org/macruby/MacRuby.git
-</pre>
+You can also "browse the repository":https://github.com/MacRuby/MacRuby online.

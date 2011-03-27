@@ -1,0 +1,24 @@
+--- 
+title:      Moved to GitHub
+created_at: 2011-03-26 23:47:28.622654 -07:00
+blog_post:  true
+layout:     blog_entry
+author:     lrz
+filter:
+  - erb
+  - textile
+--- 
+<% @page[:excerpt] = capture_erb do %>
+The MacRuby source code repository is moving to GitHub!
+<% end %>
+<%= RedCloth.new(@page.excerpt).to_html %>
+
+MacRuby has been developed inside a Subversion repository since its inception, but we think that now is the time to switch to Git, and GitHub is the best place to do it.
+
+MacRuby's source code is now available from "https://github.com/MacRuby/MacRuby":https://github.com/MacRuby/MacRuby. You will also find the source code of this website and the Control Tower project under the same organization.
+
+Only the source code repository has moved, the rest of the infrastructure, such as nightly builds or Trac tickets, hasn't changed.
+
+The development of MacRuby now continues on GitHub. The previous Subversion repository has been emptied, and will not be updated.
+
+We hope that, by being on GitHub, developers will be able to contribute changes to the project more easily, and that we will be able to reach our 1.0 milestone more gracefully.
