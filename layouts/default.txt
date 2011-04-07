@@ -9,31 +9,28 @@ filter:    erb
 <!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-<%= render :partial => "/standard-head" %>
+	<%= render :partial => "/standard-head" %>
 </head>
-
 <body>
-  <div id="nest">
-	<header>
-    	<%= render :partial => "/header" %>
+  
+<div class="wrapper">
+  
+  <header>
+    <%= render :partial => "/header" %>
 	</header>
-    <div id="rightcol">
-      <%= render :partial => "/steps" %>
-      <%= render :partial => "/events" %>
-    </div><!-- // end rightcol -->
-    <div id="leftcol">
-      <%= @content %>
-    </div><!-- // end leftcol -->
-  </div><!-- // end nest -->
-  <%= render :partial => "/footer" %>
-  <script type="text/javascript">
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  </script>
-  <script type="text/javascript">
-  try {
-  var pageTracker = _gat._getTracker("UA-11019946-1");
-  pageTracker._trackPageview();
-  } catch(err) {}</script>
+	  
+  <div class="mainContent">
+    <%= @content %>
+  </div>
+  
+  <footer>
+    <%= render :partial => "/footer" %>
+  </footer>
+  
+</div><!-- End Wrapper -->
+
+<!-- Dont forget analytics -->  
 </body>
 </html>
+
+

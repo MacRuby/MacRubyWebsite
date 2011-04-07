@@ -4,6 +4,6 @@ filter: erb
 <h1 class="logo">
   <a href="/"></a>
 </h1>
-<nav>
-<%= render :partial => "/navigation" %>
+<nav class="primaryNav">
+  <%= render :partial => "/navigation" %>
 </nav>
