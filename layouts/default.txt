@@ -13,8 +13,8 @@ filter:    erb
 </head>
 <body>
   
-<div class="wrapper">
-  
+<div class="wrapper clearfix">
+<div class="innerWrapper clearfix">  
   <header>
     <%= render :partial => "/header" %>
 	</header>
@@ -22,12 +22,15 @@ filter:    erb
   <div class="mainContent">
     <%= @content %>
   </div>
-  
-  <footer>
-    <%= render :partial => "/footer" %>
-  </footer>
-  
+</div> <!-- End Inner Wrapper -->
+<footer>
+  <div class="innerWrapper">
+  <%= render :partial => "/footer" %>
+  </div>
+</footer> 
 </div><!-- End Wrapper -->
+
+
 
 <!-- Dont forget analytics -->  
 </body>

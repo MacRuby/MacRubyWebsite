@@ -66,15 +66,26 @@ input, select { vertical-align: middle; }
   comment inside the CC or it will close prematurely. */
 
 /* General */
+html, body {
+  height: 100%;
+}
 body {
+  color: #404040;
   font-family: verdana, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   background: #e4e4e4 url(../images/new/bg.jpg) top repeat-x;
 }
 ul {
   list-style-type: none;
 }
 .wrapper {
+  position: relative;
+  min-height: 100%;
+}
+.innerWrapper {
   width: 960px;
+  padding: 0 20px;
   margin: 0 auto;
 }
 /* Header */
@@ -87,12 +98,12 @@ header h1.logo a {
   width: 275px;
   background: url(../images/new/logo.png) no-repeat;
   position: absolute;
-  top: 45px;
+  top: 50px;
 }
 /* Primary Nav */
 .primaryNav {
   position: relative;
-  top: 60px;
+  top: 66px;
   float: right;
   line-height: 40px;
   height: 40px;
@@ -128,14 +139,65 @@ header h1.logo a {
   height: 370px;
 }
 /* MainContent */
+.grid .top,
+.grid .bottom {
+  height: 250px;
+}
 .grid aside {
+  position: relative;
+  padding: 30px;
   min-height: 200px;
-  width: 480px;
+  height: 100%;
+  width: 420px;
   float: left;
 }
+.grid h2 {
+  height: 80px;
+  line-height: 90px;
+  font-family: georgia, serif;
+  font-size: 25px;
+  padding-left: 70px;
+}
+.grid h2 img {
+  left: 15px;
+  position: absolute;
+  z-index: 999;
+}
+.grid .gridIcon1 {top: 24px;}
+.grid .gridIcon2 {}
+.grid .gridIcon3 {}
+.grid .gridIcon4 {}
 
+.grid .gridContent {
+  height: 170px;
+  overflow: hidden;
+  padding: 0 10px; 
+}
+.grid .boxed {
+  height: 150px;
+  margin-top: -20px;
+  position: relative;
+  bottom: 0;
+  padding: 15px;
+  border: 1px solid #cbcbcb;
+  background: #dbdbdb;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+  
+  
+.grid 
+.mainContent {
+  padding-bottom: 100px; /* Height of footer */
+}
 /* Footer */
-
+footer {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  background: black;
+}
 
 
 
