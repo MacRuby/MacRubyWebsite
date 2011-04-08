@@ -65,6 +65,14 @@ input, select { vertical-align: middle; }
   and read this CSS rule. Don't ever use a normal HTML
   comment inside the CC or it will close prematurely. */
 
+@font-face {
+  font-family: "Lobster 1.4"; src: url('lobster_1.4.otf');
+}
+
+.lobsterFont {
+  font-family: "Lobster 1.4", Georgia, serif;
+}
+
 /* General */
 html, body {
   height: 100%;
@@ -141,7 +149,6 @@ header h1.logo a {
 /* MainContent */
 .grid .top,
 .grid .bottom {
-  height: 250px;
 }
 .grid aside {
   position: relative;
@@ -154,8 +161,7 @@ header h1.logo a {
 .grid h2 {
   height: 80px;
   line-height: 90px;
-  font-family: georgia, serif;
-  font-size: 25px;
+  font-size: 30px;
   padding-left: 70px;
 }
 .grid h2 img {
@@ -169,12 +175,11 @@ header h1.logo a {
 .grid .gridIcon4 {}
 
 .grid .gridContent {
-  height: 170px;
   overflow: hidden;
   padding: 0 10px; 
 }
 .grid .boxed {
-  height: 150px;
+  height: 180px;
   margin-top: -20px;
   position: relative;
   bottom: 0;
@@ -183,10 +188,13 @@ header h1.logo a {
   background: #dbdbdb;
   -moz-border-radius: 10px;
   border-radius: 10px;
+  -moz-box-shadow:inset 0 0 2px white;
+  -webkit-box-shadow:inset 0 0 2px white;
+  box-shadow:inset 0 0 2px white;
 }
   
   
-.grid 
+.grid,
 .mainContent {
   padding-bottom: 100px; /* Height of footer */
 }
