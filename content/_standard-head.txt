@@ -3,10 +3,16 @@ filter: erb
 ---
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>MacRuby &raquo; Home</title>
-<meta name="author" content="" />
-<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/javascripts/jquery-1.5.2.js"></script>
+<link rel="stylesheet" href="/stylesheets/main.css" type="text/css" media="screen" />
 
-<!-- CodeRay syntax highlighting CSS -->
-<!-- <link rel="stylesheet" href="/css/coderay.css" type="text/css" /> -->
-<!-- <link rel="alternate" type="application/rss+xml" title="RSS" href="/feeds/posts/macruby/index.xml" /> -->
+
+
+<!-- Syntax Highlighter -->
+<script type="text/javascript" src="/javascripts/shCore.js"></script>
+<script type="text/javascript" src="/javascripts/shBrushJScript.js"></script>
+<link rel="stylesheet" href="/stylesheets/shCore.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="/stylesheets/shThemeDefault.css" type="text/css" media="screen" />
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+

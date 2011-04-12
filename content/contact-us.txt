@@ -5,21 +5,24 @@ filter:
   - erb
   - textile
 ---
-h1(title). <%= h(@page.title) %>
+h2(headerText lobsterFont). <%= h(@page.title) %>
 
 MacRuby is a free software project by Apple Inc.  Many folks inside and outside of Apple contribute to this great project and we have a "MacRuby Project Team":/project.html page to list them.  Please feel free to contact us if you have any questions, ideas or bugs to report.  
 
 Here's all the ways of getting ahold of us:
 
-h2. Twitter
+h3(headerText lobsterFont). Twitter
 
+<section class="block">
 You can follow us on Twitter by following the "@macruby":http://twitter.com/macruby account.
+</section>
 
-h2. Mailing Lists
+h3(headerText lobsterFont). Mailing Lists
 
+<section class="block">
 "MacRuby-devel":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-devel is the developer mailing-list. Please subscribe to it, if you are interested in following the MacRuby development process or would like to start a discussion. All activity in the tracker generates notifications in this list.
-
 "MacRuby-changes":http://lists.macosforge.org/mailman/listinfo.cgi/macruby-changes is the SVN changes mailing-list. This is a read-only list, but you might want to subscribe to it if you are interested in tracking all of the changes in the project's source code.
+</section>
 
 h2. IRC
 
@@ -27,8 +30,8 @@ Some contributors of the project are connected on the #macruby channel within th
 
 h2. Contributions
 
+<section class="block">
 Please "file a ticket":https://www.macruby.org/trac/newticket on the "MacRuby Trac":https://www.macruby.org/trac/report component, if you want to contribute an enhancement request or a bug report. Patches with test cases are welcome.
-
 You can also send your feedback to the MacRuby-devel mailing-list.
-
 If you want to help us, do not hesitate to introduce yourself in the mailing-list; we will give you an overview of things that need to be done. If you want to commit your code directly in the repository, please note that you will have to sign a committer agreement first; we will provide this to you.
+</section>

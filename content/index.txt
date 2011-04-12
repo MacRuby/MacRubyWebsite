@@ -14,75 +14,57 @@ filter:
 <div class="grid clearfix">
   <div class="top clearfix">
     <aside>
-      <h2 class="headerText lobsterFont"><img class="gridIcon1" src="../images/icon_toolbox.png" alt="#" />Why MacRuby?</h2>
-      <div class="gridContent">
+      
+      <h2 class="headerText1 lobsterFont"><img class="gridIcon1" src="../images/icon_toolbox.png" alt="#" />Why MacRuby?</h2>
+      <div class="gridContent boxed">
         MacRuby began as an attempt to work around many problems inherent in RubyCocoa. In the course of solving these problems, MacRuby has also solved numerous problems in the original implementation of Ruby. Consequently, there are a number of reasons (e.g. convenience, efficiency, flexibility, performance) why one might wish to use MacRuby for new (and ongoing) Ruby applications... <a href="/documentation/why-macruby.html"><br/><i>Read more...</i></a>
       </div>
+      
     </aside>
     <aside>
-      <h2 class="headerText lobsterFont"><img class="gridIcon2" src="../images/icon_star.png" alt="#" /> Whats Going on</h2>
-      <div >
-        <div class="gridContent boxed">
-          apsod ifhap sodfih aspdfioh
-        </div>      
+      
+      <h2 class="headerText1 lobsterFont"><img class="gridIcon2" src="../images/icon_star.png" alt="#" /> Whats Going on</h2>
+      <div class="gridContent boxed">
+        <div class="abstract">
+          <h3 class="headerText1"><a href="#">News Item 1</a><span class="date">2010-10-08</span></h3>
+          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
+          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+        </div>
+        <div class="abstract">
+          <h3 class="headerText1"><a href="#">News Item 2</a><span class="date">2010-10-08</span></h3>
+          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
+          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+        </div>   
+      </div>
+        
     </aside>
   </div>
   <div class="bottom clearfix">
     <aside>
-      <h2 class="headerText lobsterFont"><img class="gridIcon3" src="../images/icon_notebook.png" alt="#" />The Definitive Guide</h2>
-      <div class="gridContent">
+      
+      <h2 class="headerText1 lobsterFont"><img class="gridIcon3" src="../images/icon_notebook.png" alt="#" />The Definitive Guide</h2>
+      <div class="gridContent boxed">
         Matt Aimonetti is currently working on a MacRuby book for O'Reilly. It is under development and the book is being published as it is being written. The work is released under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons</a> license, with the idea of getting early feedback from the community. 
         <br/><a href="http://macruby.labs.oreilly.com/">Check it out!</a>
       </div>
+      
     </aside>
     <aside>
-      <h2 class="headerText lobsterFont"><img class="gridIcon4" src="../images/icon_cloud.png" alt="#" />MacRuby Blogs</h2>
+      
+      <h2 class="headerText1 lobsterFont"><img class="gridIcon4" src="../images/icon_cloud.png" alt="#" />MacRuby Blogs</h2>
       <div class="gridContent boxed">
-        <h3 class="headerText">BridgeSupport Preview 1</h3>
-        <span class="date">2010-10-08</span><br />
-        A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
-        <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+        <div class="abstract">
+          <h3 class="headerText1"><a href="#">Blog Item 1</a><span class="date">2010-10-08</span></h3>
+          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
+          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+        </div>
+        <div class="abstract">
+          <h3 class="headerText1"><a href="#">Blog Item 2</a><span class="date">2010-10-08</span></h3>
+          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
+          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+        </div>
       </div>
+      
     </aside>
   </div>
 </div>
-
-
-<a href="/downloads.html" id="zip"><img src="/images/zip.png" width="100" height="100" /></a>
-<a href="/source.html">checkout the source</a>
-
-Check out the <a href="/documentation/tutorial.html">tutorial</a>, <a href="/documentation.html">resources</a> 
-&nbsp; &nbsp; and <a href="http://svn.macosforge.org/repository/ruby/MacRuby/trunk/sample-macruby">examples</a> that are available.
-
-<strong>MacRuby</strong> is an implementation of Ruby 1.9 directly on top of Mac OS X core technologies such as the Objective-C runtime and garbage collector, the LLVM compiler infrastructure and the Foundation and ICU frameworks. It is the goal of MacRuby to enable the creation of full-fledged Mac OS X applications which do not sacrifice performance in order to enjoy the benefits of using Ruby. <a href="/documentation/overview.html"><i>Read more...</i></a>
-
-
-
-<hr />
-
-
-
-<h3><a href="/blog/index.html"><img src="/images/h3_macruby_blog.png" alt="MacRuby Blog" /></a></h3>
-
-
-
-
-
-<hr />
-
-
-
-<h4>MacRuby 0.7</h4>
-<p><span class='date'>2010-10-01</span> &raquo; <br />
-After 5 months of development, we are happy to announce the immediate availability of MacRuby 0.7. <br />
-<a href='/blog/2010/10/01/macruby07.html'>Read more&#8230;</a></p>
-
-
-
-<hr />
-
-
-
-<a href="/blog/index2.html"><img src="/images/h3_see-older-articles.png" alt="See Older Articles" /></a>
-
-

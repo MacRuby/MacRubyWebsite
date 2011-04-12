@@ -5,9 +5,8 @@ filter:
   - erb
   - textile
 ---
-h1(title). <%= h(@page.title) %>
+h2(headerText lobsterFont).  <%= h(@page.title) %>
 
-h2. MacRuby Development
 
 MacRuby development happens in the master branch of our "GitHub":https://github.com/MacRuby/MacRuby repository. However, be careful, because it may not work (or even compile) all of the time.
 
@@ -23,7 +22,7 @@ $ git clone -b 0.10 git://github.com/MacRuby/MacRuby.git macruby-0.10
 
 For building instructions, please refer to README.rdoc file, but the basic build instructions are:
 
-<pre class="commands">
+<pre class="brush: js;">
 $ rake
 $ sudo rake install
 </pre>
