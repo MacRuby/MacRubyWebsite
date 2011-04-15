@@ -6,19 +6,25 @@ filter:
   - erb
   - textile
 ---
-h1(title). <%= h(@page.title) %>
+h2(headerText lobsterFont). <%= h(@page.title) %>
 
-Welcome to MacRuby's documentation center.  Here you will find the information you need to get up and running and building OS X applications with MacRuby in no time.  If you have not read the "Introductory Tutorial":/documentation/tutorial.html, its a great way to get started.  
+<p>
+  Welcome to MacRuby's documentation center.  Here you will find the information you need to get up and running and building OS X applications with MacRuby in no time.  If you have not read the "Introductory Tutorial":/documentation/tutorial.html, its a great way to get started.  
+</p>
+<p>
+  If you are wondering why in the world MacRuby exists you can read that in the "Why MacRuby?":/documentation/why-macruby.html page.  If you want documentation on HotCocoa you can "find it here":/hotcocoa.html.  You can catch up on the latest news by following the "MacRuby Blog":/blog.
+</p>
+<p>
+  Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
+</p>
+<p>
+  In addition to the documentation available here, MacRuby team member, "Matt Aimonetti":http://merbist.com keeps a HTML version of the manuscript of his "O'Reilly book":http://ofps.oreilly.com/titles/9781449380373/ online and available for free at "this url":http://ofps.oreilly.com/titles/9781449380373/.
+</p>
 
-If you are wondering why in the world MacRuby exists you can read that in the "Why MacRuby?":/documentation/why-macruby.html page.  If you want documentation on HotCocoa you can "find it here":/hotcocoa.html.  You can catch up on the latest news by following the "MacRuby Blog":/blog.
+h3(headerText lobsterFont). Screencasts
 
-Below are a list of tutorials and recipes for MacRuby.  Tutorials are the longest content and delve deep on a particular area.  Recipes are short and specific examples of how to accomplish something with MacRuby.
-
-In addition to the documentation available here, MacRuby team member, "Matt Aimonetti":http://merbist.com keeps a HTML version of the manuscript of his "O'Reilly book":http://ofps.oreilly.com/titles/9781449380373/ online and available for free at "this url":http://ofps.oreilly.com/titles/9781449380373/.
-
-h2. Screencasts
-
-<ul class="screencast_list">
+<section class="block">
+<ul class="alternatingRows">
   <% macruby_screencasts.each do |screencast| -%>
     <li>
        <span class="date"><%= screencast.date %></span>
@@ -27,10 +33,12 @@ h2. Screencasts
      </li>
   <% end -%>
 </ul>
+</section>
 
-h2. Tutorials
+h3(headerText lobsterFont). Tutorials
 
-<ul class="tutorial_list">
+<section class="block">
+<ul class="alternatingRows">
 <%
   tutorials = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
       :sort_by => "updated_at", :reverse => true, :tutorial => true)
@@ -40,10 +48,12 @@ h2. Tutorials
 <li><span class="date"><%= page.updated_at.strftime('%Y-%m-%d') %></span><span class="name"><%= link_to_page(page) %></span><%= new_or_updated_indicator(page) %><span class="author">By <%= member_name(page.author) %></span>
 <% end -%>
 </ul>
+</section>
 
-h2. Recipes
+h3(headerText lobsterFont). Recipes
 
-<ul class="recipe_list">
+<section class="block">
+<ul class="alternatingRows">
 <%
   recipes = @pages.find(:all, :in_directory => @page.dir, :recursive => true,
       :sort_by => "created_at", :reverse => true, :recipe => true)
@@ -58,10 +68,12 @@ h2. Recipes
 <% end -%>
 <% end -%>
 </ul>
+</section>
 
-h2. Talks
+h3(headerText lobsterFont). Talks
 
-<ul class="screencast_list">
+<section class="block">
+<ul class="alternatingRows">
   <% macruby_talks.each do |talk| -%>
     <li>
        <span class="date"><%= talk.date %></span>
@@ -70,4 +82,5 @@ h2. Talks
      </li>
   <% end -%>
 </ul>
+</section>
 
