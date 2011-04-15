@@ -11,7 +11,7 @@ filter:    erb
 <head>
   <%= render :partial => "/standard-head" %>
 </head>
-<body>
+<body id="blogEntry">
   <div id="nest">
     <%= render :partial => "/header" %>
     <%= render :partial => "/navigation" %>

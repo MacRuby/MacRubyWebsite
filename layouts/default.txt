@@ -11,13 +11,19 @@ filter:    erb
 <head>
 	<%= render :partial => "/standard-head" %>
 </head>
-<body>
-  
+<body id="default">
+
+
 <div class="wrapper clearfix">  
 
 <header>
   <%= render :partial => "/header" %>
 </header>
+
+<aside class="promoMini">
+  Current Version: 1.2.3 <a href="#" class="downloadSmall"></a>
+</aside>
+
 <div class="mainContent">
   <%= @content %>
 </div>

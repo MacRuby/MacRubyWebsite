@@ -110,7 +110,30 @@ body {
   font-family: verdana, sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  background: #e4e4e4 url(../images/new/bg.jpg) top repeat-x;
+  background: #e4e4e4 url(../images/bg_home.jpg) top repeat-x;
+}
+
+#default {
+  background: #e4e4e4 url(../images/bg_default.jpg) top repeat-x;
+}
+
+.promoMini {
+  font-size: 80%;
+  color: white;
+  text-align: right;
+  line-height: 41px;
+  height: 41px;
+}
+.promoMini .downloadSmall {
+  float: right;
+  margin-left: 10px;
+  display: block;
+  height: 41px;
+  width: 111px;
+  background: url(../images/downloadSmall.jpg) 0 -41px no-repeat;
+}
+.promoMini .downloadSmall:hover {
+  background: url(../images/hover.jpg) no-repeat;
 }
 
 ::selection {
@@ -159,7 +182,7 @@ header h1.logo a {
   display: block;
   height: 73px;
   width: 275px;
-  background: url(../images/new/logo.png) no-repeat;
+  background: url(../images/logo.png) no-repeat;
   position: absolute;
   top: 50px;
 }

@@ -10,8 +10,6 @@ filter:
   <%= render :partial => "/promo" %>
 </aside>
 
-
-
 <div class="grid clearfix">
   <div class="top clearfix">
     <aside>
