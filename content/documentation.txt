@@ -8,6 +8,7 @@ filter:
 ---
 h2(headerText lobsterFont). <%= h(@page.title) %>
 
+<section class="blockMain">
 <p>
   Welcome to MacRuby's documentation center.  Here you will find the information you need to get up and running and building OS X applications with MacRuby in no time.  If you have not read the "Introductory Tutorial":/documentation/tutorial.html, its a great way to get started.  
 </p>
@@ -20,6 +21,7 @@ h2(headerText lobsterFont). <%= h(@page.title) %>
 <p>
   In addition to the documentation available here, MacRuby team member, "Matt Aimonetti":http://merbist.com keeps a HTML version of the manuscript of his "O'Reilly book":http://ofps.oreilly.com/titles/9781449380373/ online and available for free at "this url":http://ofps.oreilly.com/titles/9781449380373/.
 </p>
+
 
 h3(headerText lobsterFont). Screencasts
 
@@ -82,5 +84,6 @@ h3(headerText lobsterFont). Talks
      </li>
   <% end -%>
 </ul>
+</section>
 </section>
 

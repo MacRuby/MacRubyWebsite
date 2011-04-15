@@ -1,6 +1,25 @@
 ---
 filter: erb
 ---
-<p>MacRuby is a free software project under the Ruby license.</p>
-<p>Hosting provided by <a href="http://macosforge.org">Mac OS Forge</a>. Use of this site is subject to the <a href="http://www.macosforge.org/terms/">Mac OS Forge Terms of Use</a>.</p>
-<p>Website designed by <a href="http://www.boboroshi.com/">John Athayde</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
+
+<div class="footerLinks">
+  <div class="innerWrapper">
+    Links Here
+  </div>
+</div>
+<div class="footerNav">
+  <div class="innerWrapper">
+  <ul>
+  <li><a href="/" title="Home">Home</a></li>
+  <li><a href="/news/index.html" title="News">News</a></li>
+  <li><a href="/source.html" title="Source">Source</a></li>
+  <li><a href="/documentation.html" title="Documentation">Documentation</a></li>
+  <li><a href="/contact-us.html" title="Contact">Contact</a></li>
+  </ul>
+  </div>
+</div>
+<div class="footerLegal">
+  <div class="innerWrapper">
+  <p>MacRuby is a free software project under the Ruby license. Hosting provided by <a href="http://macosforge.org">Mac OS Forge</a>. Use of this site is subject to the <a href="http://www.macosforge.org/terms/">Mac OS Forge Terms of Use</a>. Website designed by <a href="http://www.boboroshi.com/">John Athayde</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
+  </div>
+</div>
