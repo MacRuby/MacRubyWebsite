@@ -20,6 +20,10 @@ filter: erb
 </div>
 <div class="footerLegal">
   <div class="innerWrapper">
-  <p>MacRuby is a free software project under the Ruby license. Hosting provided by <a href="http://macosforge.org">Mac OS Forge</a>. Use of this site is subject to the <a href="http://www.macosforge.org/terms/">Mac OS Forge Terms of Use</a>. Website designed by <a href="http://www.boboroshi.com/">John Athayde</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
+  <p>MacRuby is a free software project under the Ruby license. Hosting
+provided by <a href="http://macosforge.org">Mac OS Forge</a>. Use of
+this site is subject to the <a
+href="http://www.macosforge.org/terms/">Mac OS Forge Terms of Use</a>.
+Website designed by <a href="http://allandelacruz.com">Allan Delacruz</a> and created with <a href="http://webby.rubyforge.org/">Webby</a>.</p>
   </div>
 </div>

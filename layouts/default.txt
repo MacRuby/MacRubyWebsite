@@ -21,7 +21,7 @@ filter:    erb
 </header>
 
 <aside class="promoMini">
-  Current Version: 1.2.3 <a href="#" class="downloadSmall"></a>
+  Current Version: <%= MACRUBY_VERSION %> <a href="/downloads.html" class="downloadSmall"></a>
 </aside>
 
 <div class="mainContent">

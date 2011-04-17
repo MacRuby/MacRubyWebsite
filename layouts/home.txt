@@ -9,7 +9,7 @@ filter:    erb
 <!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-	<%= render :partial => "/home-head" %>
+	<%= render :partial => "/standard-head" %>
 </head>
 <body id="home">
   
