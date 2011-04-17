@@ -18,6 +18,7 @@ filter:    erb
 <header>
   <%= render :partial => "/header" %>
 </header>
+
 <div class="mainContent">
   <%= @content %>
 </div>

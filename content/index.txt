@@ -23,19 +23,22 @@ filter:
       
     </aside>
     <aside>
-      
+     
       <h2 class="headerText1 lobsterFont"><img class="gridIcon2" src="../images/icon_star.png" alt="#" /> Whats Going on</h2>
       <div class="gridContent boxed equalHeights1">
+
+      <% articles = @pages.find(:all, :in_directory => File.join(@page.dir, 'blog'), :recursive => true, :sort_by => "created_at", :reverse => true, :blog_post => true) -%>
+      <% articles[0,2].each do |article| -%>
+      
         <div class="abstract padding15">
-          <h3 class="headerText1"><a href="#">News Item 1</a><span class="date">2010-10-08</span></h3>
-          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
-          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
+          <h3 class="headerText1">
+            <a href="<%= article.url %>"><%= article.title %></a>
+            <%= blog_date(article) %>
+          <h3>
+          <%= blog_excerpt(article) %>
         </div>
-        <div class="abstract padding15">
-          <h3 class="headerText1"><a href="#">News Item 2</a><span class="date">2010-10-08</span></h3>
-          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
-          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
-        </div>   
+        <% end -%>
+ 
       </div>
         
     </aside>

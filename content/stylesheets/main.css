@@ -133,7 +133,7 @@ body {
   background: url(../images/downloadSmall.jpg) 0 -41px no-repeat;
 }
 .promoMini .downloadSmall:hover {
-  background: url(../images/hover.jpg) no-repeat;
+  background: url(../images/downloadSmall.jpg) no-repeat;
 }
 
 ::selection {
