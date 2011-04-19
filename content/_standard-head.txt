@@ -5,7 +5,7 @@ filter: erb
 
 <script type="text/javascript" src="/javascripts/jquery-1.5.2.js"></script>
 <script type="text/javascript" src="/javascripts/scripts.js"></script>
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 	$(".equalHeights1").equalHeights(200,600);
 	$(".equalHeights2").equalHeights(200,600);

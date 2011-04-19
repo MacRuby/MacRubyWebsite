@@ -49,28 +49,31 @@ filter:
       <h2 class="headerText1 lobsterFont"><img class="gridIcon3" src="../images/icon_notebook.png" alt="#" />The Definitive Guide</h2>
       <div class="gridContent boxed equalHeights2">
         <div class="padding15">
-        Matt Aimonetti is currently working on a MacRuby book for O'Reilly. It is under development and the book is being published as it is being written. The work is released under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons</a> license, with the idea of getting early feedback from the community. 
-        <br/><a href="http://macruby.labs.oreilly.com/">Check it out!</a>
+<!-- <img src="http://covers.oreilly.com/images/0636920000723/rc_s.gif" alt="MacRuby Book by Matt Aimonetti" style="float:left; padding:0.5em 1em 0 0"> -->
+<a href="http://merbist.com">Matt Aimonetti</a> is currently working on
+a <a href="http://oreilly.com/catalog/0636920000723/">MacRuby book for
+O'Reilly</a>. It is under development and the book is being published as
+it is being written. The work is released under a <a
+href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative
+Commons</a> license, with the idea of getting early feedback from the
+community.<br/>
+<a href="http://oreilly.com/catalog/0636920000723/">Check it out!</a>
         </div>
       </div>
       
     </aside>
     <aside>
       
-      <h2 class="headerText1 lobsterFont"><img class="gridIcon4" src="../images/icon_cloud.png" alt="#" />MacRuby Blogs</h2>
-      <div class="gridContent boxed equalHeights2">
-        <div class="abstract padding15">
-          <h3 class="headerText1"><a href="#">Blog Item 1</a><span class="date">2010-10-08</span></h3>
-          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
-          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
-        </div>
-        <div class="abstract padding15">
-          <h3 class="headerText1"><a href="#">Blog Item 2</a><span class="date">2010-10-08</span></h3>
-          A new development version of the <a href="http://bridgesupport.macosforge.org/trac/wiki">BridgeSupport</a> project, now based on the clang/<span class="caps">LLVM</span> compiler framework, is available for testing!<br />
-          <a href='/blog/2010/10/08/bridgesupport-preview.html'>Read more&#8230;</a>
-        </div>
+      <h2 class="headerText1 lobsterFont"><img class="gridIcon4"
+src="../images/icon_cloud.png" alt="#" />Latest Tweets</h2>
+      <div class="gridContent boxed equalHeights2" >
+        <ul id='twitter_update_list'></ul>
       </div>
       
     </aside>
   </div>
 </div>
+
+<script type="text/javascript" src="/javascripts/blogger.js"</script>
+<script type="text/javascript"
+src="http://twitter.com/statuses/user_timeline/macruby.json?callback=twitterCallback2&count=5"></script>
