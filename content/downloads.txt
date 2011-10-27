@@ -26,3 +26,9 @@ h2. Source
 <p>
   You can always get the latest sources from our <a href='/source.html'>Subversion or Git repository</a>.
 </p>
+
+h2. Bridge Support Preview
+
+<p>
+Bridge Support is needed for machines running on Snow Leopard (10.6) in order to access some of the lower level libraries in Cocoa. You can download <a href="http://www.macruby.org/files/BridgeSupport%20Preview%203.zip">Bridge Support Preview 3</a> as a standalone binary installer. To learn more about Bridge Support, you can read the original <a href="http://www.macruby.org/blog/2010/10/08/bridgesupport-preview.html">blog post</a>.
+<p/>
